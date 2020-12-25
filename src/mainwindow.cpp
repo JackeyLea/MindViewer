@@ -1,6 +1,23 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+/* Decoder states (Packet decoding) */
+#define PARSER_STATE_NULL           0x00  /* NULL state */
+#define PARSER_STATE_SYNC           0x01  /* Waiting for SYNC byte */
+#define PARSER_STATE_SYNC_CHECK     0x02  /* Waiting for second SYNC byte */
+#define PARSER_STATE_PAYLOAD_LENGTH 0x03  /* Waiting for payload[] length */
+#define PARSER_STATE_PAYLOAD        0x04  /* Waiting for next payload[] byte */
+#define PARSER_STATE_CHKSUM         0x05  /* Waiting for chksum byte */
+
+/* Decoder states (2-byte raw decoding) */
+#define PARSER_STATE_WAIT_HIGH      0x06  /* Waiting for high byte */
+#define PARSER_STATE_WAIT_LOW       0x07  /* High r'cvd.  Expecting low part */
+
+/* Other constants */
+#define PARSER_SYNC_BYTE            0xAA  /* Syncronization byte */
+#define PARSER_EXCODE_BYTE          0x55  /* EXtended CODE level byte */
+
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -21,6 +38,64 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+int MainWindow::parserData(QByteArray ba, struct _eegPkt &pkt)
+{
+    if(ba.isEmpty()) return -1;
+    int size=ba.size();
+    if(size>179) return -1;//官方说明最多179个字节
+
+    int i=0;
+    unsigned char state=PARSER_STATE_SYNC;
+    unsigned char payloadLength;
+    unsigned char payloadSum;
+    //while(i<size){
+    while(i<4){
+        switch(state){
+        case PARSER_STATE_SYNC://第一个同步字节
+            if((unsigned char)ba[i]==PARSER_SYNC_BYTE){
+                state=PARSER_STATE_SYNC_CHECK;
+            }
+            ++i;
+            break;
+        case PARSER_STATE_SYNC_CHECK:
+            if((unsigned char)ba[i]==PARSER_SYNC_BYTE){
+                state=PARSER_STATE_PAYLOAD_LENGTH;//准备解析负载长度
+            }else{
+                state=PARSER_STATE_SYNC;
+            }
+            ++i;
+            break;
+        case PARSER_STATE_PAYLOAD_LENGTH:
+            payloadLength=ba[i];
+            if(payloadLength>170){
+                state=PARSER_STATE_SYNC;
+                return -3;
+            }else if(payloadLength==170){
+                return -4;
+            }else{
+                payloadSum=0;
+                state=PARSER_STATE_PAYLOAD;//准备解析有效数据
+            }
+            //qDebug()<<"payload length is: "<<payloadLength;
+            ++i;
+            break;
+        case PARSER_STATE_PAYLOAD:
+            for(int j=0;j<payloadLength;j++){
+                qDebug()<<(unsigned char)ba[i+j];
+                payloadSum+=ba[i+j];
+            }
+            payloadSum&=0xff;
+            payloadSum=~payloadSum&0xff;
+            i+=payloadLength;
+            if(payloadSum==ba[i]){
+                qDebug()<<"is match";
+            }
+        }
+    }
+
+    return 0;
+}
+
 void MainWindow::sltReceiveData(QByteArray ba)
 {
     QString s;
@@ -32,6 +107,8 @@ void MainWindow::sltReceiveData(QByteArray ba)
     if(ui->actionHex->isChecked()){
         ui->textHex->appendPlainText(s);
     }
+    struct _eegPkt pkt;
+    parserData(ba,pkt);
 }
 
 //打开文件位置

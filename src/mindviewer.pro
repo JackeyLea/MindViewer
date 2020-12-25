@@ -12,14 +12,12 @@ CONFIG += c++11
 
 SOURCES += \
     ThinkGearStreamParser.cpp \
-    common.cpp \
     generator.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
     ThinkGearStreamParser.h \
-    common.h \
     generator.h \
     mainwindow.h
 
