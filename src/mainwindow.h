@@ -9,6 +9,11 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QDesktopServices>
+#include <QString>
+
+#include "generator.h"
+#include "iostream"
+#include "sstream"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -24,7 +29,7 @@ public:
 
 
 private slots:
-    void sltParserCompleted();
+    void sltReceiveData(QByteArray ba);
 
 private slots:
     void on_actionOpen_triggered();
@@ -37,17 +42,19 @@ private slots:
 
     void on_actionGithub_triggered();
 
-    void on_actionCapture_triggered();
-
     void on_actionSerialPort_triggered();
 
-    void on_actionPause_triggered();
+    void on_actionTest_triggered();
 
-    void on_actionResume_triggered();
+    void on_actionSave_triggered();
 
-    void on_actionClear_triggered();
+    void on_actionHex_triggered(bool checked);
+
+    void on_actionGraph_triggered(bool checked);
 
 private:
     Ui::MainWindow *ui;
+
+    Generator *gen;
 };
 #endif // MAINWINDOW_H

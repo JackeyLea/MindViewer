@@ -4,26 +4,34 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-    //, pLocalData(new LocalData())
 {
     ui->setupUi(this);
+    ui->actionHex->setChecked(true);
 
-//    connect(pLocalData,&LocalData::finished,this,&MainWindow::sltParserCompleted);
+    gen=new Generator();
+    connect(gen,&Generator::sendData,this,&MainWindow::sltReceiveData);
 }
 
 MainWindow::~MainWindow()
 {
-//    if(pLocalData!=nullptr){
-//        delete pLocalData;
-//    }
+    if(gen!=nullptr){
+        gen->stopNow();
+        delete gen;
+    }
     delete ui;
 }
 
-void MainWindow::sltParserCompleted()
+void MainWindow::sltReceiveData(QByteArray ba)
 {
-    qDebug()<<"Local data parsered";
-    //QList<pkgPacket> result = pLocalData->getParserResult();
-    //qDebug()<<result.size();
+    QString s;
+    for(int i=0;i<ba.size();i++){
+        QString ss,sss;
+        sss=ss.asprintf("0x%02X ",(unsigned char)ba.at(i));
+        s+=sss;
+    }
+    if(ui->actionHex->isChecked()){
+        ui->textHex->appendPlainText(s);
+    }
 }
 
 //打开文件位置
@@ -35,9 +43,6 @@ void MainWindow::on_actionOpen_triggered()
         return;
     }
     qDebug()<<"Select file path is: "<<filePath;
-    //调用专用函数打开解析数据
-    //pLocalData->setFilePath(filePath);
-    //pLocalData->start();
 }
 
 void MainWindow::on_actionExit_triggered()
@@ -65,12 +70,7 @@ void MainWindow::on_actionAbout_Qt_triggered()
 
 void MainWindow::on_actionGithub_triggered()
 {
-        QDesktopServices::openUrl(QUrl("https://github.com/JackeyLea/MindViewer"));
-}
-
-void MainWindow::on_actionCapture_triggered()
-{
-
+    QDesktopServices::openUrl(QUrl("https://github.com/JackeyLea/MindViewer"));
 }
 
 void MainWindow::on_actionSerialPort_triggered()
@@ -78,17 +78,38 @@ void MainWindow::on_actionSerialPort_triggered()
 
 }
 
-void MainWindow::on_actionPause_triggered()
+void MainWindow::on_actionTest_triggered()
 {
-
+    gen->start();
 }
 
-void MainWindow::on_actionResume_triggered()
+void MainWindow::on_actionSave_triggered()
 {
-
+    if(ui->actionHex->isChecked()){
+        QMessageBox::information(this,tr("Save text"),"Save hex data to file?",QMessageBox::Ok|QMessageBox::Cancel);
+    }else{
+        QMessageBox::information(this,tr("Save image"),"Save image to file?",QMessageBox::Ok|QMessageBox::Cancel);
+    }
 }
 
-void MainWindow::on_actionClear_triggered()
+void MainWindow::on_actionHex_triggered(bool checked)
 {
+    if(checked){
+        ui->stackedWidget->setCurrentIndex(0);
+        ui->actionGraph->setChecked(false);
+    }else{
+        ui->stackedWidget->setCurrentIndex(1);
+        ui->actionGraph->setChecked(true);
+    }
+}
 
+void MainWindow::on_actionGraph_triggered(bool checked)
+{
+    if(checked){
+        ui->stackedWidget->setCurrentIndex(1);
+        ui->actionHex->setChecked(false);
+    }else{
+        ui->stackedWidget->setCurrentIndex(0);
+        ui->actionHex->setChecked(true);
+    }
 }

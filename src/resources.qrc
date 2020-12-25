@@ -18,5 +18,6 @@
         <file>resources/themes/light.qss</file>
         <file>resources/themes/gray.qss</file>
         <file>resources/icons/serialport.svg</file>
+        <file>resources/icons/hex.svg</file>
     </qresource>
 </RCC>
