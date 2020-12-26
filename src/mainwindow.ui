@@ -7,27 +7,106 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>600</height>
+    <height>800</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>800</width>
+    <height>800</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout">
+   <layout class="QGridLayout" name="layoutGWidget">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <property name="spacing">
+     <number>0</number>
+    </property>
     <item row="0" column="0">
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="pageHex">
-       <layout class="QGridLayout" name="gridLayout_2">
+       <layout class="QGridLayout" name="layoutGHex">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <property name="spacing">
+         <number>0</number>
+        </property>
         <item row="0" column="0">
-         <widget class="QPlainTextEdit" name="textHex"/>
+         <widget class="QPlainTextEdit" name="textHex">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="pageGraph"/>
+      <widget class="QWidget" name="pageGraph">
+       <widget class="Curves" name="graphEEG">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>800</width>
+          <height>532</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>800</width>
+          <height>532</height>
+         </size>
+        </property>
+       </widget>
+       <widget class="CurvesCommon" name="graphCommon">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>530</y>
+          <width>801</width>
+          <height>266</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>800</width>
+          <height>266</height>
+         </size>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+       </widget>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -38,7 +117,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>23</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Help">
@@ -72,7 +151,6 @@
    <addaction name="menu_Mode"/>
    <addaction name="menu_Help"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
   <action name="actionOpen">
    <property name="icon">
     <iconset resource="resources.qrc">
@@ -128,6 +206,10 @@
    </property>
   </action>
   <action name="actionTest">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/resources/icons/test.svg</normaloff>:/resources/icons/test.svg</iconset>
+   </property>
    <property name="text">
     <string>Test</string>
    </property>
@@ -148,16 +230,38 @@
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/resources/icons/graph.svg</normaloff>:/resources/icons/graph.svg</iconset>
+   </property>
    <property name="text">
     <string>Graph</string>
    </property>
   </action>
   <action name="actionSave">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/resources/icons/save.svg</normaloff>:/resources/icons/save.svg</iconset>
+   </property>
    <property name="text">
     <string>Save</string>
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Curves</class>
+   <extends>QFrame</extends>
+   <header>curves.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CurvesCommon</class>
+   <extends>QFrame</extends>
+   <header>curvescommon.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="resources.qrc"/>
  </resources>

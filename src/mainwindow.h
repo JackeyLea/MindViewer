@@ -10,10 +10,12 @@
 #include <QFileDialog>
 #include <QDesktopServices>
 #include <QString>
+#include <QPen>
+#include <QResizeEvent>
 
 #include "generator.h"
-#include "iostream"
-#include "sstream"
+#include "retriver.h"
+#include "common.h"
 
 /* Parser types */
 #define PARSER_TYPE_NULL       0x00
@@ -36,26 +38,6 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
-struct _rawPkt{
-    int raw;
-};
-
-struct _eegPkt{
-    int signal;
-
-    int delta;
-    int theta;
-    int lowAlpha;
-    int highAlpha;
-    int lowBeta;
-    int highBeta;
-    int lowGamma;
-    int midGamma;
-    int attention;//0-100
-    int meditation;//0-100
-    int blink;
-};//一个数据包包含的所有值
-
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -64,7 +46,10 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    int parserData(QByteArray ba,struct _eegPkt &pkt);
+    int parserData(QByteArray ba, bool &raw, short &rawValue, bool &eeg, struct _eegPkt &pkt);
+
+protected:
+    void resizeEvent(QResizeEvent *);
 
 private slots:
     void sltReceiveData(QByteArray ba);
@@ -94,5 +79,6 @@ private:
     Ui::MainWindow *ui;
 
     Generator *gen;
+    Retriver *retriverWgt;
 };
 #endif // MAINWINDOW_H

@@ -10,19 +10,33 @@ CONFIG += c++11
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+unix:{
+INCLUDEPATH += /usr/include/qwt
+
+LIBS += -lqwt
+}
+
 SOURCES += \
-    ThinkGearStreamParser.cpp \
+    curves.cpp \
+    curvescommon.cpp \
     generator.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    retriver.cpp
 
 HEADERS += \
-    ThinkGearStreamParser.h \
+    common.h \
+    curves.h \
+    curvescommon.h \
     generator.h \
-    mainwindow.h
+    mainwindow.h \
+    retriver.h
 
 FORMS += \
-    mainwindow.ui
+    curves.ui \
+    curvescommon.ui \
+    mainwindow.ui \
+    retriver.ui
 
 RESOURCES += \
     resources.qrc
