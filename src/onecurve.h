@@ -15,7 +15,6 @@ class OneCurve : public QQuickPaintedItem
     Q_PROPERTY(int spaceCount READ getSpaceCount WRITE setSpaceCount NOTIFY spaceCountChanged)
     Q_PROPERTY(QColor lineColor READ getLineColor WRITE setLineColor NOTIFY lineColorChanged)
     Q_PROPERTY(QFont lineFont READ getLineFont WRITE setLineFont NOTIFY lineFontChanged)
-    Q_PROPERTY(QFont gridLineFont READ getGridLineFont WRITE setGridLineFont NOTIFY gridLineFontChanged)
     Q_PROPERTY(int lineWidth READ getLineWidth WRITE setLineWidth NOTIFY lineWidthChanged)
     Q_PROPERTY(int yMin READ getYMin WRITE setYMin NOTIFY yMinChanged)
     Q_PROPERTY(int yMax READ getYMax WRITE setYMax NOTIFY yMaxChanged)
@@ -47,9 +46,6 @@ public:
     const QFont& getLineFont() const;
     void setLineFont(const QFont& newLineFont);
 
-    const QFont& getGridLineFont() const;
-    void setGridLineFont(const QFont& newGridLineFont);
-
     int getLineWidth() const;
     void setLineWidth(int newLineWidth);
 
@@ -60,7 +56,6 @@ signals:
     void yMaxChanged();
     void lineColorChanged();
     void lineFontChanged();
-    void gridLineFontChanged();
     void lineWidthChanged();
 
 private:

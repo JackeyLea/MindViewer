@@ -154,20 +154,6 @@ void OneCurve::setLineFont(const QFont& newLineFont)
     emit lineFontChanged();
 }
 
-const QFont& OneCurve::getGridLineFont() const
-{
-    return myGridLineFont;
-}
-
-void OneCurve::setGridLineFont(const QFont& newGridLineFont)
-{
-    if (myGridLineFont == newGridLineFont) {
-        return;
-    }
-    myGridLineFont = newGridLineFont;
-    emit gridLineFontChanged();
-}
-
 int OneCurve::getLineWidth() const
 {
     return myLineWidth;
