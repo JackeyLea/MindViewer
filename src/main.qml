@@ -32,10 +32,6 @@ Window {
             pointCount: 800
             spaceCount: 5
             anchors.fill: parent
-            title: qsTr("折线图")
-            titleFont.bold: true
-            titleFont.pixelSize: 35
-            titleColor: Qt.rgba(0, 0, 1, 0.5)
             xTickCount: 10
             yTickCount: 6
             xLineVisible: true

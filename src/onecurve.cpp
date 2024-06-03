@@ -3,6 +3,7 @@
 OneCurve::OneCurve(QQuickItem *parent)
     :QQuickPaintedItem(parent)
 {}
+
 void OneCurve::paint(QPainter* painter)
 {
     if (!painter) {
@@ -16,7 +17,6 @@ void OneCurve::paint(QPainter* painter)
 
     // The drawing order cannot be changed,
     // because there are dependencies between them
-    drawTitle(painter);
     drawLabels(painter);
     drawGridLine(painter);
     drawLine(painter);
@@ -187,49 +187,6 @@ void OneCurve::setPoints(const QList<QPointF>& points)
     update();
 }
 
-const QString& OneCurve::getTitle() const
-{
-    return myTitle;
-}
-
-void OneCurve::setTitle(const QString& title)
-{
-    if (myTitle == title) {
-        return;
-    }
-    myTitle = title;
-    emit titleChanged();
-    update();
-}
-
-const QFont& OneCurve::getTitleFont() const
-{
-    return myTitleFont;
-}
-
-void OneCurve::setTitleFont(const QFont& font)
-{
-    if (myTitleFont == font)
-        return;
-    myTitleFont = font;
-    emit titleFontChanged();
-}
-
-const QColor& OneCurve::getTitleColor() const
-{
-    return myTitleColor;
-}
-
-void OneCurve::setTitleColor(const QColor& color)
-{
-    if (myTitleColor == color) {
-        return;
-    }
-    myTitleColor = color;
-    emit titleColorChanged();
-    update();
-}
-
 const QColor& OneCurve::getLineColor() const
 {
     return myLineColor;
@@ -313,7 +270,6 @@ void OneCurve::setLineWidth(int newLineWidth)
     emit lineWidthChanged();
 }
 
-
 bool OneCurve::getLabelsVisible() const
 {
     return myLabelsVisible;
@@ -354,23 +310,6 @@ void OneCurve::setLabelsColor(const QColor& newLabelsColor)
     }
     myLabelsColor = newLabelsColor;
     emit labelsColorChanged();
-}
-
-void OneCurve::drawTitle(QPainter* painter)
-{
-    if (!myTitle.isEmpty()) {
-        QFontMetrics metrics(myTitleFont, painter->device());
-        int titleHeight = metrics.height() + 10;
-        myYStart += titleHeight;
-
-        painter->save();
-        QPen pen = painter->pen();
-        pen.setColor(myTitleColor);
-        painter->setPen(pen);
-        painter->setFont(myTitleFont);
-        painter->drawText(0, 0, width(), titleHeight, Qt::AlignCenter, myTitle);
-        painter->restore();
-    }
 }
 
 void OneCurve::drawLabels(QPainter* painter)

@@ -8,9 +8,6 @@
 class OneCurve : public QQuickPaintedItem
 {
     Q_OBJECT
-    Q_PROPERTY(QString title READ getTitle WRITE setTitle NOTIFY titleChanged)
-    Q_PROPERTY(QFont titleFont READ getTitleFont WRITE setTitleFont NOTIFY titleFontChanged)
-    Q_PROPERTY(QColor titleColor READ getTitleColor WRITE setTitleColor NOTIFY titleColorChanged)
     Q_PROPERTY(int pointCount READ getPointCount WRITE setPointCount NOTIFY pointCountChanged)
     Q_PROPERTY(int spaceCount READ getSpaceCount WRITE setSpaceCount NOTIFY spaceCountChanged)
     Q_PROPERTY(int xTickCount READ getXTickCount WRITE setXTickCount NOTIFY xTickCountChanged)
@@ -62,15 +59,6 @@ public:
     const QList<QPointF>& getPoints() const;
     void setPoints(const QList<QPointF>& points);
 
-    const QString& getTitle() const;
-    void setTitle(const QString& title);
-
-    const QFont& getTitleFont() const;
-    void setTitleFont(const QFont& font);
-
-    const QColor& getTitleColor() const;
-    void setTitleColor(const QColor& color);
-
     const QColor& getLineColor() const;
     void setLineColor(const QColor& newLineColor);
 
@@ -99,9 +87,6 @@ public:
     void setLabelsFont(const QFont& newLabelsFont);
 
 signals:
-    void titleChanged();
-    void titleFontChanged();
-    void titleColorChanged();
     void pointCountChanged();
     void spaceCountChanged();
     void yMinChanged();
@@ -121,16 +106,12 @@ signals:
     void labelsFontChanged();
 
 private:
-    void drawTitle(QPainter* painter);
     void drawLabels(QPainter* painter);
     void drawGridLine(QPainter* painter);
     void drawLine(QPainter* painter);
     QPointF transformPoint(const QPointF& pt) const;
 
 private:
-    QString                   myTitle;
-    QFont                     myTitleFont;
-    QColor                    myTitleColor;
     int                       myPointCount{60};
     int                       mySpaceCount{10};
     int                       myXTickCount{1};
