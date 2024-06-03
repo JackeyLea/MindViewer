@@ -38,9 +38,6 @@ Window {
             yLineVisible: true
             yMax: 8000
             yMin: 0
-            labelsVisible: true
-            labelsColor: Qt.rgba(0, 0, 0, 0.9)
-            labelsFont.pixelSize: 15
             lineWidth: 2
             gridLineWidth: 1
             lineColor: Qt.rgba(1, 0, 0, 1)

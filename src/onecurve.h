@@ -22,9 +22,6 @@ class OneCurve : public QQuickPaintedItem
     Q_PROPERTY(int gridLineWidth READ getGridLineWidth WRITE setGridLineWidth NOTIFY gridLineWidthChanged)
     Q_PROPERTY(int yMin READ getYMin WRITE setYMin NOTIFY yMinChanged)
     Q_PROPERTY(int yMax READ getYMax WRITE setYMax NOTIFY yMaxChanged)
-    Q_PROPERTY(bool labelsVisible READ getLabelsVisible WRITE setLabelsVisible NOTIFY labelsVisibleChanged)
-    Q_PROPERTY(QColor labelsColor READ getLabelsColor WRITE setLabelsColor NOTIFY labelsColorChanged)
-    Q_PROPERTY(QFont labelsFont READ getLabelsFont WRITE setLabelsFont NOTIFY labelsFontChanged)
 public:
     OneCurve(QQuickItem* parent = nullptr);
 
@@ -77,15 +74,6 @@ public:
     int getGridLineWidth() const;
     void setGridLineWidth(int newGridLineWidth);
 
-    bool getLabelsVisible() const;
-    void setLabelsVisible(bool newLabelsVisible);
-
-    const QColor& getLabelsColor() const;
-    void setLabelsColor(const QColor& newLabelsColor);
-
-    const QFont& getLabelsFont() const;
-    void setLabelsFont(const QFont& newLabelsFont);
-
 signals:
     void pointCountChanged();
     void spaceCountChanged();
@@ -101,12 +89,8 @@ signals:
     void gridLineFontChanged();
     void lineWidthChanged();
     void gridLineWidthChanged();
-    void labelsVisibleChanged();
-    void labelsColorChanged();
-    void labelsFontChanged();
 
 private:
-    void drawLabels(QPainter* painter);
     void drawGridLine(QPainter* painter);
     void drawLine(QPainter* painter);
     QPointF transformPoint(const QPointF& pt) const;
@@ -124,9 +108,6 @@ private:
     QFont                     myGridLineFont;
     int                       myLineWidth;
     int                       myGridLineWidth;
-    bool                      myLabelsVisible{true};
-    QColor                    myLabelsColor;
-    QFont                     myLabelsFont;
     int                       myYMaxValue{100};
     int                       myYMinValue{};
     QList<QPointF>            myPoints;
