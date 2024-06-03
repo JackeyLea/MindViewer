@@ -59,23 +59,15 @@ signals:
     void lineWidthChanged();
 
 private:
-    void drawGridLine(QPainter* painter);
     void drawLine(QPainter* painter);
     QPointF transformPoint(const QPointF& pt) const;
 
 private:
     int                       myPointCount{60};
     int                       mySpaceCount{10};
-    int                       myXTickCount{10};
-    int                       myYTickCount{6};
-    bool                      myXLineVisible{true};
-    bool                      myYLineVisible{true};
     QColor                    myLineColor;
-    QColor                    myGridLineColor;
     QFont                     myLineFont;
-    QFont                     myGridLineFont;
     int                       myLineWidth;
-    int                       myGridLineWidth{1};
     int                       myYMaxValue{100};
     int                       myYMinValue{};
     QList<QPointF>            myPoints;

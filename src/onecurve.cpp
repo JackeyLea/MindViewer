@@ -3,7 +3,6 @@
 OneCurve::OneCurve(QQuickItem *parent)
     :QQuickPaintedItem(parent)
 {
-    myGridLineColor = qRgba(127, 0, 0, 255);
 }
 
 void OneCurve::paint(QPainter* painter)
@@ -12,14 +11,13 @@ void OneCurve::paint(QPainter* painter)
         return;
     }
 
-    myXStart = myGridLineWidth;
-    myXEnd = width() - myGridLineWidth;
-    myYStart = myGridLineWidth;
-    myYEnd = height() - myGridLineWidth;
+    myXStart = 0;
+    myXEnd = width();
+    myYStart =0;
+    myYEnd = height();
 
     // The drawing order cannot be changed,
     // because there are dependencies between them
-    drawGridLine(painter);
     drawLine(painter);
 }
 
@@ -166,39 +164,6 @@ void OneCurve::setLineWidth(int newLineWidth)
     }
     myLineWidth = newLineWidth;
     emit lineWidthChanged();
-}
-
-void OneCurve::drawGridLine(QPainter* painter)
-{
-    QPainterPath linePath;
-    if (myXLineVisible) {
-        int xLineSpace = (myXEnd - myXStart) / myXTickCount;
-        for (int i = 1; i < myXTickCount; ++i) {
-            int xPos = myXStart + xLineSpace * i;
-            linePath.moveTo(xPos, myYStart);
-            linePath.lineTo(xPos, myYEnd);
-        }
-    }
-    if (myYLineVisible) {
-        int yLineSpace = (myYEnd - myYStart) / myYTickCount;
-        for (int i = 1; i < myYTickCount; ++i) {
-            int yPos = myYStart + yLineSpace * i;
-            linePath.moveTo(myXStart, yPos);
-            linePath.lineTo(myXEnd, yPos);
-        }
-    }
-    if (!linePath.isEmpty()) {
-        painter->save();
-        QPen pen = painter->pen();
-        pen.setColor(myGridLineColor);
-        pen.setStyle(Qt::CustomDashLine);
-        pen.setDashPattern(QVector<qreal>{8, 10});
-        pen.setWidth(myGridLineWidth);
-        painter->setPen(pen);
-        painter->drawPath(linePath);
-        painter->setFont(myGridLineFont);
-        painter->restore();
-    }
 }
 
 void OneCurve::drawLine(QPainter* painter)
