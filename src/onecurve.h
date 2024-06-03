@@ -19,7 +19,6 @@ class OneCurve : public QQuickPaintedItem
     Q_PROPERTY(bool xLineVisible READ getXLineVisible WRITE setXLineVisible NOTIFY xLineVisibleChanged)
     Q_PROPERTY(bool yLineVisible READ getYLineVisible WRITE setYLineVisible NOTIFY yLineVisibleChanged)
     Q_PROPERTY(int lineWidth READ getLineWidth WRITE setLineWidth NOTIFY lineWidthChanged)
-    Q_PROPERTY(int gridLineWidth READ getGridLineWidth WRITE setGridLineWidth NOTIFY gridLineWidthChanged)
     Q_PROPERTY(int yMin READ getYMin WRITE setYMin NOTIFY yMinChanged)
     Q_PROPERTY(int yMax READ getYMax WRITE setYMax NOTIFY yMaxChanged)
 public:
@@ -62,9 +61,6 @@ public:
     int getLineWidth() const;
     void setLineWidth(int newLineWidth);
 
-    int getGridLineWidth() const;
-    void setGridLineWidth(int newGridLineWidth);
-
 signals:
     void pointCountChanged();
     void spaceCountChanged();
@@ -76,7 +72,6 @@ signals:
     void lineFontChanged();
     void gridLineFontChanged();
     void lineWidthChanged();
-    void gridLineWidthChanged();
 
 private:
     void drawGridLine(QPainter* painter);
@@ -95,7 +90,7 @@ private:
     QFont                     myLineFont;
     QFont                     myGridLineFont;
     int                       myLineWidth;
-    int                       myGridLineWidth;
+    int                       myGridLineWidth{1};
     int                       myYMaxValue{100};
     int                       myYMinValue{};
     QList<QPointF>            myPoints;

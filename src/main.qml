@@ -37,7 +37,6 @@ Window {
             yMax: 8000
             yMin: 0
             lineWidth: 2
-            gridLineWidth: 1
             lineColor: Qt.rgba(1, 0, 0, 1)
         }
 
