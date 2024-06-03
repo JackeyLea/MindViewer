@@ -16,8 +16,6 @@ class OneCurve : public QQuickPaintedItem
     Q_PROPERTY(QColor lineColor READ getLineColor WRITE setLineColor NOTIFY lineColorChanged)
     Q_PROPERTY(QFont lineFont READ getLineFont WRITE setLineFont NOTIFY lineFontChanged)
     Q_PROPERTY(QFont gridLineFont READ getGridLineFont WRITE setGridLineFont NOTIFY gridLineFontChanged)
-    Q_PROPERTY(bool xLineVisible READ getXLineVisible WRITE setXLineVisible NOTIFY xLineVisibleChanged)
-    Q_PROPERTY(bool yLineVisible READ getYLineVisible WRITE setYLineVisible NOTIFY yLineVisibleChanged)
     Q_PROPERTY(int lineWidth READ getLineWidth WRITE setLineWidth NOTIFY lineWidthChanged)
     Q_PROPERTY(int yMin READ getYMin WRITE setYMin NOTIFY yMinChanged)
     Q_PROPERTY(int yMax READ getYMax WRITE setYMax NOTIFY yMaxChanged)
@@ -33,12 +31,6 @@ public:
 
     int getYMax() const;
     void setYMax(int value);
-
-    bool getXLineVisible() const;
-    void setXLineVisible(bool newXLineVisible);
-
-    bool getYLineVisible() const;
-    void setYLineVisible(bool newYLineVisible);
 
     int getPointCount() const;
     void setPointCount(int pointCount);
@@ -66,8 +58,6 @@ signals:
     void spaceCountChanged();
     void yMinChanged();
     void yMaxChanged();
-    void xLineVisibleChanged();
-    void yLineVisibleChanged();
     void lineColorChanged();
     void lineFontChanged();
     void gridLineFontChanged();
@@ -83,8 +73,8 @@ private:
     int                       mySpaceCount{10};
     int                       myXTickCount{10};
     int                       myYTickCount{6};
-    bool                      myXLineVisible{};
-    bool                      myYLineVisible{};
+    bool                      myXLineVisible{true};
+    bool                      myYLineVisible{true};
     QColor                    myLineColor;
     QColor                    myGridLineColor;
     QFont                     myLineFont;

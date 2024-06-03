@@ -70,34 +70,6 @@ void OneCurve::setYMax(int value)
     update();
 }
 
-bool OneCurve::getYLineVisible() const
-{
-    return myYLineVisible;
-}
-
-void OneCurve::setYLineVisible(bool newYLineVisible)
-{
-    if (myYLineVisible == newYLineVisible) {
-        return;
-    }
-    myYLineVisible = newYLineVisible;
-    emit yLineVisibleChanged();
-}
-
-bool OneCurve::getXLineVisible() const
-{
-    return myXLineVisible;
-}
-
-void OneCurve::setXLineVisible(bool newXLineVisible)
-{
-    if (myXLineVisible == newXLineVisible) {
-        return;
-    }
-    myXLineVisible = newXLineVisible;
-    emit xLineVisibleChanged();
-}
-
 int OneCurve::getPointCount() const
 {
     return myPointCount;

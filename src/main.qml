@@ -32,8 +32,6 @@ Window {
             pointCount: 800
             spaceCount: 5
             anchors.fill: parent
-            xLineVisible: true
-            yLineVisible: true
             yMax: 8000
             yMin: 0
             lineWidth: 2
