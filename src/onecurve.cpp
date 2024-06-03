@@ -68,23 +68,6 @@ void OneCurve::setYMax(int value)
     update();
 }
 
-int OneCurve::getYTickCount() const
-{
-    return myYTickCount;
-}
-
-void OneCurve::setYTickCount(int tickCount)
-{
-    if (myYTickCount == tickCount) {
-        return;
-    }
-    if (tickCount <= 0) {
-        return;
-    }
-    myYTickCount = tickCount;
-    emit yTickCountChanged();
-}
-
 bool OneCurve::getYLineVisible() const
 {
     return myYLineVisible;
@@ -111,23 +94,6 @@ void OneCurve::setXLineVisible(bool newXLineVisible)
     }
     myXLineVisible = newXLineVisible;
     emit xLineVisibleChanged();
-}
-
-int OneCurve::getXTickCount() const
-{
-    return myXTickCount;
-}
-
-void OneCurve::setXTickCount(int tickCount)
-{
-    if (myXTickCount == tickCount) {
-        return;
-    }
-    if (tickCount <= 0) {
-        return;
-    }
-    myXTickCount = tickCount;
-    emit xTickCountChanged();
 }
 
 int OneCurve::getPointCount() const

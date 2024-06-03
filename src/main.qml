@@ -32,8 +32,6 @@ Window {
             pointCount: 800
             spaceCount: 5
             anchors.fill: parent
-            xTickCount: 10
-            yTickCount: 6
             xLineVisible: true
             yLineVisible: true
             yMax: 8000
