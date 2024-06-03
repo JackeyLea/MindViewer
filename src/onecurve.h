@@ -4,6 +4,9 @@
 #include <QQuickPaintedItem>
 #include <QPainter>
 #include <QPainterPath>
+#include <QColor>
+#include <QRgba64>
+#include <QRgb>
 
 class OneCurve : public QQuickPaintedItem
 {
@@ -11,7 +14,6 @@ class OneCurve : public QQuickPaintedItem
     Q_PROPERTY(int pointCount READ getPointCount WRITE setPointCount NOTIFY pointCountChanged)
     Q_PROPERTY(int spaceCount READ getSpaceCount WRITE setSpaceCount NOTIFY spaceCountChanged)
     Q_PROPERTY(QColor lineColor READ getLineColor WRITE setLineColor NOTIFY lineColorChanged)
-    Q_PROPERTY(QColor gridLineColor READ getGridLineColor WRITE setGridLineColor NOTIFY gridLineColorChanged)
     Q_PROPERTY(QFont lineFont READ getLineFont WRITE setLineFont NOTIFY lineFontChanged)
     Q_PROPERTY(QFont gridLineFont READ getGridLineFont WRITE setGridLineFont NOTIFY gridLineFontChanged)
     Q_PROPERTY(bool xLineVisible READ getXLineVisible WRITE setXLineVisible NOTIFY xLineVisibleChanged)
@@ -51,9 +53,6 @@ public:
     const QColor& getLineColor() const;
     void setLineColor(const QColor& newLineColor);
 
-    const QColor& getGridLineColor() const;
-    void setGridLineColor(const QColor& newGridLineColor);
-
     const QFont& getLineFont() const;
     void setLineFont(const QFont& newLineFont);
 
@@ -74,7 +73,6 @@ signals:
     void xLineVisibleChanged();
     void yLineVisibleChanged();
     void lineColorChanged();
-    void gridLineColorChanged();
     void lineFontChanged();
     void gridLineFontChanged();
     void lineWidthChanged();

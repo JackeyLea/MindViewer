@@ -39,7 +39,6 @@ Window {
             lineWidth: 2
             gridLineWidth: 1
             lineColor: Qt.rgba(1, 0, 0, 1)
-            gridLineColor: Qt.rgba(0, 0, 1, 0.5)
         }
 
         // FIXME 2021-08-07 : timer for test

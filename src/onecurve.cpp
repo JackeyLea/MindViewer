@@ -2,7 +2,9 @@
 
 OneCurve::OneCurve(QQuickItem *parent)
     :QQuickPaintedItem(parent)
-{}
+{
+    myGridLineColor = qRgba(127, 0, 0, 255);
+}
 
 void OneCurve::paint(QPainter* painter)
 {
@@ -164,19 +166,6 @@ void OneCurve::setLineColor(const QColor& newLineColor)
     }
     myLineColor = newLineColor;
     emit lineColorChanged();
-}
-
-const QColor& OneCurve::getGridLineColor() const
-{
-    return myGridLineColor;
-}
-
-void OneCurve::setGridLineColor(const QColor& newGridLineColor)
-{
-    if (myGridLineColor == newGridLineColor)
-        return;
-    myGridLineColor = newGridLineColor;
-    emit gridLineColorChanged();
 }
 
 const QFont& OneCurve::getLineFont() const
