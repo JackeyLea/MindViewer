@@ -71,6 +71,49 @@ Window {
     Rectangle{
         color: Qt.rgba(0, 0, 1, 0.1)
         anchors.top: parent.top
+        anchors.right: batteryRectID.left
+        anchors.margins: 10
+        radius: 5
+        width: 70
+        height: 50
+
+        WIFI {
+            id: wifiID
+            //anchors.top: parent.top
+            //anchors.right: parent.right
+
+            // PropertyAnimation {         //电量变动动画
+            //     id:batterChange
+            //     target: batteryID
+            //     property: "batteryLevel"
+            //     duration: 500
+            //     easing.type: Easing.InOutQuad
+            // }
+        }
+
+        // FIXME 2021-08-07 : timer for test
+        Timer {
+            running: true
+            interval: 100
+            repeat: true
+
+            property double current: 0
+
+            onTriggered: {
+                current = current + 1
+                if (current > 5) {
+                    current = 0
+                }
+
+                wifiID.wifiLevel = current
+            }
+        }
+    }
+
+    Rectangle{
+        id: batteryRectID
+        color: Qt.rgba(0, 0, 1, 0.1)
+        anchors.top: parent.top
         anchors.right: parent.right
         anchors.margins: 10
         radius: 5
