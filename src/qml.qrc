@@ -3,5 +3,6 @@
         <file>main.qml</file>
         <file>Battery.qml</file>
         <file>WIFI.qml</file>
+        <file>Dial.qml</file>
     </qresource>
 </RCC>
