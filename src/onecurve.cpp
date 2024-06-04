@@ -2,8 +2,7 @@
 
 OneCurve::OneCurve(QQuickItem *parent)
     :QQuickPaintedItem(parent)
-{
-}
+{}
 
 void OneCurve::paint(QPainter* painter)
 {
@@ -16,8 +15,6 @@ void OneCurve::paint(QPainter* painter)
     myYStart =0;
     myYEnd = height();
 
-    // The drawing order cannot be changed,
-    // because there are dependencies between them
     drawLine(painter);
 }
 

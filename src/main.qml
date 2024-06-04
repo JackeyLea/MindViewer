@@ -4,8 +4,10 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 
 import com.onecurve 1.0
+import "./"
 
 Window {
+    id:mindviewerID
     x: 0
     y: 0
     width: 1080
@@ -21,7 +23,6 @@ Window {
     title: qsTr("MindViewer")
 
     Rectangle {
-
         color: Qt.rgba(0, 0, 1, 0.1)
         anchors.fill: parent
         anchors.margins: 10
@@ -67,6 +68,47 @@ Window {
         }
     }
 
+    Rectangle{
+        color: Qt.rgba(0, 0, 1, 0.1)
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.margins: 10
+        radius: 5
+        width:100
+        height:50
+
+        Battery {
+            id:batteryID
+            //anchors.top: parent.top
+            //anchors.right: parent.right
+
+            // PropertyAnimation {         //电量变动动画
+            //     id:batterChange
+            //     target: batteryID
+            //     property: "batteryLevel"
+            //     duration: 500
+            //     easing.type: Easing.InOutQuad
+            // }
+        }
+
+        // FIXME 2021-08-07 : timer for test
+        Timer {
+            running: true
+            interval: 100
+            repeat: true
+
+            property double current: 0
+
+            onTriggered: {
+                current = current + 0.01
+                if (current >= 1) {
+                    current = 0
+                }
+
+                batteryID.batteryLevel = current
+            }
+        }
+    }
     /*Rectangle {
         id: rectangle
         x: 0
