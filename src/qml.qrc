@@ -1,9 +1,9 @@
 <RCC>
     <qresource prefix="/">
-        <file>main.qml</file>
-        <file>Battery.qml</file>
-        <file>WIFI.qml</file>
-        <file>DialBackground.qml</file>
-        <file>Dial.qml</file>
+        <file>qml/Battery.qml</file>
+        <file>qml/Dial.qml</file>
+        <file>qml/DialBackground.qml</file>
+        <file>qml/main.qml</file>
+        <file>qml/WIFI.qml</file>
     </qresource>
 </RCC>

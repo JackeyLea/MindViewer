@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<OneCurve>("com.onecurve", 1, 0, "OneCurve");
 
     QQmlApplicationEngine engine;
-    const QUrl url(QStringLiteral("qrc:/main.qml"));
+    const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
     QObject::connect(
         &engine,
         &QQmlApplicationEngine::objectCreated,
