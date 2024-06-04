@@ -5,5 +5,14 @@
         <file>qml/DialBackground.qml</file>
         <file>qml/main.qml</file>
         <file>qml/WIFI.qml</file>
+        <file>resources/icons/about.svg</file>
+        <file>resources/icons/capture.svg</file>
+        <file>resources/icons/exit.svg</file>
+        <file>resources/icons/github.svg</file>
+        <file>resources/icons/mind.svg</file>
+        <file>resources/icons/open.svg</file>
+        <file>resources/icons/qt.png</file>
+        <file>resources/icons/serialport.svg</file>
+        <file>resources/icons/test.svg</file>
     </qresource>
 </RCC>
