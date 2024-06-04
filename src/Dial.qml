@@ -1,92 +1,218 @@
-// file - Mycar.qml
-
 import QtQuick 2.15
+import QtQuick.Window 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
+import "./"
 
-Item {
-    id: carItem
-    width: 100
-    height: 100
+Rectangle{
 
-    // 背景圆弧线宽
-    property int btm_lineWidth: 15
-    // 背景圆弧颜色
-    property color btm_backgroundColor: Qt.rgba(0, 0, 0, 0.1);
-    // 背景圆弧半径 开始角度 结束角度
-    property int btm_r: 20
-    property double btm_startAngle: 0
-    property double btm_endAngle: 90
+    DialBackground {
+        property int svalue:0
 
-    onBtm_lineWidthChanged: canvas.requestPaint()
-    onBtm_backgroundColorChanged: canvas.requestPaint()
-    onBtm_rChanged: canvas.requestPaint()
-    onBtm_startAngleChanged: canvas.requestPaint()
-    onBtm_endAngleChanged: canvas.requestPaint()
+        id: speed_car
+        x: 175
+        y: 93
+        width: 291
+        height: 238
+        dial_addR: -6
+        dial_longNum: 10
+        dial_longLen: 15
+        dial_lineWidth: 3
+        btm_lineWidth: 22
+        top_lineWidth: 10
+        top_endAngle: svalue*1.3+140
+        top_startAngle: 140
+        btm_endAngle: 400
+        btm_startAngle: 140
+        btm_r: 120
+        top_r: 120
 
-    // 顶层圆弧线宽
-    property int top_lineWidth: 10
-    // 顶层圆弧颜色
-    property color top_backgroundColor: "lightgreen"
-    // 顶层圆弧半径 开始角度 结束角度
-    property int top_r: 20
-    property double top_startAngle: 0
-    property double top_endAngle: 90
+        Text {
+            id: speed
+            x: 104
+            y: 116
+            width: 89
+            height: 44
+            text: parent.svalue
+            style: Text.Normal
+            font.weight: Font.ExtraBold
+            font.capitalization: Font.MixedCase
+            font.pixelSize: 40
+            font.bold: true
+            font.family: "Verdana"
+            horizontalAlignment: Text.AlignHCenter
+        }
 
-    onTop_lineWidthChanged: canvas.requestPaint()
-    onTop_backgroundColorChanged: canvas.requestPaint()
-    onTop_rChanged: canvas.requestPaint()
-    onTop_startAngleChanged: canvas.requestPaint()
-    onTop_endAngleChanged: canvas.requestPaint()
+        Label {
+            id: speed_label
+            x: 120
+            y: 154
+            width: 45
+            height: 30
+            text: qsTr("冥想值")
+            font.pointSize: 11
+            font.bold: true
+            verticalAlignment: Text.AlignBottom
+        }
 
-    // 刻度盘
-    property color dial_color: "#000000"
-    property int dial_lineWidth: 3
-    property int dial_addR: 2          // 通过调整该变量可以控制刻度盘圆弧与底层圆弧的距离
-    property int dial_longNum: 5       // 刻度盘长刻度线的数量
-    property int dial_longLen: 10      // 刻度盘长刻度线的长度
+        Label {
+            id: label2
+            x: 263
+            y: 235
+            width: 33
+            height: 25
+            text: qsTr("200")
+            horizontalAlignment: Text.AlignHCenter
+            font.pointSize: 14
+            font.weight: Font.Normal
+        }
 
-    onDial_colorChanged: canvas.requestPaint()
-    onDial_lineWidthChanged: canvas.requestPaint()
-    onDial_addRChanged: canvas.requestPaint()
-    onDial_longNumChanged: canvas.requestPaint()
-    onDial_longLenChanged: canvas.requestPaint()
+        Label {
+            id: label4
+            x: 300
+            y: 180
+            width: 42
+            height: 25
+            text: qsTr("180")
+            horizontalAlignment: Text.AlignHCenter
+            font.pointSize: 14
+            font.weight: Font.Normal
+        }
 
-    Canvas {
-        id: canvas
-        width: carItem.width
-        height: carItem.height
+        Label {
+            id: label6
+            x: 310
+            y: 100
+            width: 23
+            height: 25
+            text: qsTr("160")
+            horizontalAlignment: Text.AlignHCenter
+            font.pointSize: 14
+            font.weight: Font.Normal
+        }
 
-        onPaint: {
-            var ctx = getContext("2d");
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        Label {
+            id: label8
+            x: 270
+            y: 30
+            width: 35
+            height: 25
+            text: qsTr("140")
+            horizontalAlignment: Text.AlignHCenter
+            font.pointSize: 14
+            font.weight: Font.Normal
+        }
 
-            // 画背景圆弧
-            ctx.lineWidth = carItem.btm_lineWidth;
-            ctx.strokeStyle = carItem.btm_backgroundColor;
-            ctx.beginPath();
-            ctx.arc(carItem.width/2, carItem.width/2, carItem.btm_r, (carItem.btm_startAngle/180*Math.PI), (carItem.btm_endAngle/180*Math.PI));
-            ctx.stroke();
+        Label {
+            id: label10
+            x: 200
+            y: -20
+            width: 36
+            height: 25
+            text: qsTr("120")
+            horizontalAlignment: Text.AlignHCenter
+            font.pointSize: 14
+            font.weight: Font.Normal
+        }
 
-            // 画大刻度盘
-            ctx.lineWidth = carItem.dial_lineWidth;
-            ctx.strokeStyle = carItem.dial_color;
-            ctx.beginPath();
-            ctx.arc(carItem.width/2, carItem.width/2, carItem.btm_r+carItem.btm_lineWidth+carItem.dial_addR, (carItem.btm_startAngle/180*Math.PI), (carItem.btm_endAngle/180*Math.PI));
-            var tmp_step = (carItem.btm_endAngle-carItem.btm_startAngle)/carItem.dial_longNum;
-            for(var i=carItem.btm_startAngle;i<carItem.btm_endAngle+tmp_step;i+=tmp_step) {
-                var tmp_x = (carItem.width/2)+(carItem.btm_r+carItem.btm_lineWidth+carItem.dial_addR)*Math.cos(i/180*Math.PI);
-                var tmp_y = (carItem.width/2)+(carItem.btm_r+carItem.btm_lineWidth+carItem.dial_addR)*Math.sin(i/180*Math.PI);
-                ctx.moveTo(tmp_x, tmp_y);
-                // 绘制长刻度线
-                ctx.lineTo(tmp_x+carItem.dial_longLen*Math.cos(i/180*Math.PI), tmp_y+(carItem.dial_longLen*Math.sin(i/180*Math.PI)));
+        Label {
+            id: label11
+            x: 130
+            y: -30
+            width: 23
+            height: 25
+            text: qsTr("100")
+            horizontalAlignment: Text.AlignHCenter
+            font.pointSize: 14
+            font.weight: Font.Normal
+        }
+
+        Label {
+            id: label9
+            x: 60
+            y: -20
+            width: 23
+            height: 25
+            text: qsTr("80")
+            horizontalAlignment: Text.AlignHCenter
+            font.pointSize: 14
+            font.weight: Font.Normal
+        }
+
+        Label {
+            id: label7
+            x: 0
+            y: 30
+            width: 23
+            height: 25
+            text: qsTr("60")
+            horizontalAlignment: Text.AlignHCenter
+            font.pointSize: 14
+            font.weight: Font.Normal
+        }
+
+        Label {
+            id: label5
+            x: -30
+            y: 102
+            width: 23
+            height: 25
+            text: qsTr("40")
+            horizontalAlignment: Text.AlignHCenter
+            font.pointSize: 14
+            font.weight: Font.Normal
+        }
+
+        Label {
+            id: label3
+            x: -28
+            y: 172
+            width: 23
+            height: 25
+            text: qsTr("20")
+            horizontalAlignment: Text.AlignHCenter
+            font.pointSize: 14
+            font.weight: Font.Normal
+        }
+
+        Label {
+            id: label1
+            x: 8
+            y: 235
+            width: 23
+            height: 25
+            text: qsTr("0")
+            font.weight: Font.Normal
+            horizontalAlignment: Text.AlignHCenter
+            font.pointSize: 14
+        }
+    }
+
+    // FIXME 2021-08-07 : timer for test
+    Timer {
+        running: true
+        interval: 1000
+        repeat: true
+
+        property int current: 0
+
+        onTriggered: {
+            current = current + 10
+            if (current >= 200) {
+                current = 0
             }
-            ctx.stroke();
 
-            // 画顶层圆弧
-            ctx.lineWidth = carItem.top_lineWidth;
-            ctx.strokeStyle = carItem.top_backgroundColor;
-            ctx.beginPath();
-            ctx.arc(carItem.width/2, carItem.width/2, carItem.top_r, (carItem.top_startAngle/180*Math.PI), (carItem.top_endAngle/180*Math.PI));
-            ctx.stroke();
+            if(current<60) {
+                speed.color = "red"
+            }
+            else if(current<120) {
+                speed.color = "#f2ac28"
+            }
+            else {
+                speed.color = "green"
+            }
+            speed_label.color = speed.color
+            speed_car.svalue=current
         }
     }
 }
