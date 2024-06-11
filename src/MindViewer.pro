@@ -5,11 +5,14 @@ QT += quick qml
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 HEADERS += \
-    onecurve.h
+    common.h \
+    onecurve.h \
+    simgen.h
 
 SOURCES += \
         main.cpp \
-        onecurve.cpp
+        onecurve.cpp \
+        simgen.cpp
 
 RESOURCES += qml.qrc
 
