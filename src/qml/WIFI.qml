@@ -18,6 +18,7 @@ Rectangle {
     width: 70
     height: 50
     color: Qt.rgba(0, 0, 1, 0.1)
+    radius: 5
 
     //信号主体
     Repeater{

@@ -13,20 +13,27 @@ Window {
     width: 1080
     height: 720
     visible: true
-    color: "#000000ff"
-    maximumHeight: 720
-    maximumWidth: 1080
+    //color: "#000000ff"
+    color: "white"
+    //maximumHeight: 720
+    //maximumWidth: 1080
     minimumHeight: 720
     minimumWidth: 1080
     modality: Qt.WindowModal
     visibility: Window.AutomaticVisibility
     title: qsTr("MindViewer")
 
+    //flags: Qt.FramelessWindowHint
+
     Rectangle {
         color: Qt.rgba(0, 0, 1, 0.1)
-        anchors.fill: parent
+        //anchors.fill: parent
         anchors.margins: 10
         radius: 5
+        x: 10
+        y: 10
+        width: 500
+        height: 100
 
         OneCurve {
             id: paintItem
@@ -68,12 +75,12 @@ Window {
         }
     }
 
-    Rectangle{
-        color: Qt.rgba(0, 0, 1, 0.1)
+    Item{
+        //color: Qt.rgba(0, 0, 1, 0.1)
         anchors.top: parent.top
         anchors.right: batteryRectID.left
         anchors.margins: 10
-        radius: 5
+        //radius: 5
         width: 70
         height: 50
 
@@ -110,13 +117,13 @@ Window {
         }
     }
 
-    Rectangle{
+    Item{
         id: batteryRectID
-        color: Qt.rgba(0, 0, 1, 0.1)
+        //color: Qt.rgba(0, 0, 1, 0.1)
         anchors.top: parent.top
         anchors.right: parent.right
         anchors.margins: 10
-        radius: 5
+        //radius: 5
         width:100
         height:50
 
@@ -155,5 +162,25 @@ Window {
 
     Dial{
         id:a
+    }
+
+    Button{
+        id:btnExit
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.margins: 10
+        width:64
+        height:64
+
+        Image {
+            id: backgroundImage
+            source: "qrc:/resources/icons/exit.svg" // 替换为您的图片路径
+            anchors.fill: parent
+            fillMode: Image.PreserveAspectCrop
+        }
+
+        onClicked: {
+            Qt.quit()
+        }
     }
 }

@@ -5,7 +5,6 @@ import QtQuick.Layouts 1.15
 import "./"
 
 Rectangle{
-
     DialBackground {
         property int svalue:0
 

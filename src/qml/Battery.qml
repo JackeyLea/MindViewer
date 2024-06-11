@@ -16,6 +16,7 @@ Rectangle {
     width: 100
     height: 50
     color: Qt.rgba(0, 0, 1, 0.1)
+    radius:5
 
     // 电池体
     Rectangle {
