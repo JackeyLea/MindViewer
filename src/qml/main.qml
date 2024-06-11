@@ -165,6 +165,26 @@ Window {
     }
 
     Button{
+        id:btnOpen
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        anchors.margins: 10
+        width:64
+        height:64
+
+        Image {
+            id: backgroundOpenImage
+            source: "qrc:/resources/icons/open.svg" // 替换为您的图片路径
+            anchors.fill: parent
+            fillMode: Image.PreserveAspectCrop
+        }
+
+        onClicked: {
+            // TODO 打开并读取文件
+        }
+    }
+
+    Button{
         id:btnExit
         anchors.right: parent.right
         anchors.bottom: parent.bottom
@@ -173,7 +193,7 @@ Window {
         height:64
 
         Image {
-            id: backgroundImage
+            id: backgroundExitImage
             source: "qrc:/resources/icons/exit.svg" // 替换为您的图片路径
             anchors.fill: parent
             fillMode: Image.PreserveAspectCrop
