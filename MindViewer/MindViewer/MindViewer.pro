@@ -14,7 +14,7 @@ SOURCES += \
     simulator.cpp
 
 HEADERS += \
-    BaseStimulation.h \
+    basestimulation.h \
     mainwindow.h \
     simulator.h
 

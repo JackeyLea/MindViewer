@@ -14,8 +14,9 @@
 class BaseStimulation : public QObject
 {
 public:
-    BaseStimulation();
-    ~BaseStimulation();
+    BaseStimulation(){}
+
+    ~BaseStimulation(){}
 
 protected:
     void sigNewFrame(QByteArray ba);
