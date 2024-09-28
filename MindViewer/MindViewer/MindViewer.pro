@@ -13,6 +13,7 @@ SOURCES += \
     mainwindow.cpp
 
 HEADERS += \
+    BaseStimulation.h \
     mainwindow.h
 
 FORMS += \
