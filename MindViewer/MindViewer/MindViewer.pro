@@ -10,11 +10,13 @@ CONFIG += c++17
 
 SOURCES += \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    simulator.cpp
 
 HEADERS += \
     BaseStimulation.h \
-    mainwindow.h
+    mainwindow.h \
+    simulator.h
 
 FORMS += \
     mainwindow.ui
