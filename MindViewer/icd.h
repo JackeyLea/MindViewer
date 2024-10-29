@@ -10,6 +10,19 @@
 #define ICD_H
 
 #include <QObject>
+#include <QRandomGenerator>
+
+static QList<uchar> TGAModules = {0x01,0x02,0x04,0x05,0x83};
+
+//[0,max)
+inline uchar getNum(int max=256){
+    return QRandomGenerator::global()->bounded(0,max);
+}
+
+inline bool getBool()
+{
+    return getNum(2);
+}
 
 //数据源类型
 enum DataSourceType{
