@@ -38,7 +38,7 @@ public:
     void stopCOM();
 
 signals:
-    void rawData(QByteArray ba);
+    void sigNewPkg(QByteArray ba);
 
 private slots:
     void receiveData();

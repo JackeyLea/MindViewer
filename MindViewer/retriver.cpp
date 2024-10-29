@@ -47,7 +47,7 @@ void Retriver::stopCOM()
 void Retriver::receiveData()
 {
     QByteArray data = com->readAll();
-    emit rawData(data);//通知有原始数据来了
+    emit sigNewPkg(data);//通知有原始数据来了
 }
 
 //打开关闭按钮
@@ -55,6 +55,7 @@ void Retriver::on_btnOpenClose_clicked()
 {
     if(isCOMOpen){//关闭串口
         com->clear();//清空串口数据
+        com->close();
     }else{//打开串口
         //设置串口名字 假设我们上面已经成功获取到了 并且使用第一个
         com->setPortName(ui->comboBoxCOM->currentText());
