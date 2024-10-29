@@ -1,4 +1,5 @@
 QT       += core gui
+QT       += serialport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -11,15 +12,18 @@ CONFIG += c++17
 SOURCES += \
     dataparser.cpp \
     main.cpp \
-    mainwidget.cpp
+    mainwidget.cpp \
+    retriver.cpp
 
 HEADERS += \
     dataparser.h \
     icd.h \
-    mainwidget.h
+    mainwidget.h \
+    retriver.h
 
 FORMS += \
-    mainwidget.ui
+    mainwidget.ui \
+    retriver.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
