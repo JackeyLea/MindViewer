@@ -7,5 +7,6 @@
         <file>resource/icon/serialport.svg</file>
         <file>resource/icon/sim.svg</file>
         <file>resource/icon/clear.svg</file>
+        <file>resource/icon/mind.svg</file>
     </qresource>
 </RCC>
