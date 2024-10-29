@@ -25,7 +25,7 @@ public:
 
     QByteArray getOne(uchar mn, int max);//输入为modulename,max
     QByteArray getRaw(bool noise=false);//
-    QByteArray getEEG();
+    QByteArray getEEG(bool noise=false);
 
 signals:
     void sigNewPkt(QByteArray ba);

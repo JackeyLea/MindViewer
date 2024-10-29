@@ -21,6 +21,8 @@ private slots:
     /// \brief case_checkGetRaw
     ///
     void case_checkGetRaw();
+
+    void case_checkGetEEG();
 };
 
 #endif // MINDVIEWERTEST_H

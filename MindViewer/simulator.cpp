@@ -116,7 +116,7 @@ QByteArray Simulator::getRaw(bool noise)
 //如果还没有这个模块，获取随机数决定是否添加
 //大包不包含原始数据
 //eeg数据有三个无符号整数组成
-QByteArray Simulator::getEEG()
+QByteArray Simulator::getEEG(bool noise)
 {
     //    QByteArray pkg2;
     //    pkg2.clear();
@@ -145,7 +145,7 @@ QByteArray Simulator::getEEG()
         pkg.clear();
         pkg.append(0xAA);//0
         pkg.append(0xAA);//1
-        pkg.append((int)0x00);// payload，先为空，等模块确定后才能确定
+        pkg.append((char)0x00);// payload，先为空，等模块确定后才能确定
 
         //使用两个循环，外层决定是否使用，内层决定使用哪一个模块
         for(int i=0;i<5;i++){//是否使用
@@ -217,15 +217,12 @@ QByteArray Simulator::getEEG()
         }
         //update plength
         //qDebug()<<"size "<<pkg.size();
-        pkg[2]=pkg.size()-3;
+        pkg[2]=pkg.size()-3;//末尾一个 两个0xaa
         //qDebug()<<"2"<<(int)pkg[2];
         if((int)pkg[2]==0){//如果所有模块都未被使用，就重新生成
             continue;
         }
         //qDebug()<<ms;
-        if(!ms.contains(4)){//必须有eeg数据，如果没有就重新生成
-            continue;
-        }
         //calculate sumcheck
         int checksum = pkg[3];
         for (int i = 4; i < pkg.size(); i++)
@@ -235,16 +232,16 @@ QByteArray Simulator::getEEG()
         checksum &= 0xff;
         checksum = ~checksum & 0xff;
         pkg.append(checksum);
-        //qDebug()<<"eeg"<<pkg;
         break;
     }
 
     //添加随机干扰数据
-    int cnt = getNum();
-    for(int n=0;n<cnt;n++){
-        pkg.append(getNum());
+    if(noise){
+        int cnt = getNum();
+        for(int n=0;n<cnt;n++){
+            pkg.append(getNum());
+        }
     }
-    pkg.append(0xaa);
 
     return pkg;
 }

@@ -21,3 +21,21 @@ void MindViewerTest::case_checkGetRaw()
     checksum = ~checksum & 0xff;
     QVERIFY(checksum==ba[7]);
 }
+
+void MindViewerTest::case_checkGetEEG()
+{
+    Simulator sim;
+    QByteArray ba = sim.getEEG();
+
+    QVERIFY((uchar)ba[0]==0xaa);
+    QVERIFY((uchar)ba[1]==0xaa);
+    QVERIFY(ba[0]!=0x00);
+
+    int checksum=0;
+    for(int i=3;i<ba.size()-1;i++){
+        checksum += ba[i];
+    }
+    checksum &= 0xff;
+    checksum = ~checksum & 0xff;
+    QVERIFY(checksum==ba[ba.size()-1]);
+}
