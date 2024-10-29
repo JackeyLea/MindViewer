@@ -24,7 +24,7 @@ public:
     ~Simulator();
 
     QByteArray getOne(uchar mn, int max);//输入为modulename,max
-    QByteArray getRaw();//
+    QByteArray getRaw(bool noise=false);//
     QByteArray getEEG();
 
 signals:

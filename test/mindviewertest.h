@@ -15,7 +15,12 @@ class MindViewerTest : public QObject
     Q_OBJECT
 
 private slots:
-    void case_check();
+    /// 检测模拟部分 //////////////
+
+    /// 检测模拟生成原始数据包
+    /// \brief case_checkGetRaw
+    ///
+    void case_checkGetRaw();
 };
 
 #endif // MINDVIEWERTEST_H

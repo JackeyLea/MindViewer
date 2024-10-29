@@ -14,10 +14,12 @@ CONFIG -= app_bundle
 
 SOURCES += \
         main.cpp \
-        mindviewertest.cpp
+        mindviewertest.cpp \
+        ../MindViewer/simulator.cpp
 
 HEADERS += \
-    mindviewertest.h
+    mindviewertest.h \
+    ../MindViewer/simulator.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

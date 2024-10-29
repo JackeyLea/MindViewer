@@ -43,7 +43,7 @@ QByteArray Simulator::getOne(uchar mn, int max)
 }
 //16位raw value -32768~32767
 //打包时分为两个uchar存储
-QByteArray Simulator::getRaw()
+QByteArray Simulator::getRaw(bool noise)
 {
     //    QByteArray pkg;
     //    pkg.clear();
@@ -99,11 +99,13 @@ QByteArray Simulator::getRaw()
     //qDebug()<<"raw data"<<data;
 
     //添加随机干扰数据
-    int cnt = getNum();
-    for(int n=0;n<cnt;n++){
-        data.append(getNum());
+    if(noise){
+        int cnt = getNum();
+        for(int n=0;n<cnt;n++){
+            data.append(getNum());
+        }
+        data.append(0xaa);
     }
-    data.append(0xaa);
 
     return data;
 }
