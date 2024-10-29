@@ -53,7 +53,7 @@ void MainWidget::initConn()
 
 void MainWidget::sltBtnCOM()
 {
-
+    m_parser->setSource(COM);
 }
 
 void MainWidget::sltBtnSIM()
@@ -99,5 +99,10 @@ void MainWidget::sltBtnSave()
 // 从解析类中获取数据然后显示
 void MainWidget::sltUpdateWidget()
 {
+    //从资源池中去一个结构体
+    _eegPkt pkt = m_parser->getPkg();
+    ui->labelPowerValue->setText(QString("%1").arg(pkt.power));
+
+    update();
 }
 

@@ -10,17 +10,22 @@
 #include <QObject>
 #include <QThread>
 
+#include "icd.h"
+#include "retriver.h"
+
 class DataParser : public QThread
 {
     Q_OBJECT
 public:
     DataParser();
 
+    void setSource(DataSourceType type);
+
     /// 获取一包数据并等待显示
     /// \brief getPkg
     /// \return
     ///
-    QByteArray getPkg();
+    _eegPkt getPkg();
 
     /// 清空缓存区
     /// \brief clearBuff
@@ -43,7 +48,9 @@ protected:
 
 private:
     QByteArray m_buff;//数据缓存区
-    QByteArrayList m_pkgList;//解析后的结构体列表
+    QList<_eegPkt> m_pkgList;//解析后的结构体列表
+
+    Retriver *m_comRetriver;
 };
 
 #endif // DATAPARSER_H
