@@ -1,6 +1,12 @@
-QT = core
+#######################
+### \author Jackey Lea
+### \date 2024-10-29
+### \brief 单元测试
+#######################
+QT += core testlib
 
 CONFIG += c++17 cmdline
+CONFIG -= app_bundle
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
