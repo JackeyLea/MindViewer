@@ -1,3 +1,11 @@
 <RCC>
-    <qresource prefix="/"/>
+    <qresource prefix="/">
+        <file>resource/icon/open.svg</file>
+        <file>resource/icon/pause.svg</file>
+        <file>resource/icon/resume.svg</file>
+        <file>resource/icon/save.svg</file>
+        <file>resource/icon/serialport.svg</file>
+        <file>resource/icon/sim.svg</file>
+        <file>resource/icon/clear.svg</file>
+    </qresource>
 </RCC>
