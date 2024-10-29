@@ -117,7 +117,6 @@ void Curves::updateRawData(short raw)
     curveRaw->setSamples(xdata,dataRaw);
     curveRaw->attach(this);
     curveRaw->setLegendAttribute(curveRaw->LegendShowLine);//显示图例的标志，这里显示线的颜色。
-    replot();
 }
 
 //显示八个脑电波数据
@@ -187,8 +186,6 @@ void Curves::updateEEGData(_eegPkt pkt)
     curveTheta->setSamples(xdata,dataTheta);
     curveTheta->attach(this);
     curveTheta->setLegendAttribute(curveTheta->LegendShowLine);//显示图例的标志，这里显示线的颜色。
-
-    replot();
 }
 //清空数据
 void Curves::CurveClear()

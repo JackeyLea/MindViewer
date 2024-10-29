@@ -39,6 +39,38 @@ void DataParser::clearBuff()
     m_pkgList.clear();
 }
 
+void DataParser::skipInvalidByte()
+{
+    if(mBuff.size()==0) return;
+
+    //一个包最起码包含一个有效数据类型0xaa 0xaa 0x02 0xaa 0xaa
+    // 此时包肯定不完整，就结束
+    if(mBuff.size()<=5) return;
+
+    //有可能一次收的数据不完整先判断
+    while(mBuff.size()){
+        //可能会出现这种情况 0xaa 0xaa 0xaa
+        if(mBuff[0]==0xaa && mBuff[1]==0xaa && mBuff[2]==0xaa){
+            mBuff.removeFirst();
+            continue;
+        }
+        if(mBuff[0]==0xAA && mBuff[1]==0xAA){//先找包头
+            //包大小
+            int pkgSize = mBuff[2];
+            //最后的checksum + 本身 + 2个同步
+            if(pkgSize + 2 + 1+ 1 > mBuff.size()){
+                qDebug()<<"pkg is less than given size.";
+                mBuff.removeFirst();
+                continue;
+            }
+        }else{
+            //如果前两个不是0xAA 0xAA就向后移一位
+            mBuff.removeFirst();
+            qDebug()<<"remove "<<mBuff;
+        }
+    }
+}
+
 //使用状态机解析原始数据
 int DataParser::parsePkg(QByteArray ba, bool &raw, short &rawValue, bool &common, bool &eeg, struct _eegPkt &pkt)
 {
@@ -241,8 +273,32 @@ void DataParser::run()
 {
     while(1){
         if(m_buff.size()>0){
+            //这里用while是考虑缓冲区可能有不止一个包
+            while(mBuff.size()>=5){
+                assert(mBuff[0]!=(uchar)0xaa);
+                assert(mBuff[1]!=(uchar)0xaa);
 
-        }else{
+                //第3个字节是长度
+                int length = mBuff[2];
+                QByteArray tmpBA = mBuff.mid(0,length+2+1+1);
+                qDebug()<<"one pkg"<<tmpBA;
+                //从缓冲区删除已经解析的包
+                qDebug()<<"before delete"<<mBuff;
+                mBuff.remove(0,length+4);
+                qDebug()<<"after delete"<<mBuff;
+                //解析函数一次只解析一个包
+                bool raw,eeg,common;
+                short rawValue;
+                struct _eegPkt pkt;
+                pkt.init();
+                if(parsePkg(tmpBA,raw,rawValue,common,eeg,pkt)!=0){
+                    qDebug()<<"Cannot parse data.";
+                    //错误数据已经从缓存区删除，直接进行下一次解析
+                }
+                qDebug()<<"parsered";
+            }//while
+            qDebug()<<"mBuff"<<mBuff;
+        }else{//if
             qDebug()<<"DataParser::run() -> sleep 30ms";
             _eegPkt pkt;
             pkt.init();
@@ -255,75 +311,6 @@ void DataParser::run()
 
 void DataParser::sltRcvData(QByteArray ba)
 {
-    qDebug()<<"receive 1 "<<ba;
-    if(ba.size()<=0) return;
-    //图形模式
-    //把新收到的数据填充到缓冲区
-    mBuff.append(ba);
-    qDebug()<<"receive 2"<<ba;
-    qDebug()<<"buff "<<mBuff;
-
-    if(mBuff.size()<=5){
-        //一个包最起码包含一个有效数据类型0xaa 0xaa 0x02 0xaa 0xaa
-        return;//此时包肯定不完整，就结束
-    }else{//有可能一次收的数据不完整先判断
-        while(mBuff.size()){
-            if(mBuff[0]==0xAA && mBuff[1]==0xAA){//先找包头
-                //包大小
-                int pkgSize = mBuff[2];
-                if(pkgSize + 2 + 1+ 1 > mBuff.size()){
-                    qDebug()<<"pkg is less than given size.";
-                    return;
-                }else{
-                    //此时继续解析
-                    break;
-                }
-            }else{
-                //如果前两个不是0xAA 0xAA就向后移一位
-                mBuff.remove(0,1);
-                qDebug()<<"remove "<<mBuff;
-            }
-        }
-    }
-
-    //一包有效数据
-    qDebug()<<"valid pkg"<<mBuff;
-
-    //提取有效数据
-    while(mBuff.size()>=5){
-        //这里用while是考虑缓冲区可能有不止一个包
-        //有一种特殊情况 0xaa 0xaa 0xaa
-        if(mBuff[0]==0xaa && mBuff[1]==0xaa && mBuff[2]==0xaa){
-            mBuff.remove(0,1);
-            continue;
-        }
-        if(mBuff[0]!=(uchar)0xAA || mBuff[1]!=(uchar)0xAA ){
-            //qDebug()<<"next pkg"<<mBuff;
-            //删除一个直到符合
-            mBuff.remove(0,1);
-            continue;
-        }
-        //第3个字节是长度
-        int length = mBuff[2];
-        QByteArray tmpBA = mBuff.mid(0,length+2+1+1);
-        qDebug()<<"valid pkg"<<tmpBA;
-        //从缓冲区删除已经解析的包
-        qDebug()<<"before delete"<<mBuff;
-        mBuff.remove(0,length+4);
-        qDebug()<<"after delete"<<mBuff;
-        //continue;
-        //解析函数一次只解析一个包
-        {
-            bool raw,eeg,common;
-            short rawValue;
-            struct _eegPkt pkt;
-            pkt.init();
-            if(parsePkg(tmpBA,raw,rawValue,common,eeg,pkt)!=0){
-                qDebug()<<"Cannot parse data.";
-                return;
-            }
-            qDebug()<<"parsered";
-        }
-    }
-    qDebug()<<"mBuff"<<mBuff;
+    //收到数据后填充至缓存区等待解析
+    m_buff.append(ba);
 }

@@ -34,10 +34,10 @@ public:
 
 protected:
 
-    /// 校验当前是否为有效数据包
-    /// \brief checkPkg
+    /// 跳过无效字节
+    /// \brief skipInvalidByte
     ///
-    void checkPkg();
+    void skipInvalidByte();
 
     /// 解析一个有效数据包，但是数据不一定有效
     /// \brief parsePkg
