@@ -42,15 +42,20 @@ protected:
     /// 解析一个有效数据包，但是数据不一定有效
     /// \brief parsePkg
     ///
-    void parsePkg();
+    int parsePkg(QByteArray ba, bool &raw, short &rawValue, bool &common, bool &eeg, _eegPkt &pkt);
 
     void run();
+
+private:
+    void sltRcvData(QByteArray ba);
 
 private:
     QByteArray m_buff;//数据缓存区
     QList<_eegPkt> m_pkgList;//解析后的结构体列表
 
     Retriver *m_comRetriver;
+
+    QByteArray mBuff;
 };
 
 #endif // DATAPARSER_H

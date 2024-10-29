@@ -1,6 +1,8 @@
 #include "curves.h"
 #include "ui_curves.h"
 
+#include "icd.h"
+
 Curves::Curves(QWidget *parent) :
     QwtPlot(parent),
     ui(new Ui::Curves)

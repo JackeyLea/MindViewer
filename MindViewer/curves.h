@@ -30,8 +30,6 @@
 #include <qwt_picker_machine.h>
 #include <qwt_plot_layout.h>
 
-#include "common.h"
-
 namespace Ui {
 class Curves;
 }
