@@ -33,13 +33,15 @@ SOURCES += \
     dataparser.cpp \
     main.cpp \
     mainwidget.cpp \
-    retriver.cpp
+    retriver.cpp \
+    simulator.cpp
 
 HEADERS += \
     dataparser.h \
     icd.h \
     mainwidget.h \
-    retriver.h
+    retriver.h \
+    simulator.h
 
 FORMS += \
     mainwidget.ui \
