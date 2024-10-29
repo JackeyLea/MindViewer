@@ -96,7 +96,7 @@
       </widget>
      </item>
      <item>
-      <widget class="Line" name="line">
+      <widget class="Line" name="lineOpen">
        <property name="orientation">
         <enum>Qt::Orientation::Vertical</enum>
        </property>
@@ -149,7 +149,7 @@
       </widget>
      </item>
      <item>
-      <widget class="Line" name="line_2">
+      <widget class="Line" name="lineClear">
        <property name="orientation">
         <enum>Qt::Orientation::Vertical</enum>
        </property>
@@ -225,14 +225,14 @@
          </widget>
         </item>
         <item row="9" column="1">
-         <widget class="QLabel" name="label">
+         <widget class="QLabel" name="labelNoise">
           <property name="text">
            <string>噪声数据(B)</string>
           </property>
          </widget>
         </item>
         <item row="7" column="1">
-         <widget class="QLabel" name="labelRawLossRate">
+         <widget class="QLabel" name="labelEEGPkg">
           <property name="text">
            <string>EEG数据包</string>
           </property>
@@ -267,7 +267,7 @@
          </widget>
         </item>
         <item row="8" column="1">
-         <widget class="QLabel" name="label_5">
+         <widget class="QLabel" name="labelEEGPkgCnt">
           <property name="minimumSize">
            <size>
             <width>50</width>
@@ -372,7 +372,7 @@
          </widget>
         </item>
         <item row="10" column="1">
-         <widget class="QLabel" name="label_4">
+         <widget class="QLabel" name="labelNoiseValue">
           <property name="minimumSize">
            <size>
             <width>50</width>
@@ -387,17 +387,20 @@
           <property name="text">
            <string>1000</string>
           </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignCenter</set>
+          </property>
          </widget>
         </item>
         <item row="9" column="0">
-         <widget class="QLabel" name="label_2">
+         <widget class="QLabel" name="labelV">
           <property name="text">
            <string>电压(V)</string>
           </property>
          </widget>
         </item>
         <item row="10" column="0">
-         <widget class="QLabel" name="label_3">
+         <widget class="QLabel" name="labelValue">
           <property name="minimumSize">
            <size>
             <width>50</width>
