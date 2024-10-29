@@ -2,6 +2,9 @@
 #define MAINWIDGET_H
 
 #include <QWidget>
+#include <QTimer>
+
+#include "dataparser.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWidget; }
@@ -58,7 +61,16 @@ private slots:
     ///
     void sltBtnSave();
 
+    /// 定时刷新界面
+    /// \brief sltUpdateWidget
+    ///
+    void sltUpdateWidget();
+
 private:
     Ui::MainWidget *ui;
+
+    QTimer *m_timer;
+
+    DataParser *m_parser;
 };
 #endif // MAINWIDGET_H

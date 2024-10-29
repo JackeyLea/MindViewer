@@ -22,6 +22,11 @@ public:
     ///
     QByteArray getPkg();
 
+    /// 清空缓存区
+    /// \brief clearBuff
+    ///
+    void clearBuff();
+
 protected:
 
     /// 校验当前是否为有效数据包
