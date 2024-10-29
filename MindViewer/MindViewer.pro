@@ -15,6 +15,7 @@ SOURCES += \
 
 HEADERS += \
     dataparser.h \
+    icd.h \
     mainwidget.h
 
 FORMS += \
