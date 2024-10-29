@@ -30,6 +30,7 @@ unix:{
 }
 
 SOURCES += \
+    curves.cpp \
     dataparser.cpp \
     main.cpp \
     mainwidget.cpp \
@@ -37,6 +38,7 @@ SOURCES += \
     simulator.cpp
 
 HEADERS += \
+    curves.h \
     dataparser.h \
     icd.h \
     mainwidget.h \
@@ -44,6 +46,7 @@ HEADERS += \
     simulator.h
 
 FORMS += \
+    curves.ui \
     mainwidget.ui \
     retriver.ui
 
