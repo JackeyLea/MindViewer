@@ -8,14 +8,14 @@
 #define MINDVIEWERTEST_H
 
 #include <QObject>
+#include <QtTest/QTest>
 
 class MindViewerTest : public QObject
 {
     Q_OBJECT
-public:
-    explicit MindViewerTest(QObject *parent = nullptr);
 
-signals:
+private slots:
+    void case_check();
 };
 
 #endif // MINDVIEWERTEST_H
