@@ -28,7 +28,7 @@ public:
     QByteArray getEEG(bool noise=false);
 
 signals:
-    void sigNewPkt(QByteArray ba);
+    void sigNewPkg(QByteArray ba);
 
 private:
     QTimer *timer;
