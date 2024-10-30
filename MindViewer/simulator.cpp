@@ -82,11 +82,6 @@ QByteArray Simulator::getRaw(bool noise)
     data.append(0x02);//原始数据大小
     data.append(getNum());//low
     data.append(getNum());//high
-    //用于验证包是否正确
-    //data.append(0xFC);
-    //data.append(0xEE);//经验值93
-    //data.append(0xFA);
-    //data.append(0x79);//校验值0a
     //计算校验值
     int checksum = data[3];
     for (int i = 4; i < data.size(); i++)

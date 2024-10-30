@@ -39,22 +39,33 @@ void DataParser::clearBuff()
     m_pkgList.clear();
 }
 
+void DataParser::add2Buff(QByteArray ba)
+{
+    mBuff.append(ba);
+}
+
+QByteArray DataParser::getBuff()
+{
+    return mBuff;
+}
+
 void DataParser::skipInvalidByte()
 {
     if(mBuff.size()==0) return;
 
-    //一个包最起码包含一个有效数据类型0xaa 0xaa 0x02 0xaa 0xaa
+    //一个包最起码包含一个有效数据类型0xaa 0xaa 0x02 0x02 0x01 0xaa
     // 此时包肯定不完整，就结束
-    if(mBuff.size()<=5) return;
+    if(mBuff.size()<=6) return;
 
     //有可能一次收的数据不完整先判断
     while(mBuff.size()){
         //可能会出现这种情况 0xaa 0xaa 0xaa
-        if(mBuff[0]==0xaa && mBuff[1]==0xaa && mBuff[2]==0xaa){
+        if((uchar)mBuff[0]==0xaa && (uchar)mBuff[1]==0xaa && (uchar)mBuff[2]==0xaa){
+            qDebug()<<"3 0xaa found.";
             mBuff.removeFirst();
             continue;
         }
-        if(mBuff[0]==0xAA && mBuff[1]==0xAA){//先找包头
+        if((uchar)mBuff[0]==0xAA && (uchar)mBuff[1]==0xAA){//先找包头
             //包大小
             int pkgSize = mBuff[2];
             //最后的checksum + 本身 + 2个同步
@@ -62,6 +73,8 @@ void DataParser::skipInvalidByte()
                 qDebug()<<"pkg is less than given size.";
                 mBuff.removeFirst();
                 continue;
+            }else{
+                break;
             }
         }else{
             //如果前两个不是0xAA 0xAA就向后移一位

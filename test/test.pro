@@ -5,7 +5,7 @@
 ### \note Qt 6.8.0
 ### \note LLVM-Mingw 17.0.6
 #######################
-QT += core testlib
+QT += core testlib serialport widgets gui
 
 CONFIG += c++17 cmdline
 CONFIG -= app_bundle
@@ -17,11 +17,18 @@ CONFIG -= app_bundle
 SOURCES += \
         main.cpp \
         mindviewertest.cpp \
-        ../MindViewer/simulator.cpp
+        ../MindViewer/simulator.cpp \
+        ../MindViewer/dataparser.cpp \
+        ../MindViewer/retriver.cpp
 
 HEADERS += \
     mindviewertest.h \
-    ../MindViewer/simulator.h
+    ../MindViewer/simulator.h \
+    ../MindViewer/dataparser.h \
+    ../MindViewer/retriver.h
+
+FORMS += \
+    ../MindViewer/retriver.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

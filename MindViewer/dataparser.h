@@ -32,7 +32,8 @@ public:
     ///
     void clearBuff();
 
-protected:
+    void add2Buff(QByteArray ba);//仅供单元测试使用
+    QByteArray getBuff();//仅供单元测试使用
 
     /// 跳过无效字节
     /// \brief skipInvalidByte

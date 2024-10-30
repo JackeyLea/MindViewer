@@ -22,7 +22,17 @@ private slots:
     ///
     void case_checkGetRaw();
 
+    /// 检测模拟生成EEG数据包
+    /// \brief case_checkGetEEG
+    ///
     void case_checkGetEEG();
+
+    /// 检测能否正常跳过无效数据
+    /// \brief case_checkSkip
+    ///
+    void case_checkSkip();
+    void case_checkSkip1();
+    void case_checkSkip2();
 };
 
 #endif // MINDVIEWERTEST_H
