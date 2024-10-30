@@ -62,8 +62,6 @@ private:
     int m_total;//总数
     int m_loss;//丢失数
     int m_rawCnt;//原始包数
-    int m_eegCnt;//EEG包数
-    int m_heart;//心跳
 };
 
 #endif // DATAPARSER_H

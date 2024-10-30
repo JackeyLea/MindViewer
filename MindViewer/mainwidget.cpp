@@ -86,7 +86,6 @@ void MainWidget::sltBtnClear()
     ui->labelTotalCntValue->setText("0");
     ui->labelTotalLossValue->setText("0");
     ui->labelRawCntValue->setText("0");
-    ui->labelEEGPkgCnt->setText("0");
     ui->labelNoiseValue->setText("0");
     //清空缓存区
     m_parser->clearBuff();
@@ -102,17 +101,15 @@ void MainWidget::sltUpdateWidget()
 {
     //从资源池中去一个结构体
     _eegPkt pkt = m_parser->getPkg();
-    qDebug()<<pkt.loss;
     ui->labelPowerValue->setText(QString("%1").arg(pkt.power));
     ui->labelSignalValue->setText(QString("%1").arg(pkt.signal));
     ui->labelTotalCntValue->setText(QString("%1").arg(pkt.total));
     ui->labelTotalLossValue->setText(QString("%1").arg(pkt.loss));
     ui->labelRawCntValue->setText(QString("%1").arg(pkt.rawCnt));
-    ui->labelEEGPkgCnt->setText(QString("%1").arg(pkt.eegCnt));
     ui->labelNoiseValue->setText(QString("%1").arg(pkt.noise));
-    ui->labelHeartValue->setText(QString("%1").arg(pkt.heart));
     ui->widgetAttention->setValue(pkt.attention);
     ui->widgetMeditation->setValue(pkt.meditation);
+    ui->widgetEEG->updateEEGData(pkt);
 
     update();
 }
