@@ -8,6 +8,8 @@ MainWidget::MainWidget(QWidget *parent)
     , m_parser(new DataParser)
 {
     ui->setupUi(this);
+    ui->widgetAttention->setLabel("注意力");
+    ui->widgetMeditation->setLabel("冥想值");
 
     //定时器
     m_timer->setInterval(1000);
@@ -109,6 +111,8 @@ void MainWidget::sltUpdateWidget()
     ui->labelEEGPkgCnt->setText(QString("%1").arg(pkt.eegCnt));
     ui->labelNoiseValue->setText(QString("%1").arg(pkt.noise));
     ui->labelHeartValue->setText(QString("%1").arg(pkt.heart));
+    ui->widgetAttention->setValue(pkt.attention);
+    ui->widgetMeditation->setValue(pkt.meditation);
 
     update();
 }

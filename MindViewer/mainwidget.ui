@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>824</width>
-    <height>495</height>
+    <width>862</width>
+    <height>509</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -238,7 +238,7 @@
           </property>
          </widget>
         </item>
-        <item row="5" column="0">
+        <item row="6" column="0">
          <widget class="QLabel" name="labelTotalCnt">
           <property name="text">
            <string>总包数</string>
@@ -266,21 +266,42 @@
           </property>
          </widget>
         </item>
-        <item row="7" column="0">
+        <item row="11" column="0">
+         <widget class="QLabel" name="labelNoiseValue">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>20</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>0</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="8" column="0">
          <widget class="QLabel" name="labelRawCnt">
           <property name="text">
            <string>原始数据包</string>
           </property>
          </widget>
         </item>
-        <item row="7" column="1">
+        <item row="8" column="1">
          <widget class="QLabel" name="labelEEGPkg">
           <property name="text">
            <string>EEG数据包</string>
           </property>
          </widget>
         </item>
-        <item row="6" column="1">
+        <item row="7" column="1">
          <widget class="QLabel" name="labelTotalLossValue">
           <property name="minimumSize">
            <size>
@@ -301,7 +322,14 @@
           </property>
          </widget>
         </item>
-        <item row="6" column="0">
+        <item row="10" column="1">
+         <widget class="QLabel" name="labelHeart">
+          <property name="text">
+           <string>心跳</string>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="0">
          <widget class="QLabel" name="labelTotalCntValue">
           <property name="minimumSize">
            <size>
@@ -329,28 +357,28 @@
           </property>
          </widget>
         </item>
-        <item row="5" column="1">
+        <item row="6" column="1">
          <widget class="QLabel" name="labelTotalLossRate">
           <property name="text">
            <string>丢包数</string>
           </property>
          </widget>
         </item>
-        <item row="4" column="0" colspan="2">
+        <item row="5" column="0" colspan="2">
          <widget class="Line" name="lineInfo">
           <property name="orientation">
            <enum>Qt::Orientation::Horizontal</enum>
           </property>
          </widget>
         </item>
-        <item row="9" column="0">
+        <item row="10" column="0">
          <widget class="QLabel" name="labelNoise">
           <property name="text">
            <string>噪声数据(B)</string>
           </property>
          </widget>
         </item>
-        <item row="8" column="0">
+        <item row="9" column="0">
          <widget class="QLabel" name="labelRawCntValue">
           <property name="minimumSize">
            <size>
@@ -378,7 +406,22 @@
           </property>
          </widget>
         </item>
-        <item row="8" column="1">
+        <item row="11" column="1">
+         <widget class="QLabel" name="labelHeartValue">
+          <property name="font">
+           <font>
+            <pointsize>20</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>0</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="9" column="1">
          <widget class="QLabel" name="labelEEGPkgCnt">
           <property name="minimumSize">
            <size>
@@ -399,46 +442,23 @@
           </property>
          </widget>
         </item>
-        <item row="10" column="0">
-         <widget class="QLabel" name="labelNoiseValue">
+        <item row="2" column="0">
+         <widget class="Indicator" name="widgetAttention" native="true">
           <property name="minimumSize">
            <size>
-            <width>50</width>
-            <height>50</height>
+            <width>100</width>
+            <height>100</height>
            </size>
           </property>
-          <property name="font">
-           <font>
-            <pointsize>20</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>0</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignmentFlag::AlignCenter</set>
-          </property>
          </widget>
         </item>
-        <item row="9" column="1">
-         <widget class="QLabel" name="labelHeart">
-          <property name="text">
-           <string>心跳</string>
-          </property>
-         </widget>
-        </item>
-        <item row="10" column="1">
-         <widget class="QLabel" name="labelHeartValue">
-          <property name="font">
-           <font>
-            <pointsize>20</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>0</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignmentFlag::AlignCenter</set>
+        <item row="2" column="1">
+         <widget class="Indicator" name="widgetMeditation" native="true">
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>100</height>
+           </size>
           </property>
          </widget>
         </item>
@@ -449,6 +469,14 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Indicator</class>
+   <extends>QWidget</extends>
+   <header>indicator.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="resource.qrc"/>
  </resources>
