@@ -13,12 +13,12 @@ CONFIG += c++17
 DEFINES += QWT_DLL
 win32:{
     CONFIG(debug,debug | release){
-        INCLUDEPATH += C:\vcpkg\installed\x64-windows\include\qwt
-        LIBS += -LC:\vcpkg\installed\x64-windows\debug\lib -lqwtd
+        INCLUDEPATH += D:\qwt\include
+        LIBS += -LD:\qwt\lib -lqwtd
     }
     CONFIG(release, debug | release){
-        INCLUDEPATH += C:\vcpkg\installed\x64-windows\include\qwt
-        LIBS += -LC:\vcpkg\installed\x64-windows\lib -lqwt
+        INCLUDEPATH += D:\qwt\include
+        LIBS += -LD:\qwt\lib -lqwt
     }
 }
 
