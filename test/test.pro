@@ -2,6 +2,8 @@
 ### \author Jackey Lea
 ### \date 2024-10-29
 ### \brief 单元测试
+### \note Qt 6.8.0
+### \note LLVM-Mingw 17.0.6
 #######################
 QT += core testlib
 

@@ -1,7 +1,14 @@
+#######################
+### \author Jackey Lea
+### \date 2020-12-26
+### \brief 主程序
+### \note Qt 6.8.0
+### \note LLVM-Mingw 17.0.6
+#######################
+
 QT       += core gui
 QT       += serialport
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT       += widgets
 
 CONFIG += c++17
 
