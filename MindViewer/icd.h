@@ -81,6 +81,12 @@ struct _eegPkt{
     uchar mwl;//mind-wandering level 走神程度 0-10
     uchar signal;//0-200
     uchar power;
+    int noise;//噪声数量
+    int total;//总包数
+    int loss;//丢失数
+    int rawCnt;//原始包数
+    int eegCnt;//EEG包数
+    int heart;//心跳
 
     void init(){
         delta=0;
@@ -97,6 +103,11 @@ struct _eegPkt{
         mwl=0;
         signal=0;
         power=0;
+        noise =0;
+        total=0;
+        loss=0;
+        rawCnt=0;
+        eegCnt=0;
     }
 };//一个数据包包含的所有值
 

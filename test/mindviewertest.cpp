@@ -65,8 +65,6 @@ void MindViewerTest::case_checkSkip()
     QVERIFY((uchar)res[5]==0xfc);
     QVERIFY((uchar)res[6]==0xee);
     QVERIFY((uchar)res[7]==0x93);
-    //data.append(0xFA);
-    //data.append(0x79);//校验值0a
 }
 
 void MindViewerTest::case_checkSkip1()

@@ -3,9 +3,17 @@
 #include <QDebug>
 
 DataParser::DataParser()
+    :m_comRetriver(NULL)
+    ,m_sim(NULL)
+    ,m_noise(0)
+    ,m_total(0)
+    ,m_loss(0)
+    ,m_rawCnt(0)
+    ,m_eegCnt(0)
+    ,m_heart(0)
 {
     //初始化数据
-    m_buff.clear();
+    mBuff.clear();
     m_pkgList.clear();
 }
 
@@ -17,8 +25,11 @@ void DataParser::setSource(DataSourceType type)
     case COM:
         m_comRetriver = new Retriver(NULL);
         m_comRetriver->showWgt();
+        connect(m_comRetriver,&Retriver::sigNewPkg,this,&DataParser::sltRcvData);
         break;
     case Sim:
+        m_sim = new Simulator();
+        connect(m_sim,&Simulator::sigNewPkg,this,&DataParser::sltRcvData);
         break;
     case Local:
         break;
@@ -35,8 +46,14 @@ _eegPkt DataParser::getPkg()
 
 void DataParser::clearBuff()
 {
-    m_buff.clear();
+    mBuff.clear();
     m_pkgList.clear();
+    m_noise=0;
+    m_total=0;
+    m_loss=0;
+    m_rawCnt=0;
+    m_eegCnt=0;
+    m_heart=0;
 }
 
 void DataParser::add2Buff(QByteArray ba)
@@ -62,6 +79,7 @@ void DataParser::skipInvalidByte()
         //可能会出现这种情况 0xaa 0xaa 0xaa
         if((uchar)mBuff[0]==0xaa && (uchar)mBuff[1]==0xaa && (uchar)mBuff[2]==0xaa){
             qDebug()<<"3 0xaa found.";
+            m_noise++;
             mBuff.removeFirst();
             continue;
         }
@@ -71,6 +89,7 @@ void DataParser::skipInvalidByte()
             //最后的checksum + 本身 + 2个同步
             if(pkgSize + 2 + 1+ 1 > mBuff.size()){
                 qDebug()<<"pkg is less than given size.";
+                m_noise++;
                 mBuff.removeFirst();
                 continue;
             }else{
@@ -78,6 +97,7 @@ void DataParser::skipInvalidByte()
             }
         }else{
             //如果前两个不是0xAA 0xAA就向后移一位
+            m_noise++;
             mBuff.removeFirst();
             qDebug()<<"remove "<<mBuff;
         }
@@ -85,13 +105,12 @@ void DataParser::skipInvalidByte()
 }
 
 //使用状态机解析原始数据
-int DataParser::parsePkg(QByteArray ba, bool &raw, short &rawValue, bool &common, bool &eeg, struct _eegPkt &pkt)
+int DataParser::parsePkg(QByteArray ba, bool &raw, short &rawValue, struct _eegPkt &pkt)
 {
+    m_total++;
     //输入的数据ba只包含一个有效包
     //qDebug()<<"parse start";
     raw=false;//此数据包是否包含原始数据
-    eeg=false;//此数据包是否包含eeg数据
-    common=false;//此数据包是否包含注意力/冥想等数据
 
     if(ba.isEmpty()) return -1;//如果没有数据就直接退出
 
@@ -156,6 +175,7 @@ int DataParser::parsePkg(QByteArray ba, bool &raw, short &rawValue, bool &common
             //qDebug()<<"add"<<payloadSum<<(uchar)buff[payloadLength];
             if(payloadSum!=(uchar)buff[payloadLength]){
                 //如果与校验值不同就丢弃此包数据
+                m_loss++;
                 qDebug()<<"Checksum failed.";
                 return -1;
             }
@@ -175,11 +195,9 @@ int DataParser::parsePkg(QByteArray ba, bool &raw, short &rawValue, bool &common
             if((uchar)buff[0]==0x01){//电源值，最大为127
                 //如果缓冲区大小小于2位
                 if(buff.size() < 2){
-                    common = false;
                     state = PARSER_STATE_SYNC;
                     break;
                 }
-                common=true;
                 pkt.power=(uchar)buff[1];
                 state=PARSER_STATE_PAYLOAD;
                 buff.remove(0,2);
@@ -187,27 +205,33 @@ int DataParser::parsePkg(QByteArray ba, bool &raw, short &rawValue, bool &common
             }else if((uchar)buff[0]==0x02){//数据信号强度值
                 //如果缓冲区大小小于2位
                 if(buff.size() < 2){
-                    common= false;
                     state = PARSER_STATE_SYNC;
                     break;
                 }
                 //qDebug()<<"signal value "<<(uchar)buff[1];
-                common=true;
                 pkt.signal=(uchar)buff[1];
                 state=PARSER_STATE_PAYLOAD;
                 buff.remove(0,2);
                 cnt+=2;
-            }else if((uchar)buff[0]==0x03){
-                //ego上的心跳强度0-255
+            }else if((uchar)buff[0]==0x03){//ego上的心跳强度0-255
+                //如果缓冲区大小小于2位
+                if(buff.size() < 2){
+                    state = PARSER_STATE_SYNC;
+                    break;
+                }
+                //qDebug()<<"signal value "<<(uchar)buff[1];
+                m_heart++;
+                pkt.heart=(uchar)buff[1];
+                state=PARSER_STATE_PAYLOAD;
+                buff.remove(0,2);
+                cnt+=2;
             }else if((uchar)buff[0]==0x04){//注意力值
                 //如果缓冲区大小小于2位
                 if(buff.size() < 2){
-                    common = false;
                     state = PARSER_STATE_SYNC;
                     break;
                 }
                 //qDebug()<<"attention value "<<(uchar)buff[1];
-                common=true;
                 pkt.attention=(uchar)buff[1];
                 state=PARSER_STATE_PAYLOAD;
                 buff.remove(0,2);
@@ -215,12 +239,10 @@ int DataParser::parsePkg(QByteArray ba, bool &raw, short &rawValue, bool &common
             }else if((uchar)buff[0]==0x05){//冥想值
                 //如果缓冲区大小小于2位
                 if(buff.size() < 2){
-                    common = false;
                     state = PARSER_STATE_SYNC;
                     break;
                 }
                 //qDebug()<<"meditation value "<<(uchar)buff[1];
-                common=true;
                 pkt.meditation=(uchar)buff[1];
                 state=PARSER_STATE_PAYLOAD;
                 buff.remove(0,2);
@@ -236,6 +258,7 @@ int DataParser::parsePkg(QByteArray ba, bool &raw, short &rawValue, bool &common
                     state = PARSER_STATE_SYNC;
                     break;
                 }
+                m_rawCnt++;
                 raw=true;
                 rawValue=((uchar)buff[2]<<8)|(uchar)buff[3];
                 buff.remove(0,5);//4个数据以及最后的校验值
@@ -248,12 +271,11 @@ int DataParser::parsePkg(QByteArray ba, bool &raw, short &rawValue, bool &common
                 //qDebug()<<"parser eeg length "<<(uchar)buff[i+1];
                 //如果缓冲区大小小于24位
                 if(buff.size() < 26){
-                    eeg = false;
                     state = PARSER_STATE_SYNC;
                     break;
                 }
-                eeg=true;
                 //tgam数据默认为大端
+                m_eegCnt++;
                 pkt.delta =((uint)buff[2]<<16)|((uint)buff[3]<<8)|((uint)buff[4]);
                 pkt.theta =((uint)buff[5]<<16)|((uint)buff[6]<<8)|((uint)buff[7]);
                 pkt.lowAlpha =((uint)buff[8]<<16)|((uint)buff[9]<<8)|((uint)buff[10]);
@@ -285,11 +307,14 @@ int DataParser::parsePkg(QByteArray ba, bool &raw, short &rawValue, bool &common
 void DataParser::run()
 {
     while(1){
-        if(m_buff.size()>0){
+        //跳过无效字节
+        skipInvalidByte();
+        if(mBuff.size()>0){
+            qDebug()<<"ready to parse"<<mBuff;
             //这里用while是考虑缓冲区可能有不止一个包
-            while(mBuff.size()>=5){
-                assert(mBuff[0]!=(uchar)0xaa);
-                assert(mBuff[1]!=(uchar)0xaa);
+            while(mBuff.size()>=6){
+                assert((uchar)mBuff[0]==0xaa);
+                assert((uchar)mBuff[1]==0xaa);
 
                 //第3个字节是长度
                 int length = mBuff[2];
@@ -300,30 +325,32 @@ void DataParser::run()
                 mBuff.remove(0,length+4);
                 qDebug()<<"after delete"<<mBuff;
                 //解析函数一次只解析一个包
-                bool raw,eeg,common;
+                bool raw;
                 short rawValue;
                 struct _eegPkt pkt;
                 pkt.init();
-                if(parsePkg(tmpBA,raw,rawValue,common,eeg,pkt)!=0){
+                if(parsePkg(tmpBA,raw,rawValue,pkt)!=0){
                     qDebug()<<"Cannot parse data.";
                     //错误数据已经从缓存区删除，直接进行下一次解析
                 }
+                pkt.noise = m_noise;
+                pkt.total = m_total;
+                pkt.loss = m_loss;
+                pkt.rawCnt = m_rawCnt;
+                pkt.heart = m_heart;
+                pkt.eegCnt = m_eegCnt;
+                m_pkgList.append(pkt);
                 qDebug()<<"parsered";
             }//while
             qDebug()<<"mBuff"<<mBuff;
-        }else{//if
-            qDebug()<<"DataParser::run() -> sleep 30ms";
-            _eegPkt pkt;
-            pkt.init();
-            pkt.power = 12;
-            m_pkgList.append(pkt);
-            QThread::msleep(30);
         }
+        QThread::msleep(30);
     }
 }
 
 void DataParser::sltRcvData(QByteArray ba)
 {
+    qDebug()<<"sltRcvData"<<ba;
     //收到数据后填充至缓存区等待解析
-    m_buff.append(ba);
+    mBuff.append(ba);
 }
