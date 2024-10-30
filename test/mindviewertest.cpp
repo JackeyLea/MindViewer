@@ -37,5 +37,5 @@ void MindViewerTest::case_checkGetEEG()
     }
     checksum &= 0xff;
     checksum = ~checksum & 0xff;
-    QVERIFY(checksum==ba[ba.size()-1]);
+    QVERIFY(checksum==(uchar)ba[ba.size()-1]);
 }
