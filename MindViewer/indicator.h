@@ -7,10 +7,23 @@
 #ifndef INDICATOR_H
 #define INDICATOR_H
 
-class Indicator
+#include <QString>
+#include <QwtDial>
+
+class Indicator : public QwtDial
 {
 public:
-    Indicator();
+    Indicator(QWidget *parent = nullptr);
+
+    void setLabel( const QString& );
+    QString label() const;
+
+protected:
+    virtual void drawScaleContents( QPainter* painter,
+                                   const QPointF& center, double radius ) const QWT_OVERRIDE;
+
+private:
+    QString m_label;
 };
 
 #endif // INDICATOR_H
