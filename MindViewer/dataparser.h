@@ -9,6 +9,7 @@
 
 #include <QObject>
 #include <QThread>
+#include <QMutex>
 
 #include "icd.h"
 #include "retriver.h"
@@ -61,6 +62,8 @@ private:
     int m_loss;//丢失数
     int m_rawCnt;//原始包数
     QVector<double> m_rawData;//原始数据
+
+    QMutex m_mutex;
 };
 
 #endif // DATAPARSER_H

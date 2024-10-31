@@ -50,7 +50,10 @@ void DataParser::setSource(DataSourceType type)
 
 void DataParser::clearBuff()
 {
+    m_mutex.lock();
     mBuff.clear();
+    m_mutex.unlock();
+
     m_pkgList.clear();
     m_rawData.clear();
     m_noise=0;
@@ -83,7 +86,9 @@ void DataParser::skipInvalidByte()
         if((uchar)mBuff[0]==0xaa && (uchar)mBuff[1]==0xaa && (uchar)mBuff[2]==0xaa){
             qDebug()<<"3 0xaa found.";
             m_noise++;
+            m_mutex.lock();
             mBuff.removeFirst();
+            m_mutex.unlock();
             continue;
         }
         if((uchar)mBuff[0]==0xAA && (uchar)mBuff[1]==0xAA){//先找包头
@@ -93,7 +98,9 @@ void DataParser::skipInvalidByte()
             if(pkgSize + 2 + 1+ 1 > mBuff.size()){
                 qDebug()<<"pkg is less than given size.";
                 m_noise++;
+                m_mutex.lock();
                 mBuff.removeFirst();
+                m_mutex.unlock();
                 continue;
             }else{
                 break;
@@ -101,8 +108,10 @@ void DataParser::skipInvalidByte()
         }else{
             //如果前两个不是0xAA 0xAA就向后移一位
             m_noise++;
+
+            m_mutex.lock();
             mBuff.removeFirst();
-            //qDebug()<<"remove "<<mBuff;
+            m_mutex.unlock();
         }
     }
 }
@@ -110,14 +119,11 @@ void DataParser::skipInvalidByte()
 //使用状态机解析原始数据
 int DataParser::parsePkg(QByteArray ba, bool &raw, struct _eegPkt &pkt)
 {
-    m_total++;
-    //输入的数据ba只包含一个有效包
-    //qDebug()<<"parse start";
+    m_total++;//输入的数据ba只包含一个有效包
     raw=false;//此数据包是否包含原始数据
 
     if(ba.isEmpty()) return -1;//如果没有数据就直接退出
 
-    //qDebug()<<"add to buff."<<ba.size();
     QByteArray buff = ba;//将数据添加到处理缓冲区
 
     /////////////////处理开始/////////////////////////////////////
@@ -126,39 +132,33 @@ int DataParser::parsePkg(QByteArray ba, bool &raw, struct _eegPkt &pkt)
     uchar payloadLength=0;
     uchar payloadSum=0;
     while(buff.size()){
-        //qDebug()<<buff;
         //状态机处理
         switch(state){
         case PARSER_STATE_SYNC://第一个同步字节
             if((uchar)buff[0]==PARSER_SYNC_BYTE){
-                //qDebug()<<"parser first aa "<<i<<(uchar)buff[i];
                 state=PARSER_STATE_SYNC_CHECK;
             }
             buff.remove(0,1);
             break;
         case PARSER_STATE_SYNC_CHECK:
             if((uchar)buff[0]==PARSER_SYNC_BYTE){//包第二个0xaa
-                //qDebug()<<"parser second aa "<<i<<(uchar)buff[i];
                 state=PARSER_STATE_PAYLOAD_LENGTH;//准备解析负载长度
                 buff.remove(0,1);
             }
             break;
         case PARSER_STATE_PAYLOAD_LENGTH:
             payloadLength=(uchar)buff[0];//接下来是长度
-            //qDebug()<<"payloadlength"<<payloadLength;
             if(payloadLength>=170 || payloadLength<=0){//如果长度大于170就丢弃此包并查找下一个0xaa 0xaa
                 qDebug()<<"this package payloadLength(the 3rd value) is wrong";
                 state = PARSER_STATE_SYNC;
                 //如果是0xaa 0xaa 0xff，包头对了但是长度不对
             }else{
-                //qDebug()<<"parser payload length "<<i<<(uchar)buff[i];
                 state=PARSER_STATE_CHKSUM;//准备解析有效数据
             }
             buff.remove(0,1);
             break;
         case PARSER_STATE_CHKSUM:
         {
-            //qDebug()<<"check sum"<<payloadLength+1<<buff.size();
             //如果剩余大小不够 1是末尾的校验值 3是包头和大小
             if(payloadLength+1 >buff.size()){
                 qDebug()<<"pkg is not valid.";
@@ -169,28 +169,23 @@ int DataParser::parsePkg(QByteArray ba, bool &raw, struct _eegPkt &pkt)
             //首先校验数据是否有效
             payloadSum=0;
             for(int j=0;j<payloadLength;j++){
-                //qDebug()<<(uchar)buff[j];
                 payloadSum+=(uchar)buff[j];
             }
             payloadSum &= 0xff;
             payloadSum = ~payloadSum & 0xff;
 
-            //qDebug()<<"add"<<payloadSum<<(uchar)buff[payloadLength];
             if(payloadSum!=(uchar)buff[payloadLength]){
                 //如果与校验值不同就丢弃此包数据
                 m_loss++;
                 qDebug()<<"Checksum failed.";
                 return -1;
             }
-            //qDebug()<<"get data check sum is: "<<z<<(uchar)buff[z];
-            //qDebug()<<"parser check sum "<<i;
             state=PARSER_STATE_PAYLOAD;
             //到此可以正常解析数据了
             break;
         }
         case PARSER_STATE_PAYLOAD://解析数据
         {
-            //qDebug()<<"payload"<<buff;
             if(cnt==payloadLength){
                 buff.remove(0,1);//如果数据已经没了，那么还剩下一个校验值
                 break;
@@ -211,7 +206,6 @@ int DataParser::parsePkg(QByteArray ba, bool &raw, struct _eegPkt &pkt)
                     state = PARSER_STATE_SYNC;
                     break;
                 }
-                //qDebug()<<"signal value "<<(uchar)buff[1];
                 pkt.signal=(uchar)buff[1];
                 state=PARSER_STATE_PAYLOAD;
                 buff.remove(0,2);
@@ -222,7 +216,6 @@ int DataParser::parsePkg(QByteArray ba, bool &raw, struct _eegPkt &pkt)
                     state = PARSER_STATE_SYNC;
                     break;
                 }
-                //qDebug()<<"signal value "<<(uchar)buff[1];
                 state=PARSER_STATE_PAYLOAD;
                 buff.remove(0,2);
                 cnt+=2;
@@ -232,7 +225,6 @@ int DataParser::parsePkg(QByteArray ba, bool &raw, struct _eegPkt &pkt)
                     state = PARSER_STATE_SYNC;
                     break;
                 }
-                //qDebug()<<"attention value "<<(uchar)buff[1];
                 pkt.attention=(uchar)buff[1];
                 state=PARSER_STATE_PAYLOAD;
                 buff.remove(0,2);
@@ -243,7 +235,6 @@ int DataParser::parsePkg(QByteArray ba, bool &raw, struct _eegPkt &pkt)
                     state = PARSER_STATE_SYNC;
                     break;
                 }
-                //qDebug()<<"meditation value "<<(uchar)buff[1];
                 pkt.meditation=(uchar)buff[1];
                 state=PARSER_STATE_PAYLOAD;
                 buff.remove(0,2);
@@ -252,9 +243,7 @@ int DataParser::parsePkg(QByteArray ba, bool &raw, struct _eegPkt &pkt)
             }else if((uchar)buff[0]==0x07){
                 //raw_marker 固定值为0
             }else if((uchar)buff[0]==0x80 && (uchar)buff[1]==0x02){//16位原始数据
-                //qDebug()<<"raw data";
-                //如果缓冲区大小小于5位
-                if(buff.size() < 5){
+                if(buff.size() < 5){//如果缓冲区大小小于5位
                     raw = false;
                     state = PARSER_STATE_SYNC;
                     break;
@@ -269,10 +258,7 @@ int DataParser::parsePkg(QByteArray ba, bool &raw, struct _eegPkt &pkt)
                 //eeg_power 8个大端四字节
             }else if((uchar)buff[0]==0x83 && (uchar)buff[1]==0x18){//eeg数据部分
                 //0x83标志eeg部分开始，下一位表示为eeg部分程度默认为0x18,8个大端三字节
-                //qDebug()<<"parser eeg data "<<i<<buff[i];
-                //qDebug()<<"parser eeg length "<<(uchar)buff[i+1];
-                //如果缓冲区大小小于24位
-                if(buff.size() < 26){
+                if(buff.size() < 26){//如果缓冲区大小小于24位
                     state = PARSER_STATE_SYNC;
                     break;
                 }
@@ -300,8 +286,6 @@ int DataParser::parsePkg(QByteArray ba, bool &raw, struct _eegPkt &pkt)
         }
     }
 
-    //qDebug()<<"parse end.";
-
     return 0;
 }
 
@@ -309,23 +293,23 @@ void DataParser::run()
 {
     while(1){
         if(mBuff.size()>0){
-            //qDebug()<<"ready to parse"<<mBuff;
             //这里用while是考虑缓冲区可能有不止一个包
             while(mBuff.size()>=6){
                 //跳过无效字节
                 skipInvalidByte();
                 if(mBuff.size()==0) continue;
-                assert((uchar)mBuff[0]==0xaa);
-                assert((uchar)mBuff[1]==0xaa);
+                if(((uchar)mBuff[0]!=0xaa) && ((uchar)mBuff[1]!=0xaa)){
+                    continue;
+                }
 
                 //第3个字节是长度
                 int length = mBuff[2];
                 QByteArray tmpBA = mBuff.mid(0,length+2+1+1);
-                //qDebug()<<"one pkg"<<tmpBA;
                 //从缓冲区删除已经解析的包
-                //qDebug()<<"before delete"<<mBuff;
+                m_mutex.lock();
                 mBuff.remove(0,length+4);
-                //qDebug()<<"after delete"<<mBuff;
+                m_mutex.unlock();
+
                 //解析函数一次只解析一个包
                 bool raw=false;
                 struct _eegPkt pkt;
@@ -341,20 +325,18 @@ void DataParser::run()
                     pkt.rawCnt = m_rawCnt;
                     pkt.raw = m_rawData;
                     m_rawData.clear();
-                    //m_pkgList.append(pkt);
                     emit sigNewPkt(pkt);
                 }
-                //qDebug()<<"parsered";
             }//while
-            //qDebug()<<"mBuff"<<mBuff;
         }
-        QThread::msleep(30);
+        QThread::msleep(10);
     }
 }
 
+//收到数据后填充至缓存区等待解析
 void DataParser::sltRcvData(QByteArray ba)
 {
-    //qDebug()<<"sltRcvData"<<ba;
-    //收到数据后填充至缓存区等待解析
+    m_mutex.lock();
     mBuff.append(ba);
+    m_mutex.unlock();
 }

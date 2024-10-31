@@ -4,9 +4,6 @@
 
 Simulator::Simulator()
 {
-    isStop=false;
-    //buff.resize(1024 * 1024);
-
     timer = new QTimer();
     timer->setInterval(2);
     connect(timer,&QTimer::timeout,[=](){
@@ -47,6 +44,7 @@ QByteArray Simulator::getRaw(bool noise)
 {
     QByteArray data;
     data.clear();
+
     data.append(0xAA);
     data.append(0xAA);
     data.append(0x04);//包大小
@@ -54,6 +52,7 @@ QByteArray Simulator::getRaw(bool noise)
     data.append(0x02);//原始数据大小
     data.append(getNum());//low
     data.append(getNum());//high
+
     //计算校验值
     int checksum = data[3];
     for (int i = 4; i < data.size(); i++)
@@ -63,7 +62,6 @@ QByteArray Simulator::getRaw(bool noise)
     checksum &= 0xff;
     checksum = ~checksum & 0xff;
     data.append(checksum);
-    //qDebug()<<"raw data"<<data;
 
     //添加随机干扰数据
     if(noise){
@@ -93,6 +91,7 @@ QByteArray Simulator::getEEG(bool noise)
 
     //信号强度
     pkg.append(getOne(0x02,256));
+
     //心跳
     pkg.append(getOne(0x03,256));
 
@@ -138,10 +137,10 @@ QByteArray Simulator::getEEG(bool noise)
     //冥想值
     pkg.append(getOne(0x05,100));
 
-    //update plength
-    //qDebug()<<"size "<<pkg.size();
+    //更新包长
     pkg[2]=pkg.size()-3;//末尾一个 两个0xaa
-    //calculate sumcheck
+
+    //计算校验值
     int checksum = pkg[3];
     for (int i = 4; i < pkg.size(); i++)
     {

@@ -54,7 +54,7 @@ void MainWidget::sltBtnSIM()
 
 void MainWidget::sltBtnLocal()
 {
-
+    m_parser->setSource(Local);
 }
 
 void MainWidget::sltBtnPlay()

@@ -12,9 +12,8 @@ Retriver::Retriver(QWidget *parent) :
 
 Retriver::~Retriver()
 {
-    if(com->isOpen()){
-        com->close();
-    }
+    stopCOM();
+
     delete com;
     delete ui;
 }
@@ -38,7 +37,8 @@ void Retriver::showWgt()
 
 void Retriver::stopCOM()
 {
-    if(isCOMOpen){
+    if(com->isOpen()){//如果串口已经打开就把它关闭
+        com->clear();
         com->close();
     }
 }
@@ -54,8 +54,7 @@ void Retriver::receiveData()
 void Retriver::on_btnOpenClose_clicked()
 {
     if(isCOMOpen){//关闭串口
-        com->clear();//清空串口数据
-        com->close();
+        stopCOM();
     }else{//打开串口
         //设置串口名字 假设我们上面已经成功获取到了 并且使用第一个
         com->setPortName(ui->comboBoxCOM->currentText());
@@ -103,9 +102,6 @@ void Retriver::on_btnOpenClose_clicked()
 //取消操作
 void Retriver::on_btnCance_clicked()
 {
-    if(com->isOpen()){//如果串口已经打开就把它关闭
-        com->clear();
-        com->close();
-    }
+    stopCOM();
     this->close();
 }

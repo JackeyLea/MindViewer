@@ -23,16 +23,37 @@ public:
     Simulator();
     ~Simulator();
 
-    QByteArray getOne(uchar mn, int max);//输入为modulename,max
-    QByteArray getRaw(bool noise=false);//
+    /// 生成一个模块包
+    /// \brief getOne
+    /// \param mn 模块号
+    /// \param max 数值上限，下限默认为0
+    /// \return
+    ///
+    QByteArray getOne(uchar mn, int max);
+
+    /// 模拟原始数据包
+    /// \brief getRaw
+    /// \param noise
+    /// \return
+    ///
+    QByteArray getRaw(bool noise=false);
+
+    /// 模拟EEG数据包
+    /// \brief getEEG
+    /// \param noise
+    /// \return
+    ///
     QByteArray getEEG(bool noise=false);
 
 signals:
+    /// 通知界面已经成功解析一包
+    /// \brief sigNewPkg
+    /// \param ba
+    ///
     void sigNewPkg(QByteArray ba);
 
 private:
     QTimer *timer;
-    bool isStop;
 
     int i=0;
 };
