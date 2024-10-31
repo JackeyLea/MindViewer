@@ -64,12 +64,10 @@ private slots:
     /// 定时刷新界面
     /// \brief sltUpdateWidget
     ///
-    void sltUpdateWidget();
+    void sltUpdateWidget(_eegPkt pkt);
 
 private:
     Ui::MainWidget *ui;
-
-    QTimer *m_timer;
 
     DataParser *m_parser;
 };

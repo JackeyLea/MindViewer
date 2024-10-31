@@ -13,6 +13,7 @@ DataParser::DataParser()
     //初始化数据
     mBuff.clear();
     m_pkgList.clear();
+    m_rawData.clear();
 }
 
 void DataParser::setSource(DataSourceType type)
@@ -34,19 +35,11 @@ void DataParser::setSource(DataSourceType type)
     }
 }
 
-_eegPkt DataParser::getPkg()
-{
-    qDebug()<<m_pkgList.size();
-    if(m_pkgList.size()==0){
-        return _eegPkt();
-    }
-    return m_pkgList.takeFirst();
-}
-
 void DataParser::clearBuff()
 {
     mBuff.clear();
     m_pkgList.clear();
+    m_rawData.clear();
     m_noise=0;
     m_total=0;
     m_loss=0;
@@ -96,13 +89,13 @@ void DataParser::skipInvalidByte()
             //如果前两个不是0xAA 0xAA就向后移一位
             m_noise++;
             mBuff.removeFirst();
-            qDebug()<<"remove "<<mBuff;
+            //qDebug()<<"remove "<<mBuff;
         }
     }
 }
 
 //使用状态机解析原始数据
-int DataParser::parsePkg(QByteArray ba, bool &raw, short &rawValue, struct _eegPkt &pkt)
+int DataParser::parsePkg(QByteArray ba, bool &raw, struct _eegPkt &pkt)
 {
     m_total++;
     //输入的数据ba只包含一个有效包
@@ -255,7 +248,8 @@ int DataParser::parsePkg(QByteArray ba, bool &raw, short &rawValue, struct _eegP
                 }
                 m_rawCnt++;
                 raw=true;
-                rawValue=((uchar)buff[2]<<8)|(uchar)buff[3];
+                short rawValue=((uchar)buff[2]<<8)|(uchar)buff[3];
+                m_rawData.append(rawValue);
                 buff.remove(0,5);//4个数据以及最后的校验值
                 break;
             }else if((uchar)buff[0]==0x81 && (uchar)buff[1]==0x20){
@@ -320,11 +314,10 @@ void DataParser::run()
                 mBuff.remove(0,length+4);
                 //qDebug()<<"after delete"<<mBuff;
                 //解析函数一次只解析一个包
-                bool raw;
-                short rawValue;
+                bool raw=false;
                 struct _eegPkt pkt;
                 pkt.init();
-                if(parsePkg(tmpBA,raw,rawValue,pkt)!=0){
+                if(parsePkg(tmpBA,raw,pkt)!=0){
                     qDebug()<<"Cannot parse data.";
                     //错误数据已经从缓存区删除，直接进行下一次解析
                 }
@@ -333,7 +326,10 @@ void DataParser::run()
                     pkt.total = m_total;
                     pkt.loss = m_loss;
                     pkt.rawCnt = m_rawCnt;
-                    m_pkgList.append(pkt);
+                    pkt.raw = m_rawData;
+                    m_rawData.clear();
+                    //m_pkgList.append(pkt);
+                    emit sigNewPkt(pkt);
                 }
                 //qDebug()<<"parsered";
             }//while

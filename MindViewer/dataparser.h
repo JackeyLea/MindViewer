@@ -22,12 +22,6 @@ public:
 
     void setSource(DataSourceType type);
 
-    /// 获取一包数据并等待显示
-    /// \brief getPkg
-    /// \return
-    ///
-    _eegPkt getPkg();
-
     /// 清空缓存区
     /// \brief clearBuff
     ///
@@ -44,11 +38,14 @@ public:
     /// 解析一个有效数据包，但是数据不一定有效
     /// \brief parsePkg
     ///
-    int parsePkg(QByteArray ba, bool &raw, short &rawValue, _eegPkt &pkt);
+    int parsePkg(QByteArray ba, bool &raw, _eegPkt &pkt);
 
     void run();
 
-private:
+signals:
+    void sigNewPkt(_eegPkt pkt);
+
+private slots:
     void sltRcvData(QByteArray ba);
 
 private:
@@ -62,6 +59,7 @@ private:
     int m_total;//总数
     int m_loss;//丢失数
     int m_rawCnt;//原始包数
+    QVector<double> m_rawData;//原始数据
 };
 
 #endif // DATAPARSER_H

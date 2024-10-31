@@ -4,16 +4,11 @@
 MainWidget::MainWidget(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::MainWidget)
-    , m_timer(new QTimer)
     , m_parser(new DataParser)
 {
     ui->setupUi(this);
     ui->widgetAttention->setLabel("注意力");
     ui->widgetMeditation->setLabel("冥想值");
-
-    //定时器
-    m_timer->setInterval(1000);
-    m_timer->start();
 
     initConn();
 
@@ -24,12 +19,6 @@ MainWidget::MainWidget(QWidget *parent)
 MainWidget::~MainWidget()
 {
     delete ui;
-    if(m_timer){
-        if(m_timer->isActive()){
-            m_timer->stop();
-            m_timer->deleteLater();
-        }
-    }
     if(m_parser){
         if(m_parser->isRunning()){
             m_parser->requestInterruption();
@@ -50,7 +39,7 @@ void MainWidget::initConn()
     connect(ui->btnClear,&QPushButton::clicked,this,&MainWidget::sltBtnClear);
     connect(ui->btnSave,&QPushButton::clicked,this,&MainWidget::sltBtnSave);
 
-    connect(m_timer,&QTimer::timeout,this,&MainWidget::sltUpdateWidget);
+    connect(m_parser,&DataParser::sigNewPkt,this,&MainWidget::sltUpdateWidget);
 }
 
 void MainWidget::sltBtnCOM()
@@ -97,10 +86,8 @@ void MainWidget::sltBtnSave()
 }
 
 // 从解析类中获取数据然后显示
-void MainWidget::sltUpdateWidget()
+void MainWidget::sltUpdateWidget(_eegPkt pkt)
 {
-    //从资源池中去一个结构体
-    _eegPkt pkt = m_parser->getPkg();
     ui->labelPowerValue->setText(QString("%1").arg(pkt.power));
     ui->labelSignalValue->setText(QString("%1").arg(pkt.signal));
     ui->labelTotalCntValue->setText(QString("%1").arg(pkt.total));

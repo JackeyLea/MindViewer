@@ -8,11 +8,11 @@ Simulator::Simulator()
     //buff.resize(1024 * 1024);
 
     timer = new QTimer();
-    timer->setInterval(1000);
+    timer->setInterval(2);
     connect(timer,&QTimer::timeout,[=](){
         QByteArray buff;
         buff.clear();
-        if(i%2==0){//每512个包就有一个大包
+        if(i%512==0){//每512个包就有一个大包
             buff = getEEG();
         }else{//其他状态为小包
             buff = getRaw();

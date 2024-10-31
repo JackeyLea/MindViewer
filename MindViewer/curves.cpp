@@ -122,6 +122,17 @@ void Curves::updateRawData(short raw)
 //显示八个脑电波数据
 void Curves::updateEEGData(_eegPkt pkt)
 {
+    int newSize = pkt.raw.size();
+    //保持maxCnt个数据
+    if(dataRaw.size()>=maxCnt){
+        dataRaw.remove(0,newSize);
+    }
+    dataRaw.append(pkt.raw);
+
+    curveRaw->setSamples(xdata,dataRaw);
+    curveRaw->attach(this);
+    curveRaw->setLegendAttribute(curveRaw->LegendShowLine);//显示图例的标志，这里显示线的颜色。
+
     //保持内存中最多maxCnt个点数据
     if(dataDelta.size()>=maxCnt){
         dataDelta.pop_front();
