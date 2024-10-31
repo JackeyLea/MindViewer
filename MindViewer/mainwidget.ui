@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1080</width>
-    <height>723</height>
+    <width>1220</width>
+    <height>720</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -24,7 +24,7 @@
     <widget class="Curves" name="widgetEEG" native="true">
      <property name="minimumSize">
       <size>
-       <width>800</width>
+       <width>1000</width>
        <height>600</height>
       </size>
      </property>
