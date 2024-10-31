@@ -19,13 +19,15 @@ SOURCES += \
         mindviewertest.cpp \
         ../MindViewer/simulator.cpp \
         ../MindViewer/dataparser.cpp \
-        ../MindViewer/retriver.cpp
+        ../MindViewer/retriver.cpp \
+        ../MindViewer/localfile.cpp
 
 HEADERS += \
     mindviewertest.h \
     ../MindViewer/simulator.h \
     ../MindViewer/dataparser.h \
-    ../MindViewer/retriver.h
+    ../MindViewer/retriver.h \
+    ../MindViewer/localfile.h
 
 FORMS += \
     ../MindViewer/retriver.ui
