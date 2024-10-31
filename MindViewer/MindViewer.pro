@@ -40,6 +40,7 @@ SOURCES += \
     curves.cpp \
     dataparser.cpp \
     indicator.cpp \
+    localfile.cpp \
     main.cpp \
     mainwidget.cpp \
     retriver.cpp \
@@ -50,6 +51,7 @@ HEADERS += \
     dataparser.h \
     icd.h \
     indicator.h \
+    localfile.h \
     mainwidget.h \
     retriver.h \
     simulator.h
