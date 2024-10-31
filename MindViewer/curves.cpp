@@ -94,7 +94,6 @@ Curves::Curves(QWidget *parent) :
         }
         items[i]->setVisible(true);
     }
-    resize(800,532);
     replot();
     setAutoReplot( true );//设置自动重画，相当于更新
 }
@@ -194,9 +193,8 @@ void Curves::updateData(_eegPkt pkt)
     curveTheta->setSamples(xdata,dataTheta);
     curveTheta->attach(this);
     curveTheta->setLegendAttribute(curveTheta->LegendShowLine);//显示图例的标志，这里显示线的颜色。
-
-    replot();
 }
+
 //清空数据
 void Curves::CurveClear()
 {
