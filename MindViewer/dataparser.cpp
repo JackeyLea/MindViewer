@@ -334,21 +334,24 @@ void DataParser::run()
                     m_rawData.clear();
                     emit sigNewPkt(pkt);
                 }
+                //qDebug()<<"parsed";
+                //qDebug()<<mBuff.size();
             }//while
         }
-        QThread::msleep(10);
+        // NOTE 此处值不能过小，否则会造成界面假死
+        QThread::msleep(15);
     }
 }
 
 //收到数据后填充至缓存区等待解析
 void DataParser::sltRcvData(QByteArray ba)
 {
-    qDebug()<<"rcv"<<ba;
-    if(ba.size()>9){
-        for(int i=0;i<ba.size();i++){
-            qDebug()<<(uchar)ba[i];
-        }
-    }
+    // qDebug()<<"rcv"<<ba;
+    // if(ba.size()>9){
+    //     for(int i=0;i<ba.size();i++){
+    //         qDebug()<<(uchar)ba[i];
+    //     }
+    // }
     m_mutex.lock();
     mBuff.append(ba);
     m_mutex.unlock();
