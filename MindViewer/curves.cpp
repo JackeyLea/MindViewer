@@ -120,7 +120,7 @@ void Curves::updateData(_eegPkt pkt)
     int newSize = pkt.raw.size();
     //保持maxCnt个数据
     if(dataRaw.size()>=maxCnt){
-        dataRaw.remove(0,newSize);
+        dataRaw.remove(0,qMax(newSize,dataRaw.size()));
     }
     dataRaw.append(pkt.raw);
 
