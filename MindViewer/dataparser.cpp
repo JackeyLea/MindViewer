@@ -16,6 +16,19 @@ DataParser::DataParser()
     m_rawData.clear();
 }
 
+DataParser::~DataParser()
+{
+    if(m_comRetriver){
+        m_comRetriver->stopCOM();
+        m_comRetriver->deleteLater();
+        m_comRetriver = nullptr;
+    }
+    if(m_sim){
+        m_sim->deleteLater();
+        m_sim = nullptr;
+    }
+}
+
 void DataParser::setSource(DataSourceType type)
 {
     switch(type){

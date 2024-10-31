@@ -35,7 +35,6 @@ private:
     bool isStop;
 
     int i=0;
-    QByteArray ms;//记录已经有的模块
 };
 
 #endif // SIMULATOR_H

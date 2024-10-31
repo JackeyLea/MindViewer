@@ -19,6 +19,7 @@ class DataParser : public QThread
     Q_OBJECT
 public:
     DataParser();
+    ~DataParser();
 
     void setSource(DataSourceType type);
 

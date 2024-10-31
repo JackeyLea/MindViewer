@@ -42,9 +42,7 @@ public:
     explicit Curves(QWidget *parent = nullptr);
     ~Curves();
 
-    void updateRawData(short raw);
-    void updateRawData(QVector<double> rawData);
-    void updateEEGData(struct _eegPkt pkt);
+    void updateData(struct _eegPkt pkt);
 
     void CurveClear();
 

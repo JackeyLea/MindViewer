@@ -101,27 +101,23 @@ Curves::Curves(QWidget *parent) :
 
 Curves::~Curves()
 {
+    delete curveDelta;
+    delete curveHighAlpha;
+    delete curveHighBeta;
+    delete curveLowAlpha;
+    delete curveLowBeta;
+    delete curveLowGamma;
+    delete curveMidGamma;
+    delete curveRaw;
+    delete curveTheta;
     delete canvas;
     delete ui;
 }
 
-//刷新原始数据
-void Curves::updateRawData(short raw)
-{
-    //保持内存中最多maxCnt个点数据
-    if(dataRaw.size()>=maxCnt){
-        dataRaw.pop_front();
-    }
-    dataRaw.append((double)raw);
-
-    curveRaw->setSamples(xdata,dataRaw);
-    curveRaw->attach(this);
-    curveRaw->setLegendAttribute(curveRaw->LegendShowLine);//显示图例的标志，这里显示线的颜色。
-}
-
 //显示八个脑电波数据
-void Curves::updateEEGData(_eegPkt pkt)
+void Curves::updateData(_eegPkt pkt)
 {
+    // 原始数据
     int newSize = pkt.raw.size();
     //保持maxCnt个数据
     if(dataRaw.size()>=maxCnt){
@@ -133,6 +129,7 @@ void Curves::updateEEGData(_eegPkt pkt)
     curveRaw->attach(this);
     curveRaw->setLegendAttribute(curveRaw->LegendShowLine);//显示图例的标志，这里显示线的颜色。
 
+    // EEG数据
     //保持内存中最多maxCnt个点数据
     if(dataDelta.size()>=maxCnt){
         dataDelta.pop_front();
@@ -197,6 +194,8 @@ void Curves::updateEEGData(_eegPkt pkt)
     curveTheta->setSamples(xdata,dataTheta);
     curveTheta->attach(this);
     curveTheta->setLegendAttribute(curveTheta->LegendShowLine);//显示图例的标志，这里显示线的颜色。
+
+    replot();
 }
 //清空数据
 void Curves::CurveClear()

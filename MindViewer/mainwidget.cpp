@@ -76,6 +76,7 @@ void MainWidget::sltBtnClear()
     ui->labelTotalLossValue->setText("0");
     ui->labelRawCntValue->setText("0");
     ui->labelNoiseValue->setText("0");
+    ui->widgetEEG->CurveClear();
     //清空缓存区
     m_parser->clearBuff();
 }
@@ -96,7 +97,7 @@ void MainWidget::sltUpdateWidget(_eegPkt pkt)
     ui->labelNoiseValue->setText(QString("%1").arg(pkt.noise));
     ui->widgetAttention->setValue(pkt.attention);
     ui->widgetMeditation->setValue(pkt.meditation);
-    ui->widgetEEG->updateEEGData(pkt);
+    ui->widgetEEG->updateData(pkt);
 
     update();
 }
