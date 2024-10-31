@@ -100,6 +100,7 @@ void MainWidget::sltBtnSave()
 // 从解析类中获取数据然后显示
 void MainWidget::sltUpdateWidget(_eegPkt pkt)
 {
+    qDebug()<<"new pkt";
     ui->labelPowerValue->setText(QString("%1").arg(pkt.power));
     ui->labelSignalValue->setText(QString("%1").arg(pkt.signal));
     ui->labelTotalCntValue->setText(QString("%1").arg(pkt.total));

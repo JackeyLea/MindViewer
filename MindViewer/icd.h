@@ -55,6 +55,14 @@ inline bool getBool()
     return getNum(2);
 }
 
+inline uchar hex2int(char x) {
+    return ( (x>='0' && x<='9') ? (x-'0') : ((x>='a' && x<='f') ? (x-'a' +10) : (x-'A' + 10)));
+}
+
+inline uchar hex2ba(QString x) {
+    return (hex2int(x.at(0).toLatin1()) * 16 + hex2int(x.at(1).toLatin1()));
+}
+
 //数据源类型
 enum DataSourceType{
     None = 0,

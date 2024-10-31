@@ -49,6 +49,9 @@ void DataParser::setSource(DataSourceType type)
         connect(m_sim,&Simulator::sigNewPkg,this,&DataParser::sltRcvData);
         break;
     case Local:
+        m_lf = new LocalFile(m_filePath);
+        connect(m_lf,&LocalFile::sigNewPkg,this,&DataParser::sltRcvData);
+        m_lf->fileParse();
         break;
     }
 }
@@ -95,8 +98,7 @@ void DataParser::skipInvalidByte()
             mBuff.removeFirst();
             m_mutex.unlock();
             continue;
-        }
-        if((uchar)mBuff[0]==0xAA && (uchar)mBuff[1]==0xAA){//先找包头
+        }else if((uchar)mBuff[0]==0xAA && (uchar)mBuff[1]==0xAA){//先找包头
             //包大小
             int pkgSize = mBuff[2];
             //最后的checksum + 本身 + 2个同步
@@ -341,6 +343,12 @@ void DataParser::run()
 //收到数据后填充至缓存区等待解析
 void DataParser::sltRcvData(QByteArray ba)
 {
+    qDebug()<<"rcv"<<ba;
+    if(ba.size()>9){
+        for(int i=0;i<ba.size();i++){
+            qDebug()<<(uchar)ba[i];
+        }
+    }
     m_mutex.lock();
     mBuff.append(ba);
     m_mutex.unlock();

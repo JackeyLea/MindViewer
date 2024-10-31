@@ -40,6 +40,9 @@
          <height>64</height>
         </size>
        </property>
+       <property name="toolTip">
+        <string>读取串口数据</string>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -63,6 +66,9 @@
          <height>64</height>
         </size>
        </property>
+       <property name="toolTip">
+        <string>使用模拟数据</string>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -85,6 +91,9 @@
          <width>64</width>
          <height>64</height>
         </size>
+       </property>
+       <property name="toolTip">
+        <string>读取本地文件</string>
        </property>
        <property name="text">
         <string/>
@@ -169,6 +178,9 @@
          <height>64</height>
         </size>
        </property>
+       <property name="toolTip">
+        <string>清空数据</string>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -191,6 +203,9 @@
          <width>64</width>
          <height>64</height>
         </size>
+       </property>
+       <property name="toolTip">
+        <string>保存数据</string>
        </property>
        <property name="text">
         <string/>

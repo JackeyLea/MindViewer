@@ -14,6 +14,7 @@
 #include "icd.h"
 #include "retriver.h"
 #include "simulator.h"
+#include "localfile.h"
 
 class DataParser : public QThread
 {
@@ -57,6 +58,7 @@ private:
 
     Retriver *m_comRetriver;
     Simulator *m_sim;
+    LocalFile *m_lf;
 
     QByteArray mBuff;//数据缓存区
     int m_noise;//噪声含量
