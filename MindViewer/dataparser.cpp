@@ -29,6 +29,11 @@ DataParser::~DataParser()
     }
 }
 
+void DataParser::setFilePath(QString path)
+{
+    m_filePath = path;
+}
+
 void DataParser::setSource(DataSourceType type)
 {
     switch(type){

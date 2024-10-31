@@ -1,6 +1,8 @@
 #include "mainwidget.h"
 #include "ui_mainwidget.h"
 
+#include <QFileDialog>
+
 MainWidget::MainWidget(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::MainWidget)
@@ -54,17 +56,26 @@ void MainWidget::sltBtnSIM()
 
 void MainWidget::sltBtnLocal()
 {
+    // 选择本地文件
+    QString filePath = QFileDialog::getOpenFileName(this,tr("打开"),QString(),QString());
+    if(filePath.isEmpty()){
+        QMessageBox::information(this,tr("警告"),tr("未选择任何文件"),QMessageBox::Ok);
+        return;
+    }
+
+    //传递参数
+    m_parser->setFilePath(filePath);
     m_parser->setSource(Local);
 }
 
 void MainWidget::sltBtnPlay()
 {
-
+    QMessageBox::information(this,tr("警告"),tr("功能未实现，不要乱点"),QMessageBox::Ok);
 }
 
 void MainWidget::sltBtnPause()
 {
-
+    QMessageBox::information(this,tr("警告"),tr("功能未实现，不要乱点"),QMessageBox::Ok);
 }
 
 void MainWidget::sltBtnClear()
@@ -83,7 +94,7 @@ void MainWidget::sltBtnClear()
 
 void MainWidget::sltBtnSave()
 {
-
+    QMessageBox::information(this,tr("警告"),tr("功能未实现，不要乱点"),QMessageBox::Ok);
 }
 
 // 从解析类中获取数据然后显示

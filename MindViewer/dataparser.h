@@ -22,6 +22,8 @@ public:
     DataParser();
     ~DataParser();
 
+    void setFilePath(QString path);
+
     void setSource(DataSourceType type);
 
     /// 清空缓存区
@@ -64,6 +66,8 @@ private:
     QVector<double> m_rawData;//原始数据
 
     QMutex m_mutex;
+
+    QString m_filePath;
 };
 
 #endif // DATAPARSER_H
