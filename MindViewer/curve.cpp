@@ -10,8 +10,8 @@ Curve::Curve(QWidget *parent)
     eegYMap.setScaleInterval(-10737423,10737423);
 
     setFrameStyle( QFrame::Box | QFrame::Raised );
-    setLineWidth( 2 );
-    setMidLineWidth( 3 );
+    setLineWidth( 3 );
+    setMidLineWidth( 5 );
 
     //坐标轴
     for(int i=0;i<rawCnt;i++){
@@ -165,7 +165,7 @@ void Curve::drawCurves(QPainter *painter)
 
     // draw titles
     r = contentsRect();//回到起点
-    painter->setFont( QFont( "Helvetica", 8 ) );
+    painter->setFont( QFont( "Helvetica", 20 ) );
 
     const int alignment = Qt::AlignTop | Qt::AlignRight;
 
@@ -241,7 +241,7 @@ void Curve::populate()
     curve[3].setSamples(eegx,dataHighBeta);
 
     //低β
-    curve[4].setPen( Qt::darkGray );
+    curve[4].setPen( Qt::darkMagenta );
     curve[4].setStyle( QwtPlotCurve::Lines );
     curve[4].setRenderHint( QwtPlotItem::RenderAntialiased );
     curve[4].setSamples(eegx,dataLowBeta);
@@ -259,7 +259,7 @@ void Curve::populate()
     curve[6].setSamples(eegx,dataMidGamma);
 
     //θ
-    curve[7].setPen( Qt::darkYellow );
+    curve[7].setPen( Qt::yellow );
     curve[7].setStyle( QwtPlotCurve::Lines );
     curve[7].setRenderHint( QwtPlotItem::RenderAntialiased );
     curve[7].setSamples(eegx,dataTheta);

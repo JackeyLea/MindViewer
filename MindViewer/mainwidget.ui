@@ -19,6 +19,19 @@
   <property name="windowTitle">
    <string>MainWidget</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QPushButton{
+	background-color:white;
+}
+
+QWidget{
+	background-color:gray;
+}
+
+QFrame#frameCurve{
+	background-color:rgb(125, 125, 200);
+}</string>
+  </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="1" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -255,6 +268,9 @@
       </item>
       <item row="3" column="0">
        <widget class="QLabel" name="labelPower">
+        <property name="styleSheet">
+         <string notr="true">color:red</string>
+        </property>
         <property name="text">
          <string>电源</string>
         </property>
@@ -262,6 +278,9 @@
       </item>
       <item row="3" column="1">
        <widget class="QLabel" name="labelSignal">
+        <property name="styleSheet">
+         <string notr="true">color:green</string>
+        </property>
         <property name="text">
          <string>信号强度</string>
         </property>
@@ -279,6 +298,9 @@
          <font>
           <pointsize>20</pointsize>
          </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color:red</string>
         </property>
         <property name="text">
          <string>0</string>
@@ -301,6 +323,9 @@
           <pointsize>20</pointsize>
          </font>
         </property>
+        <property name="styleSheet">
+         <string notr="true">color:green;</string>
+        </property>
         <property name="text">
          <string>0</string>
         </property>
@@ -311,6 +336,9 @@
       </item>
       <item row="5" column="0">
        <widget class="QLabel" name="labelTotalCnt">
+        <property name="styleSheet">
+         <string notr="true">color:white</string>
+        </property>
         <property name="text">
          <string>总包数</string>
         </property>
@@ -318,6 +346,9 @@
       </item>
       <item row="5" column="1">
        <widget class="QLabel" name="labelTotalLossRate">
+        <property name="styleSheet">
+         <string notr="true">color:white;</string>
+        </property>
         <property name="text">
          <string>丢包数</string>
         </property>
@@ -335,6 +366,9 @@
          <font>
           <pointsize>20</pointsize>
          </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color:white;</string>
         </property>
         <property name="text">
          <string>0</string>
@@ -357,6 +391,9 @@
           <pointsize>20</pointsize>
          </font>
         </property>
+        <property name="styleSheet">
+         <string notr="true">color:white;</string>
+        </property>
         <property name="text">
          <string>0</string>
         </property>
@@ -367,6 +404,9 @@
       </item>
       <item row="7" column="0">
        <widget class="QLabel" name="labelRawCnt">
+        <property name="styleSheet">
+         <string notr="true">color:white;</string>
+        </property>
         <property name="text">
          <string>原始数据包</string>
         </property>
@@ -374,6 +414,9 @@
       </item>
       <item row="7" column="1">
        <widget class="QLabel" name="labelNoise">
+        <property name="styleSheet">
+         <string notr="true">color:yellow;</string>
+        </property>
         <property name="text">
          <string>噪声数据(B)</string>
         </property>
@@ -391,6 +434,9 @@
          <font>
           <pointsize>20</pointsize>
          </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color:white;</string>
         </property>
         <property name="text">
          <string>0</string>
@@ -412,6 +458,9 @@
          <font>
           <pointsize>20</pointsize>
          </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color:yellow;</string>
         </property>
         <property name="text">
          <string>0</string>
