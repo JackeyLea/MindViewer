@@ -199,14 +199,23 @@ void Curves::updateData(_eegPkt pkt)
 void Curves::CurveClear()
 {
     dataRaw.clear();
+    curveRaw->setSamples(xdata,dataRaw);
     dataDelta.clear();
+    curveDelta->setSamples(xdata,dataDelta);
     dataHighAlpha.clear();
+    curveHighAlpha->setSamples(xdata,dataHighAlpha);
     dataHighBeta.clear();
+    curveHighBeta->setSamples(xdata,dataHighBeta);
     dataLowAlpha.clear();
+    curveLowAlpha->setSamples(xdata,dataLowAlpha);
     dataLowBeta.clear();
+    curveLowBeta->setSamples(xdata,dataLowBeta);
     dataLowGamma.clear();
+    curveLowGamma->setSamples(xdata,dataLowGamma);
     dataMidGamma.clear();
+    curveMidGamma->setSamples(xdata,dataMidGamma);
     dataTheta.clear();
+    curveTheta->setSamples(xdata,dataTheta);
 }
 
 //点击图例时此曲线是否显示
