@@ -56,7 +56,7 @@ void Curve::drawCurves(QPainter *painter)
     r = contentsRect();
     painter->setFont( QFont( "Helvetica", 8 ) );
 
-    const int alignment = Qt::AlignTop | Qt::AlignHCenter;
+    const int alignment = Qt::AlignTop | Qt::AlignRight;
 
     painter->setPen( Qt::black );
 
