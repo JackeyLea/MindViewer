@@ -21,7 +21,7 @@ const int CurvCnt = 9;
 class Curve : public QFrame
 {
 public:
-    Curve();
+    Curve(QWidget *parent = nullptr);
 
 protected:
     virtual void paintEvent(QPaintEvent *event) QWT_OVERRIDE;

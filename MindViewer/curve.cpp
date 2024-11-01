@@ -1,6 +1,7 @@
 #include "curve.h"
 
-Curve::Curve()
+Curve::Curve(QWidget *parent)
+    :QFrame(parent)
 {
     xMap.setScaleInterval(-0.5,10.5);
     yMap.setScaleInterval(-1.1,1.1);
