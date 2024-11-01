@@ -86,7 +86,10 @@ void DataParser::skipInvalidByte()
 
     //一个包最起码包含一个有效数据类型0xaa 0xaa 0x02 0x02 0x01 0xaa
     // 此时包肯定不完整，就结束
-    if(mBuff.size()<=6) return;
+    if(mBuff.size()<=6) {
+        mBuff.clear();
+        return;
+    }
 
     //有可能一次收的数据不完整先判断
     while(mBuff.size()>=6){
@@ -100,7 +103,7 @@ void DataParser::skipInvalidByte()
             continue;
         }else if((uchar)mBuff[0]==0xAA && (uchar)mBuff[1]==0xAA){//先找包头
             //包大小
-            int pkgSize = mBuff[2];
+            int pkgSize = (uchar)mBuff[2];
             //最后的checksum + 本身 + 2个同步
             if(pkgSize + 2 + 1+ 1 > mBuff.size()){
                 qDebug()<<"pkg is less than given size.";
@@ -300,6 +303,7 @@ void DataParser::run()
 {
     while(1){
         if(mBuff.size()>0){
+            skipInvalidByte();
             //这里用while是考虑缓冲区可能有不止一个包
             while(mBuff.size()>=6){
                 //跳过无效字节
@@ -310,8 +314,10 @@ void DataParser::run()
                 }
 
                 //第3个字节是长度
-                int length = mBuff[2];
+                int length = (uchar)mBuff[2];
+                assert(length>0);
                 QByteArray tmpBA = mBuff.mid(0,length+2+1+1);
+
                 //从缓冲区删除已经解析的包
                 m_mutex.lock();
                 mBuff.remove(0,length+4);
@@ -334,8 +340,6 @@ void DataParser::run()
                     m_rawData.clear();
                     emit sigNewPkt(pkt);
                 }
-                //qDebug()<<"parsed";
-                //qDebug()<<mBuff.size();
             }//while
         }
         // NOTE 此处值不能过小，否则会造成界面假死
@@ -346,12 +350,6 @@ void DataParser::run()
 //收到数据后填充至缓存区等待解析
 void DataParser::sltRcvData(QByteArray ba)
 {
-    // qDebug()<<"rcv"<<ba;
-    // if(ba.size()>9){
-    //     for(int i=0;i<ba.size();i++){
-    //         qDebug()<<(uchar)ba[i];
-    //     }
-    // }
     m_mutex.lock();
     mBuff.append(ba);
     m_mutex.unlock();

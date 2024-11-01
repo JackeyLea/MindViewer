@@ -60,6 +60,7 @@ inline uchar hex2int(char x) {
 }
 
 inline uchar hex2ba(QString x) {
+    assert(x.size()==2);
     return (hex2int(x.at(0).toLatin1()) * 16 + hex2int(x.at(1).toLatin1()));
 }
 
