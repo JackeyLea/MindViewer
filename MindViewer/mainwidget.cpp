@@ -8,6 +8,7 @@ MainWidget::MainWidget(QWidget *parent)
     , ui(new Ui::MainWidget)
     , m_parser(new DataParser)
     , m_bStatus(false)
+    , m_eType(None)
 {
     ui->setupUi(this);
     ui->widgetAttention->setLabel("注意力");
@@ -50,6 +51,7 @@ void MainWidget::sltBtnCOM()
     m_bStatus = true;
     ui->labelStatusValue->setText("运行");
     m_parser->setSource(COM);
+    m_eType = COM;
 }
 
 void MainWidget::sltBtnSIM()
@@ -57,6 +59,7 @@ void MainWidget::sltBtnSIM()
     m_bStatus = true;
     ui->labelStatusValue->setText("运行");
     m_parser->setSource(Sim);
+    m_eType = Sim;
 }
 
 void MainWidget::sltBtnLocal()
@@ -73,6 +76,7 @@ void MainWidget::sltBtnLocal()
     ui->labelStatusValue->setText("运行");
     m_parser->setFilePath(filePath);
     m_parser->setSource(Local);
+    m_eType = Local;
 }
 
 void MainWidget::sltBtnPlay()
@@ -104,7 +108,19 @@ void MainWidget::sltBtnClear()
 
 void MainWidget::sltBtnSave()
 {
-    QMessageBox::information(this,tr("警告"),tr("功能未实现，不要乱点"),QMessageBox::Ok);
+    switch(m_eType){
+    case COM:
+        break;
+    case Sim:
+        QMessageBox::warning(this,tr("警告"),tr("模拟数据没必要保存"));
+        break;
+    case Local:
+        QMessageBox::warning(this,tr("警告"),tr("你告诉我已经保存的数据怎么再保存"));
+        break;
+    default:
+        QMessageBox::warning(this,tr("警告"),tr("没有选择源怎么保存"));
+        break;
+    }
 }
 
 // 从解析类中获取数据然后显示

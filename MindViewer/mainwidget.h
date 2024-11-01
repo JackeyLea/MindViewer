@@ -72,5 +72,7 @@ private:
     DataParser *m_parser;
 
     bool m_bStatus;//状态控制
+
+    DataSourceType m_eType;//当前模式
 };
 #endif // MAINWIDGET_H
