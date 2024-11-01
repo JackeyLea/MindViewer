@@ -49,48 +49,56 @@ Curves::Curves(QWidget *parent) :
     curveRaw->attach(this);
     curveRaw->setLegendAttribute(curveRaw->LegendShowLine);//显示图例的标志，这里显示线的颜色。
 
+    //δ线
     curveDelta = new QwtPlotCurve("delta");
     curveDelta->setPen(Qt::black,2);
     curveDelta->setRenderHint(QwtPlotItem::RenderAntialiased,true);
     curveDelta->attach(this);
     curveDelta->setLegendAttribute(curveDelta->LegendShowLine);//显示图例的标志，这里显示线的颜色。
 
+    //高α线
     curveHighAlpha = new QwtPlotCurve("highalpha");
     curveHighAlpha->setPen(Qt::magenta,2);
     curveHighAlpha->setRenderHint(QwtPlotItem::RenderAntialiased,true);
     curveHighAlpha->attach(this);
     curveHighAlpha->setLegendAttribute(curveHighAlpha->LegendShowLine);//显示图例的标志，这里显示线的颜色。
 
+    //高β线
     curveHighBeta = new QwtPlotCurve("highbeta");
     curveHighBeta->setPen(Qt::darkBlue,2);
     curveHighBeta->setRenderHint(QwtPlotItem::RenderAntialiased,true);
     curveHighBeta->attach(this);
     curveHighBeta->setLegendAttribute(curveHighBeta->LegendShowLine);//显示图例的标志，这里显示线的颜色。
 
+    //低α线
     curveLowAlpha = new QwtPlotCurve("lowalpha");
     curveLowAlpha->setPen(Qt::darkCyan,2);
     curveLowAlpha->setRenderHint(QwtPlotItem::RenderAntialiased,true);
     curveLowAlpha->attach(this);
     curveLowAlpha->setLegendAttribute(curveLowAlpha->LegendShowLine);//显示图例的标志，这里显示线的颜色。
 
+    //低β线
     curveLowBeta = new QwtPlotCurve("lowbeta");
     curveLowBeta->setPen(Qt::darkGray,2);
     curveLowBeta->setRenderHint(QwtPlotItem::RenderAntialiased,true);
     curveLowBeta->attach(this);
     curveLowBeta->setLegendAttribute(curveLowBeta->LegendShowLine);//显示图例的标志，这里显示线的颜色。
 
+    //低γ线
     curveLowGamma = new QwtPlotCurve("lowgamma");
     curveLowGamma->setPen(Qt::darkGreen,2);
     curveLowGamma->setRenderHint(QwtPlotItem::RenderAntialiased,true);
     curveLowGamma->attach(this);
     curveLowGamma->setLegendAttribute(curveLowGamma->LegendShowLine);//显示图例的标志，这里显示线的颜色。
 
+    //中γ线
     curveMidGamma = new QwtPlotCurve("midgamma");
     curveMidGamma->setPen(Qt::darkRed,2);
     curveMidGamma->setRenderHint(QwtPlotItem::RenderAntialiased,true);
     curveMidGamma->attach(this);
     curveMidGamma->setLegendAttribute(curveMidGamma->LegendShowLine);//显示图例的标志，这里显示线的颜色。
 
+    //θ线
     curveTheta = new QwtPlotCurve("theta");
     curveTheta->setPen(Qt::darkYellow,2);
     curveTheta->setRenderHint(QwtPlotItem::RenderAntialiased,true);
@@ -136,58 +144,63 @@ void Curves::updateData(_eegPkt pkt)
 {
     // 原始数据
     int newSize = pkt.raw.size();
-    //保持maxCnt个数据
-    if(dataRaw.size()>=maxCnt){
+    if(dataRaw.size()>=maxCnt){//保持内存中最多maxCnt个点数据
         dataRaw.remove(0,qMin(newSize,dataRaw.size()));
     }
     dataRaw.append(pkt.raw);
-
     curveRaw->setSamples(xdata,dataRaw);
 
     // EEG数据
-    //保持内存中最多maxCnt个点数据
+    //δ线
     if(dataDelta.size()>=maxCnt){
         dataDelta.pop_front();
     }
     dataDelta.append(pkt.delta);
     curveDelta->setSamples(xdata,dataDelta);
 
+    //高α线
     if(dataHighAlpha.size()>=maxCnt){
         dataHighAlpha.pop_front();
     }
     dataHighAlpha.append(pkt.highAlpha);
     curveHighAlpha->setSamples(xdata,dataHighAlpha);
 
+    //高β线
     if(dataHighBeta.size()>=maxCnt){
         dataHighBeta.pop_front();
     }
     dataHighBeta.append(pkt.highBeta);
     curveHighBeta->setSamples(xdata,dataHighBeta);
 
+    //低α线
     if(dataLowAlpha.size()>=maxCnt){
         dataLowAlpha.pop_front();
     }
     dataLowAlpha.append(pkt.lowAlpha);
     curveLowAlpha->setSamples(xdata,dataLowAlpha);
 
+    //低β线
     if(dataLowBeta.size()>=maxCnt){
         dataLowBeta.pop_front();
     }
     dataLowBeta.append(pkt.lowBeta);
     curveLowBeta->setSamples(xdata,dataLowBeta);
 
+    //低γ线
     if(dataLowGamma.size()>=maxCnt){
         dataLowGamma.pop_front();
     }
     dataLowGamma.append(pkt.lowGamma);
     curveLowGamma->setSamples(xdata,dataLowGamma);
 
+    //高γ线
     if(dataMidGamma.size()>=maxCnt){
         dataMidGamma.pop_front();
     }
     dataMidGamma.append(pkt.midGamma);
     curveMidGamma->setSamples(xdata,dataMidGamma);
 
+    //θ线
     if(dataTheta.size()>=maxCnt){
         dataTheta.pop_front();
     }
@@ -200,20 +213,28 @@ void Curves::CurveClear()
 {
     dataRaw.clear();
     curveRaw->setSamples(xdata,dataRaw);
+
     dataDelta.clear();
     curveDelta->setSamples(xdata,dataDelta);
+
     dataHighAlpha.clear();
     curveHighAlpha->setSamples(xdata,dataHighAlpha);
+
     dataHighBeta.clear();
     curveHighBeta->setSamples(xdata,dataHighBeta);
+
     dataLowAlpha.clear();
     curveLowAlpha->setSamples(xdata,dataLowAlpha);
+
     dataLowBeta.clear();
     curveLowBeta->setSamples(xdata,dataLowBeta);
+
     dataLowGamma.clear();
     curveLowGamma->setSamples(xdata,dataLowGamma);
+
     dataMidGamma.clear();
     curveMidGamma->setSamples(xdata,dataMidGamma);
+
     dataTheta.clear();
     curveTheta->setSamples(xdata,dataTheta);
 }
