@@ -40,18 +40,45 @@ void DataParser::setSource(DataSourceType type)
     case None:
         break;
     case COM:
-        m_comRetriver = new Retriver(NULL);
+        if(!m_comRetriver){
+            m_comRetriver = new Retriver(NULL);
+        }
         m_comRetriver->showWgt();
         connect(m_comRetriver,&Retriver::sigNewPkg,this,&DataParser::sltRcvData);
+        //清理之前状态
+        if(m_sim){
+            m_sim->disconnect();
+        }
+        if(m_lf){
+            m_lf->disconnect();
+        }
         break;
     case Sim:
-        m_sim = new Simulator();
+        if(!m_sim){
+            m_sim = new Simulator();
+        }
         connect(m_sim,&Simulator::sigNewPkg,this,&DataParser::sltRcvData);
+        //清理之前状态
+        if(m_lf){
+            m_lf->disconnect();
+        }
+        if(m_comRetriver){
+            m_comRetriver->disconnect();
+        }
         break;
     case Local:
-        m_lf = new LocalFile(m_filePath);
+        if(!m_lf){
+            m_lf = new LocalFile(m_filePath);
+        }
         connect(m_lf,&LocalFile::sigNewPkg,this,&DataParser::sltRcvData);
         m_lf->fileParse();
+        //清理之前状态
+        if(m_sim){
+            m_sim->disconnect();
+        }
+        if(m_comRetriver){
+            m_comRetriver->disconnect();
+        }
         break;
     }
 }
