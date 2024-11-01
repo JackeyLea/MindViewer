@@ -9,6 +9,8 @@ DataParser::DataParser()
     ,m_total(0)
     ,m_loss(0)
     ,m_rawCnt(0)
+    ,m_eType(None)
+    ,m_bSave(false)
 {
     //初始化数据
     mBuff.clear();
@@ -18,6 +20,13 @@ DataParser::DataParser()
 
 DataParser::~DataParser()
 {
+    if(!m_bSave){
+        if(file.isOpen()){
+            file.remove();
+        }
+    }
+    file.close();
+
     if(m_comRetriver){
         m_comRetriver->stopCOM();
         m_comRetriver->deleteLater();
@@ -29,6 +38,12 @@ DataParser::~DataParser()
     }
 }
 
+void DataParser::saveLocalFile()
+{
+    file.close();
+    m_bSave = true;
+}
+
 void DataParser::setFilePath(QString path)
 {
     m_filePath = path;
@@ -36,10 +51,12 @@ void DataParser::setFilePath(QString path)
 
 void DataParser::setSource(DataSourceType type)
 {
+    m_eType = type;
     switch(type){
     case None:
         break;
     case COM:
+    {
         if(!m_comRetriver){
             m_comRetriver = new Retriver(NULL);
         }
@@ -52,8 +69,16 @@ void DataParser::setSource(DataSourceType type)
         if(m_lf){
             m_lf->disconnect();
         }
+        //本地文件
+        QString fileName = QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss")+".txt";
+        QFile file(fileName);
+        if(!file.open(QFile::WriteOnly)){
+            qDebug()<<"Cannot open local file.";
+        }
         break;
+    }
     case Sim:
+    {
         if(!m_sim){
             m_sim = new Simulator();
         }
@@ -66,7 +91,9 @@ void DataParser::setSource(DataSourceType type)
             m_comRetriver->disconnect();
         }
         break;
+    }
     case Local:
+    {
         if(!m_lf){
             m_lf = new LocalFile(m_filePath);
         }
@@ -80,6 +107,7 @@ void DataParser::setSource(DataSourceType type)
             m_comRetriver->disconnect();
         }
         break;
+    }
     }
 }
 
@@ -377,6 +405,9 @@ void DataParser::run()
 //收到数据后填充至缓存区等待解析
 void DataParser::sltRcvData(QByteArray ba)
 {
+    if(file.isOpen()){
+        file.write(ba);
+    }
     m_mutex.lock();
     mBuff.append(ba);
     m_mutex.unlock();

@@ -128,6 +128,9 @@ QFrame#frameCurve{
          <height>64</height>
         </size>
        </property>
+       <property name="statusTip">
+        <string>运行</string>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -150,6 +153,9 @@ QFrame#frameCurve{
          <width>64</width>
          <height>64</height>
         </size>
+       </property>
+       <property name="statusTip">
+        <string>暂停</string>
        </property>
        <property name="text">
         <string/>
@@ -184,6 +190,9 @@ QFrame#frameCurve{
        <property name="toolTip">
         <string>清空数据</string>
        </property>
+       <property name="statusTip">
+        <string>清空缓存</string>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -208,6 +217,9 @@ QFrame#frameCurve{
         </size>
        </property>
        <property name="toolTip">
+        <string>保存数据</string>
+       </property>
+       <property name="statusTip">
         <string>保存数据</string>
        </property>
        <property name="text">

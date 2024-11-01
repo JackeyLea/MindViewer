@@ -23,6 +23,8 @@ public:
     DataParser();
     ~DataParser();
 
+    void saveLocalFile();
+
     void setFilePath(QString path);
 
     void setSource(DataSourceType type);
@@ -70,6 +72,10 @@ private:
     QMutex m_mutex;
 
     QString m_filePath;
+
+    DataSourceType m_eType;//当前数据源类型
+    QFile file;
+    bool m_bSave;
 };
 
 #endif // DATAPARSER_H

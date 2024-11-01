@@ -81,6 +81,14 @@ void MainWidget::sltBtnLocal()
 
 void MainWidget::sltBtnPlay()
 {
+    if(m_eType == None){
+        QMessageBox::warning(this,tr("警告"),tr("请先选择数据源"));
+        return;
+    }
+    if(m_bStatus){
+        QMessageBox::warning(this,tr("警告"),tr("当前处于运行状态"));
+        return;
+    }
     m_bStatus = true;
     ui->labelStatusValue->setText("运行");
     sltBtnClear();
@@ -88,12 +96,24 @@ void MainWidget::sltBtnPlay()
 
 void MainWidget::sltBtnPause()
 {
+    if(m_eType == None){
+        QMessageBox::warning(this,tr("警告"),tr("请先选择数据源"));
+        return;
+    }
+    if(!m_bStatus){
+        QMessageBox::warning(this,tr("警告"),tr("当前处于暂停状态"));
+        return;
+    }
     m_bStatus = false;
     ui->labelStatusValue->setText("暂停");
 }
 
 void MainWidget::sltBtnClear()
 {
+    if(m_eType == None){
+        QMessageBox::warning(this,tr("警告"),tr("当前无数据可清理"));
+        return;
+    }
     //清空界面
     ui->labelPowerValue->setText("0");
     ui->labelSignalValue->setText("0");
@@ -108,6 +128,10 @@ void MainWidget::sltBtnClear()
 
 void MainWidget::sltBtnSave()
 {
+    if(m_eType == None){
+        QMessageBox::warning(this,tr("警告"),tr("当前无数据可保存"));
+        return;
+    }
     switch(m_eType){
     case COM:
         break;
