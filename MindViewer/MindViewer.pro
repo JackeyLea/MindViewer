@@ -37,6 +37,7 @@ unix:{
 }
 
 SOURCES += \
+    curve.cpp \
     curves.cpp \
     dataparser.cpp \
     indicator.cpp \
@@ -47,6 +48,7 @@ SOURCES += \
     simulator.cpp
 
 HEADERS += \
+    curve.h \
     curves.h \
     dataparser.h \
     icd.h \
