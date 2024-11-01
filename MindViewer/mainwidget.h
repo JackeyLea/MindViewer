@@ -70,5 +70,7 @@ private:
     Ui::MainWidget *ui;
 
     DataParser *m_parser;
+
+    bool m_bStatus;//状态控制
 };
 #endif // MAINWIDGET_H

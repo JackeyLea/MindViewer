@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>758</width>
-    <height>719</height>
+    <height>796</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -239,30 +239,13 @@ QFrame#frameCurve{
       <string>信息</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="0" colspan="2">
-       <widget class="Indicator" name="widgetAttention" native="true">
-        <property name="minimumSize">
-         <size>
-          <width>210</width>
-          <height>210</height>
-         </size>
+      <item row="5" column="0">
+       <widget class="QLabel" name="labelTotalCnt">
+        <property name="styleSheet">
+         <string notr="true">color:white</string>
         </property>
-       </widget>
-      </item>
-      <item row="1" column="0" colspan="2">
-       <widget class="Indicator" name="widgetMeditation" native="true">
-        <property name="minimumSize">
-         <size>
-          <width>210</width>
-          <height>210</height>
-         </size>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0" colspan="2">
-       <widget class="Line" name="lineInfo">
-        <property name="orientation">
-         <enum>Qt::Orientation::Horizontal</enum>
+        <property name="text">
+         <string>总包数</string>
         </property>
        </widget>
       </item>
@@ -276,6 +259,98 @@ QFrame#frameCurve{
         </property>
        </widget>
       </item>
+      <item row="0" column="0" colspan="2">
+       <widget class="Indicator" name="widgetAttention" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>210</width>
+          <height>210</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="1">
+       <widget class="QLabel" name="labelNoiseValue">
+        <property name="minimumSize">
+         <size>
+          <width>50</width>
+          <height>50</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>20</pointsize>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color:yellow;</string>
+        </property>
+        <property name="text">
+         <string>0</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" colspan="2">
+       <widget class="Indicator" name="widgetMeditation" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>210</width>
+          <height>210</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="0">
+       <widget class="QLabel" name="labelRawCntValue">
+        <property name="minimumSize">
+         <size>
+          <width>50</width>
+          <height>50</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>20</pointsize>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color:white;</string>
+        </property>
+        <property name="text">
+         <string>0</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="0">
+       <widget class="QLabel" name="labelTotalCntValue">
+        <property name="minimumSize">
+         <size>
+          <width>50</width>
+          <height>50</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>20</pointsize>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color:white;</string>
+        </property>
+        <property name="text">
+         <string>0</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
       <item row="3" column="1">
        <widget class="QLabel" name="labelSignal">
         <property name="styleSheet">
@@ -283,6 +358,33 @@ QFrame#frameCurve{
         </property>
         <property name="text">
          <string>信号强度</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" colspan="2">
+       <widget class="Line" name="lineInfo">
+        <property name="orientation">
+         <enum>Qt::Orientation::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="0">
+       <widget class="QLabel" name="labelStatus">
+        <property name="styleSheet">
+         <string notr="true">color:red;</string>
+        </property>
+        <property name="text">
+         <string>状态</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="1">
+       <widget class="QLabel" name="labelNoise">
+        <property name="styleSheet">
+         <string notr="true">color:yellow;</string>
+        </property>
+        <property name="text">
+         <string>噪声数据(B)</string>
         </property>
        </widget>
       </item>
@@ -334,50 +436,6 @@ QFrame#frameCurve{
         </property>
        </widget>
       </item>
-      <item row="5" column="0">
-       <widget class="QLabel" name="labelTotalCnt">
-        <property name="styleSheet">
-         <string notr="true">color:white</string>
-        </property>
-        <property name="text">
-         <string>总包数</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="1">
-       <widget class="QLabel" name="labelTotalLossRate">
-        <property name="styleSheet">
-         <string notr="true">color:white;</string>
-        </property>
-        <property name="text">
-         <string>丢包数</string>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="0">
-       <widget class="QLabel" name="labelTotalCntValue">
-        <property name="minimumSize">
-         <size>
-          <width>50</width>
-          <height>50</height>
-         </size>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>20</pointsize>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">color:white;</string>
-        </property>
-        <property name="text">
-         <string>0</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignmentFlag::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
       <item row="6" column="1">
        <widget class="QLabel" name="labelTotalLossValue">
         <property name="minimumSize">
@@ -412,42 +470,18 @@ QFrame#frameCurve{
         </property>
        </widget>
       </item>
-      <item row="7" column="1">
-       <widget class="QLabel" name="labelNoise">
-        <property name="styleSheet">
-         <string notr="true">color:yellow;</string>
-        </property>
-        <property name="text">
-         <string>噪声数据(B)</string>
-        </property>
-       </widget>
-      </item>
-      <item row="8" column="0">
-       <widget class="QLabel" name="labelRawCntValue">
-        <property name="minimumSize">
-         <size>
-          <width>50</width>
-          <height>50</height>
-         </size>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>20</pointsize>
-         </font>
-        </property>
+      <item row="5" column="1">
+       <widget class="QLabel" name="labelTotalLossRate">
         <property name="styleSheet">
          <string notr="true">color:white;</string>
         </property>
         <property name="text">
-         <string>0</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignmentFlag::AlignCenter</set>
+         <string>丢包数</string>
         </property>
        </widget>
       </item>
-      <item row="8" column="1">
-       <widget class="QLabel" name="labelNoiseValue">
+      <item row="10" column="0">
+       <widget class="QLabel" name="labelStatusValue">
         <property name="minimumSize">
          <size>
           <width>50</width>
@@ -460,10 +494,10 @@ QFrame#frameCurve{
          </font>
         </property>
         <property name="styleSheet">
-         <string notr="true">color:yellow;</string>
+         <string notr="true">color:red</string>
         </property>
         <property name="text">
-         <string>0</string>
+         <string>等待</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignmentFlag::AlignCenter</set>

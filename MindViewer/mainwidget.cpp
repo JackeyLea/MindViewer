@@ -7,6 +7,7 @@ MainWidget::MainWidget(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::MainWidget)
     , m_parser(new DataParser)
+    , m_bStatus(false)
 {
     ui->setupUi(this);
     ui->widgetAttention->setLabel("注意力");
@@ -46,11 +47,15 @@ void MainWidget::initConn()
 
 void MainWidget::sltBtnCOM()
 {
+    m_bStatus = true;
+    ui->labelStatusValue->setText("运行");
     m_parser->setSource(COM);
 }
 
 void MainWidget::sltBtnSIM()
 {
+    m_bStatus = true;
+    ui->labelStatusValue->setText("运行");
     m_parser->setSource(Sim);
 }
 
@@ -64,18 +69,23 @@ void MainWidget::sltBtnLocal()
     }
 
     //传递参数
+    m_bStatus = true;
+    ui->labelStatusValue->setText("运行");
     m_parser->setFilePath(filePath);
     m_parser->setSource(Local);
 }
 
 void MainWidget::sltBtnPlay()
 {
-    QMessageBox::information(this,tr("警告"),tr("功能未实现，不要乱点"),QMessageBox::Ok);
+    m_bStatus = true;
+    ui->labelStatusValue->setText("运行");
+    sltBtnClear();
 }
 
 void MainWidget::sltBtnPause()
 {
-    QMessageBox::information(this,tr("警告"),tr("功能未实现，不要乱点"),QMessageBox::Ok);
+    m_bStatus = false;
+    ui->labelStatusValue->setText("暂停");
 }
 
 void MainWidget::sltBtnClear()
@@ -100,6 +110,10 @@ void MainWidget::sltBtnSave()
 // 从解析类中获取数据然后显示
 void MainWidget::sltUpdateWidget(_eegPkt pkt)
 {
+    if(!m_bStatus){
+        //暂停状态
+        return;
+    }
     ui->labelPowerValue->setText(QString("%1").arg(pkt.power));
     ui->labelSignalValue->setText(QString("%1").arg(pkt.signal));
     ui->labelTotalCntValue->setText(QString("%1").arg(pkt.total));
