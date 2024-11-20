@@ -24,17 +24,24 @@ SOURCES += \
         ../MindViewer/simulator.cpp \
         ../MindViewer/dataparser.cpp \
         ../MindViewer/retriver.cpp \
-        ../MindViewer/localfile.cpp
+        ../MindViewer/localfile.cpp \
+        ../MindViewer/mainwidget.cpp \
+        ../MindViewer/curve.cpp \
+        ../MindViewer/indicator.cpp
 
 HEADERS += \
     mindviewertest.h \
     ../MindViewer/simulator.h \
     ../MindViewer/dataparser.h \
     ../MindViewer/retriver.h \
-    ../MindViewer/localfile.h
+    ../MindViewer/localfile.h \
+    ../MindViewer/mainwidget.h \
+    ../MindViewer/curve.h \
+    ../MindViewer/indicator.h
 
 FORMS += \
-    ../MindViewer/retriver.ui
+    ../MindViewer/retriver.ui \
+    ../MindViewer/mainwidget.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
