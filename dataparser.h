@@ -90,7 +90,7 @@ private:
     Simulator *m_sim;
     LocalFile *m_lf;
 
-    QByteArray mBuff;//数据缓存区
+    QByteArray m_buff;//数据缓存区
     int m_noise;//噪声含量
     int m_total;//总数
     int m_loss;//丢失数

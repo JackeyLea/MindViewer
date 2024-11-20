@@ -14,7 +14,7 @@ DataParser::DataParser()
     ,m_bSave(false)
 {
     //初始化数据
-    mBuff.clear();
+    m_buff.clear();
     m_pkgList.clear();
     m_rawData.clear();
     m_filePath.clear();
@@ -116,7 +116,7 @@ void DataParser::setSource(DataSourceType type)
 void DataParser::clearBuff()
 {
     m_mutex.lock();
-    mBuff.clear();
+    m_buff.clear();
     m_mutex.unlock();
 
     m_pkgList.clear();
@@ -129,34 +129,34 @@ void DataParser::clearBuff()
 
 void DataParser::skipInvalidByte()
 {
-    if(mBuff.size()==0) return;
+    if(m_buff.size()==0) return;
 
     //一个包最起码包含一个有效数据类型0xaa 0xaa 0x02 0x02 0x01 0xaa
     // 此时包肯定不完整，就结束
-    if(mBuff.size()<=6) {
-        mBuff.clear();
+    if(m_buff.size()<=6) {
+        m_buff.clear();
         return;
     }
 
     //有可能一次收的数据不完整先判断
-    while(mBuff.size()>=6){
+    while(m_buff.size()>=6){
         //可能会出现这种情况 0xaa 0xaa 0xaa
-        if((uchar)mBuff[0]==0xaa && (uchar)mBuff[1]==0xaa && (uchar)mBuff[2]==0xaa){
+        if((uchar)m_buff[0]==0xaa && (uchar)m_buff[1]==0xaa && (uchar)m_buff[2]==0xaa){
             qDebug()<<"3 0xaa found.";
             m_noise++;
             m_mutex.lock();
-            mBuff.removeFirst();
+            m_buff.removeFirst();
             m_mutex.unlock();
             continue;
-        }else if((uchar)mBuff[0]==0xAA && (uchar)mBuff[1]==0xAA){//先找包头
+        }else if((uchar)m_buff[0]==0xAA && (uchar)m_buff[1]==0xAA){//先找包头
             //包大小
-            int pkgSize = (uchar)mBuff[2];
+            int pkgSize = (uchar)m_buff[2];
             //最后的checksum + 本身 + 2个同步
-            if(pkgSize + 2 + 1+ 1 > mBuff.size()){
+            if(pkgSize + 2 + 1+ 1 > m_buff.size()){
                 qDebug()<<"pkg is less than given size.";
                 m_noise++;
                 m_mutex.lock();
-                mBuff.removeFirst();
+                m_buff.removeFirst();
                 m_mutex.unlock();
                 continue;
             }else{
@@ -167,7 +167,7 @@ void DataParser::skipInvalidByte()
             m_noise++;
 
             m_mutex.lock();
-            mBuff.removeFirst();
+            m_buff.removeFirst();
             m_mutex.unlock();
         }
     }
@@ -349,25 +349,25 @@ int DataParser::parsePkg(const QByteArray ba, bool &raw, struct _eegPkt &pkt)
 void DataParser::run()
 {
     while(1){
-        if(mBuff.size()>0){
+        if(m_buff.size()>0){
             skipInvalidByte();
             //这里用while是考虑缓冲区可能有不止一个包
-            while(mBuff.size()>=6){
+            while(m_buff.size()>=6){
                 //跳过无效字节
                 skipInvalidByte();
-                if(mBuff.size()==0) continue;
-                if(((uchar)mBuff[0]!=0xaa) && ((uchar)mBuff[1]!=0xaa)){
+                if(m_buff.size()==0) continue;
+                if(((uchar)m_buff[0]!=0xaa) && ((uchar)m_buff[1]!=0xaa)){
                     continue;
                 }
 
                 //第3个字节是长度
-                int length = (uchar)mBuff[2];
+                int length = (uchar)m_buff[2];
                 assert(length>0);
-                QByteArray tmpBA = mBuff.mid(0,length+2+1+1);
+                QByteArray tmpBA = m_buff.mid(0,length+2+1+1);
 
                 //从缓冲区删除已经解析的包
                 m_mutex.lock();
-                mBuff.remove(0,length+4);
+                m_buff.remove(0,length+4);
                 m_mutex.unlock();
 
                 //解析函数一次只解析一个包
@@ -401,6 +401,6 @@ void DataParser::sltRcvData(QByteArray ba)
         file.write(ba);
     }
     m_mutex.lock();
-    mBuff.append(ba);
+    m_buff.append(ba);
     m_mutex.unlock();
 }
