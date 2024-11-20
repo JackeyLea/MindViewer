@@ -13,7 +13,7 @@ class LocalFile : public QObject
 {
     Q_OBJECT
 public:
-    LocalFile(QString filePath,QObject *parent = nullptr);
+    explicit LocalFile(const QString filePath, QObject *parent = nullptr);
 
     void fileParse();
 
@@ -26,7 +26,6 @@ signals:
 
 private:
     QString m_filePath;
-
 };
 
 #endif // LOCALFILE_H

@@ -13,7 +13,7 @@
 class Indicator : public QwtDial
 {
 public:
-    Indicator(QWidget *parent = nullptr);
+    explicit Indicator(QWidget *parent = nullptr);
 
     void setLabel( const QString& );
     QString label() const;

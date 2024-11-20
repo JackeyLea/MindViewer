@@ -25,7 +25,7 @@ public:
 
     void saveLocalFile();
 
-    void setFilePath(QString path);
+    void setFilePath(const QString path);
 
     void setSource(DataSourceType type);
 
@@ -45,7 +45,7 @@ public:
     /// 解析一个有效数据包，但是数据不一定有效
     /// \brief parsePkg
     ///
-    int parsePkg(QByteArray ba, bool &raw, _eegPkt &pkt);
+    int parsePkg(const QByteArray ba, bool &raw, _eegPkt &pkt);
 
     void run();
 

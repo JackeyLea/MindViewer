@@ -3,10 +3,10 @@
 #include "icd.h"
 
 Simulator::Simulator()
+    :m_timer(new QTimer)
 {
-    timer = new QTimer();
-    timer->setInterval(2);
-    connect(timer,&QTimer::timeout,[=](){
+    m_timer->setInterval(2);
+    connect(m_timer,&QTimer::timeout,[=](){
         QByteArray buff;
         buff.clear();
         if(i%512==0){//每512个包就有一个大包
@@ -22,13 +22,16 @@ Simulator::Simulator()
         }
         ++i;
     });
-    timer->start();
+    m_timer->start();
 }
 
 Simulator::~Simulator()
 {
-    timer->stop();
-    delete timer;
+    if(m_timer){
+        m_timer->stop();
+        delete m_timer;
+        m_timer = nullptr;
+    }
 }
 
 QByteArray Simulator::getOne(uchar mn, int max)

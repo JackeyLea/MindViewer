@@ -3,8 +3,9 @@
 #include <QDebug>
 
 DataParser::DataParser()
-    :m_comRetriver(NULL)
-    ,m_sim(NULL)
+    :m_comRetriver(nullptr)
+    ,m_sim(nullptr)
+    ,m_lf(nullptr)
     ,m_noise(0)
     ,m_total(0)
     ,m_loss(0)
@@ -16,6 +17,7 @@ DataParser::DataParser()
     mBuff.clear();
     m_pkgList.clear();
     m_rawData.clear();
+    m_filePath.clear();
 }
 
 DataParser::~DataParser()
@@ -44,7 +46,7 @@ void DataParser::saveLocalFile()
     m_bSave = true;
 }
 
-void DataParser::setFilePath(QString path)
+void DataParser::setFilePath(const QString path)
 {
     m_filePath = path;
 }
@@ -71,7 +73,7 @@ void DataParser::setSource(DataSourceType type)
         }
         //本地文件
         QString fileName = QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss")+".txt";
-        QFile file(fileName);
+        file.setFileName(fileName);
         if(!file.open(QFile::WriteOnly)){
             qDebug()<<"Cannot open local file.";
         }
@@ -182,7 +184,7 @@ void DataParser::skipInvalidByte()
 }
 
 //使用状态机解析原始数据
-int DataParser::parsePkg(QByteArray ba, bool &raw, struct _eegPkt &pkt)
+int DataParser::parsePkg(const QByteArray ba, bool &raw, struct _eegPkt &pkt)
 {
     m_total++;//输入的数据ba只包含一个有效包
     raw=false;//此数据包是否包含原始数据
@@ -213,7 +215,7 @@ int DataParser::parsePkg(QByteArray ba, bool &raw, struct _eegPkt &pkt)
             break;
         case PARSER_STATE_PAYLOAD_LENGTH:
             payloadLength=(uchar)buff[0];//接下来是长度
-            if(payloadLength>=170 || payloadLength<=0){//如果长度大于170就丢弃此包并查找下一个0xaa 0xaa
+            if(payloadLength>=170){//如果长度大于170就丢弃此包并查找下一个0xaa 0xaa
                 qDebug()<<"this package payloadLength(the 3rd value) is wrong";
                 state = PARSER_STATE_SYNC;
                 //如果是0xaa 0xaa 0xff，包头对了但是长度不对

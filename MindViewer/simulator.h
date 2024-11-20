@@ -53,7 +53,7 @@ signals:
     void sigNewPkg(QByteArray ba);
 
 private:
-    QTimer *timer;
+    QTimer *m_timer;
 
     int i=0;
 };
