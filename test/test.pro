@@ -3,9 +3,11 @@
 ### \date 2024-10-29
 ### \brief 单元测试
 ### \note Qt 6.8.0
-### \note LLVM-Mingw 17.0.6
+### \note VS2022
 #######################
-QT += core testlib serialport widgets gui
+QT += core gui widgets
+QT += testlib
+QT += serialport
 
 CONFIG += c++17 cmdline
 CONFIG -= app_bundle

@@ -3,12 +3,11 @@
 ### \date 2020-12-26
 ### \brief 主程序
 ### \note Qt 6.8.0
-### \note LLVM-Mingw 17.0.6
+### \note VS2022
 #######################
 
-QT       += core gui
-QT       += serialport
-QT       += widgets
+QT     += core gui widgets
+QT     += serialport
 
 CONFIG += c++17
 
