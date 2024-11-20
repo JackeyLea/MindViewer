@@ -1,3 +1,9 @@
+///////////////////
+/// \author JackeyLea
+/// \date 2024-10-31
+/// \note 界面显示类
+///////////////////
+
 #ifndef MAINWIDGET_H
 #define MAINWIDGET_H
 
@@ -15,7 +21,14 @@ class MainWidget : public QWidget
     Q_OBJECT
 
 public:
+    /// 构造函数
+    /// \brief MainWidget
+    /// \param parent
+    ///
     explicit MainWidget(QWidget *parent = nullptr);
+
+    ///
+    /// 释放资源
     ~MainWidget();
 
 protected:
@@ -69,6 +82,7 @@ private slots:
 private:
     Ui::MainWidget *ui;
 
+    // 解析器
     DataParser *m_parser;
 
     bool m_bStatus;//状态控制

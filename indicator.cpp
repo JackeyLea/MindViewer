@@ -39,11 +39,6 @@ void Indicator::setLabel( const QString& label )
     update();
 }
 
-QString Indicator::label() const
-{
-    return m_label;
-}
-
 void Indicator::drawScaleContents( QPainter* painter,
                                     const QPointF& center, double radius ) const
 {

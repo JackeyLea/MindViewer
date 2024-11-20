@@ -13,8 +13,16 @@ class LocalFile : public QObject
 {
     Q_OBJECT
 public:
+    /// 构造函数
+    /// \brief LocalFile
+    /// \param filePath
+    /// \param parent
+    ///
     explicit LocalFile(const QString filePath, QObject *parent = nullptr);
 
+    /// 文件内容解析
+    /// \brief fileParse
+    ///
     void fileParse();
 
 signals:

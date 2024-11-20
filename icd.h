@@ -50,11 +50,6 @@ inline uchar getNum(int max=256){
     return QRandomGenerator::global()->bounded(0,max);
 }
 
-inline bool getBool()
-{
-    return getNum(2);
-}
-
 inline uchar hex2int(char x) {
     return ( (x>='0' && x<='9') ? (x-'0') : ((x>='a' && x<='f') ? (x-'a' +10) : (x-'A' + 10)));
 }

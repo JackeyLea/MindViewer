@@ -20,7 +20,13 @@ class Simulator : public QObject
 {
     Q_OBJECT
 public:
+    /// 构造函数
+    /// \brief Simulator
+    ///
     Simulator();
+
+    ///
+    /// 释放资源
     ~Simulator();
 
     /// 生成一个模块包

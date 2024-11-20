@@ -127,16 +127,6 @@ void DataParser::clearBuff()
     m_rawCnt=0;
 }
 
-void DataParser::add2Buff(QByteArray ba)
-{
-    mBuff.append(ba);
-}
-
-QByteArray DataParser::getBuff()
-{
-    return mBuff;
-}
-
 void DataParser::skipInvalidByte()
 {
     if(mBuff.size()==0) return;

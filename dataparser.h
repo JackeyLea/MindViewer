@@ -20,13 +20,30 @@ class DataParser : public QThread
 {
     Q_OBJECT
 public:
+    /// 构造函数
+    /// \brief DataParser
+    ///
     DataParser();
+
+    ///
+    /// 释放资源
     ~DataParser();
 
+    /// 设置保存数据至本地
+    /// \brief saveLocalFile
+    ///
     void saveLocalFile();
 
+    /// 设置文件路径
+    /// \brief setFilePath
+    /// \param path
+    ///
     void setFilePath(const QString path);
 
+    /// 设置数据源类型
+    /// \brief setSource
+    /// \param type
+    ///
     void setSource(DataSourceType type);
 
     /// 清空缓存区
@@ -34,8 +51,7 @@ public:
     ///
     void clearBuff();
 
-    void add2Buff(QByteArray ba);//仅供单元测试使用
-    QByteArray getBuff();//仅供单元测试使用
+protected:
 
     /// 跳过无效字节
     /// \brief skipInvalidByte
@@ -47,17 +63,29 @@ public:
     ///
     int parsePkg(const QByteArray ba, bool &raw, _eegPkt &pkt);
 
+    /// 独立线程函数
+    /// \brief run
+    ///
     void run();
 
 signals:
+    /// 通知界面有新数据包
+    /// \brief sigNewPkt
+    /// \param pkt
+    ///
     void sigNewPkt(_eegPkt pkt);
 
 private slots:
+    /// 接收从数据源发过来的数据并填充至解析缓存区
+    /// \brief sltRcvData
+    /// \param ba
+    ///
     void sltRcvData(QByteArray ba);
 
 private:
     QList<_eegPkt> m_pkgList;//解析后的结构体列表
 
+    /// 数据源
     Retriver *m_comRetriver;
     Simulator *m_sim;
     LocalFile *m_lf;

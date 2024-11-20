@@ -13,17 +13,29 @@
 class Indicator : public QwtDial
 {
 public:
+    /// 构造函数
+    /// \brief Indicator
+    /// \param parent
+    ///
     explicit Indicator(QWidget *parent = nullptr);
 
+    /// 仪表名
+    /// \brief setLabel
+    ///
     void setLabel( const QString& );
-    QString label() const;
 
 protected:
+    /// 绘图
+    /// \brief drawScaleContents
+    /// \param painter
+    /// \param center
+    /// \param radius
+    ///
     virtual void drawScaleContents( QPainter* painter,
                                    const QPointF& center, double radius ) const QWT_OVERRIDE;
 
 private:
-    QString m_label;
+    QString m_label;//仪表名称
 };
 
 #endif // INDICATOR_H
