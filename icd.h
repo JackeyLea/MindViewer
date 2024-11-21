@@ -11,6 +11,7 @@
 
 #include <QObject>
 #include <QRandomGenerator>
+#include <QFile>
 
 /* Parser types */
 #define PARSER_TYPE_NULL       0x00
@@ -111,5 +112,18 @@ struct _eegPkt{
         raw.clear();
     }
 };//一个数据包包含的所有值
+
+inline QString getQSS()
+{
+    QString qss;
+
+    QFile file("qrc:/resource/qss/MaterialDark.qss");
+    if(file.open(QFile::ReadOnly)){
+        qss = file.readAll();
+    }
+    file.close();
+
+    return qss;
+}
 
 #endif // ICD_H
