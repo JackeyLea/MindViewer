@@ -16,7 +16,14 @@ TGAM连接及测试：<a href="https://blog.jackeylea.com/tgam/setup-and-install
 
 Qt 6.8.0 + VS 2022 64bit + QWT6.3.0
 
+## 编译
+
+1. 下载vcpkg，使用vcpkg安装qwt库
+2. 安装Qt 6.8.0
+3. 安装VS2022
+4. 使用QtCreator打开工程并编译
+
 ### 说明
 
 - 在官方的API中没有给出眨眼（blink）/走神程度的接口，所以其一直为0
-- TGAM模块是每秒发送512个数据包，也就是每2毫秒有一个数据包，经过测试，本程序可以正常显示，但是程序线程会飙到100%，风扇开始转。
+- TGAM模块是每秒发送512个数据包，也就是每2毫秒有一个数据包
