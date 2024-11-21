@@ -7,10 +7,10 @@
 #ifndef CURVE_H
 #define CURVE_H
 
-#include <QwtScaleMap>
-#include <QwtPlotCurve>
-#include <QwtSymbol>
-#include <QwtMath>
+#include "qwt_scale_map.h"
+#include "qwt_plot_curve.h"
+#include "qwt_symbol.h"
+#include "qwt_math.h"
 
 #include <QPainter>
 #include <QFrame>
