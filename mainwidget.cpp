@@ -10,6 +10,9 @@ MainWidget::MainWidget(QWidget *parent)
     , m_bStatus(false)
     , m_eType(None)
 {
+#ifdef Q_OS_LINUX
+    qRegisterMetaType<_eegPkt>("_eegPkt");
+#endif
     ui->setupUi(this);
     ui->widgetAttention->setLabel("注意力");
     ui->widgetMeditation->setLabel("冥想值");
