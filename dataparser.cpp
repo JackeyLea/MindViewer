@@ -400,6 +400,7 @@ void DataParser::sltRcvData(QByteArray ba)
     if(file.isOpen()){
         file.write(ba);
     }
+    // NOTE DEBUG模式下，以下代码可能会崩溃
     m_mutex.lock();
     m_buff.append(ba);
     m_mutex.unlock();
