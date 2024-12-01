@@ -8,5 +8,6 @@
         <file>resource/icon/sim.svg</file>
         <file>resource/icon/clear.svg</file>
         <file>resource/icon/mind.svg</file>
+        <file>resource/qss/mindviewer.qss</file>
     </qresource>
 </RCC>

@@ -117,7 +117,7 @@ inline QString getQSS()
 {
     QString qss;
 
-    QFile file("qrc:/resource/qss/MaterialDark.qss");
+    QFile file(":/resource/qss/mindviewer.qss");
     if(file.open(QFile::ReadOnly)){
         qss = file.readAll();
     }
