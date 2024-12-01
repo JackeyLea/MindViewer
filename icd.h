@@ -88,6 +88,7 @@ struct _eegPkt{
     int total;//总包数
     int loss;//丢失数
     int rawCnt;//原始包数
+    int eegCnt;//EEG数据包
     QVector<double> raw;
 
     void init(){
@@ -109,6 +110,7 @@ struct _eegPkt{
         total=0;
         loss=0;
         rawCnt=0;
+        eegCnt=0;
         raw.clear();
     }
 };//一个数据包包含的所有值

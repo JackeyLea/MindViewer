@@ -124,6 +124,7 @@ void MainWidget::sltBtnClear()
     ui->labelTotalLossValue->setText("0");
     ui->labelRawCntValue->setText("0");
     ui->labelNoiseValue->setText("0");
+    ui->labelEEGCnt->setText("0");
     ui->frameCurve->clear();
     //清空缓存区
     m_parser->clearBuff();
@@ -162,6 +163,7 @@ void MainWidget::sltUpdateWidget(_eegPkt pkt)
     ui->labelTotalCntValue->setText(QString("%1").arg(pkt.total));
     ui->labelTotalLossValue->setText(QString("%1").arg(pkt.loss));
     ui->labelRawCntValue->setText(QString("%1").arg(pkt.rawCnt));
+    ui->labelEEGCntValue->setText(QString("%1").arg(pkt.eegCnt));
     ui->labelNoiseValue->setText(QString("%1").arg(pkt.noise));
     ui->widgetAttention->setValue(pkt.attention);
     ui->widgetMeditation->setValue(pkt.meditation);

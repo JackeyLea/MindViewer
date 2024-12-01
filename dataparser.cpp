@@ -10,6 +10,7 @@ DataParser::DataParser()
     ,m_total(0)
     ,m_loss(0)
     ,m_rawCnt(0)
+    ,m_eegCnt(0)
     ,m_eType(None)
     ,m_bSave(false)
 {
@@ -125,6 +126,7 @@ void DataParser::clearBuff()
     m_total=0;
     m_loss=0;
     m_rawCnt=0;
+    m_eegCnt=0;
 }
 
 void DataParser::skipInvalidByte()
@@ -331,6 +333,7 @@ int DataParser::parsePkg(const QByteArray ba, bool &raw, struct _eegPkt &pkt)
                 state=PARSER_STATE_PAYLOAD;
                 buff.remove(0,26);//24 + 2
                 cnt+=26;
+                m_eegCnt++;//统计
             }else if((uchar)buff[0]==0x86 && (uchar)buff[1]==0x02){
                 //两个大端字节表示R峰的间隔
             }
@@ -383,6 +386,7 @@ void DataParser::run()
                     pkt.total = m_total;
                     pkt.loss = m_loss;
                     pkt.rawCnt = m_rawCnt;
+                    pkt.eegCnt = m_eegCnt;
                     pkt.raw = m_rawData;
                     m_rawData.clear();
                     emit sigNewPkt(pkt);

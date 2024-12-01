@@ -95,6 +95,7 @@ private:
     int m_total;//总数
     int m_loss;//丢失数
     int m_rawCnt;//原始包数
+    int m_eegCnt;//eeg数据包数
     QVector<double> m_rawData;//原始数据
 
     QMutex m_mutex;

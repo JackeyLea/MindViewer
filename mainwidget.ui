@@ -421,7 +421,7 @@
        </widget>
       </item>
       <item row="4" column="1">
-       <widget class="QLabel" name="labelEEGCntValue">
+       <widget class="QLabel" name="labelEEGCnt">
         <property name="text">
          <string>EEG数据包</string>
         </property>
@@ -472,7 +472,7 @@
        </widget>
       </item>
       <item row="5" column="1">
-       <widget class="QLabel" name="labelEEGCnt">
+       <widget class="QLabel" name="labelEEGCntValue">
         <property name="minimumSize">
          <size>
           <width>50</width>
