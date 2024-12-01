@@ -259,7 +259,7 @@ void Curve::populate()
     curve[6].setSamples(eegx,dataMidGamma);
 
     //θ
-    curve[7].setPen( Qt::yellow );
+    curve[7].setPen( Qt::darkYellow );
     curve[7].setStyle( QwtPlotCurve::Lines );
     curve[7].setRenderHint( QwtPlotItem::RenderAntialiased );
     curve[7].setSamples(eegx,dataTheta);
