@@ -124,7 +124,7 @@ void MainWidget::sltBtnClear()
     ui->labelTotalLossValue->setText("0");
     ui->labelRawCntValue->setText("0");
     ui->labelNoiseValue->setText("0");
-    ui->labelEEGCnt->setText("0");
+    ui->labelEEGCntValue->setText("0");
     ui->frameCurve->clear();
     //清空缓存区
     m_parser->clearBuff();
