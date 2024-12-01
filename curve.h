@@ -34,7 +34,7 @@ public:
     /// \brief updateData
     /// \param pkt
     ///
-    void updateData(const _eegPkt pkt);
+    void updateData(const _eegPkt& pkt);
 
     /// 清空缓存区数据
     /// \brief clear

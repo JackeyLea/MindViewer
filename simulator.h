@@ -61,7 +61,7 @@ signals:
 private:
     QTimer *m_timer;
 
-    int i=0;
+    uint time_index=0;
 };
 
 #endif // SIMULATOR_H

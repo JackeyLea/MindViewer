@@ -115,6 +115,7 @@ struct _eegPkt{
     }
 };//一个数据包包含的所有值
 
+//加载样式表
 inline QString getQSS()
 {
     QString qss;

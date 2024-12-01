@@ -9,7 +9,7 @@ Simulator::Simulator()
     connect(m_timer,&QTimer::timeout,[=](){
         QByteArray buff;
         buff.clear();
-        if(i%512==0){//每512个包就有一个大包
+        if(time_index%512==0){//每512个包就有一个大包
             buff = getEEG();
         }else{//其他状态为小包
             buff = getRaw();
@@ -17,10 +17,10 @@ Simulator::Simulator()
 
         emit sigNewPkg(buff);
 
-        if(i > 3000000){
-            i=0;
+        if(time_index > 3000000){
+            time_index=0;
         }
-        ++i;
+        ++time_index;
     });
     m_timer->start();
 }
@@ -58,9 +58,9 @@ QByteArray Simulator::getRaw(bool noise)
 
     //计算校验值
     int checksum = data[3];
-    for (int i = 4; i < data.size(); i++)
+    for (int k = 4; k < data.size(); k++)
     {
-        checksum += data[i];
+        checksum += data[k];
     }
     checksum &= 0xff;
     checksum = ~checksum & 0xff;
@@ -145,9 +145,9 @@ QByteArray Simulator::getEEG(bool noise)
 
     //计算校验值
     int checksum = pkg[3];
-    for (int i = 4; i < pkg.size(); i++)
+    for (int j = 4; j < pkg.size(); j++)
     {
-        checksum += pkg[i];
+        checksum += pkg[j];
     }
     checksum &= 0xff;
     checksum = ~checksum & 0xff;

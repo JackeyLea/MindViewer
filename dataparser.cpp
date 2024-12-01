@@ -176,7 +176,7 @@ void DataParser::skipInvalidByte()
 }
 
 //使用状态机解析原始数据
-int DataParser::parsePkg(const QByteArray ba, bool &raw, struct _eegPkt &pkt)
+int DataParser::parsePkg(const QByteArray& ba, bool &raw, struct _eegPkt &pkt)
 {
     m_total++;//输入的数据ba只包含一个有效包
     raw=false;//此数据包是否包含原始数据

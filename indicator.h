@@ -8,6 +8,7 @@
 #define INDICATOR_H
 
 #include <QString>
+#include <QWidget>
 #include "qwt_dial.h"
 
 class Indicator : public QwtDial

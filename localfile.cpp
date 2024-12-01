@@ -4,7 +4,7 @@
 #include <QFile>
 #include <QDebug>
 
-LocalFile::LocalFile(const QString filePath, QObject *parent)
+LocalFile::LocalFile(const QString& filePath, QObject *parent)
     : QObject{parent}
     ,m_filePath(filePath)
 {}

@@ -18,7 +18,7 @@ public:
     /// \param filePath
     /// \param parent
     ///
-    explicit LocalFile(const QString filePath, QObject *parent = nullptr);
+    explicit LocalFile(const QString& filePath, QObject *parent = nullptr);
 
     /// 文件内容解析
     /// \brief fileParse

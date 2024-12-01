@@ -25,7 +25,7 @@ Curve::Curve(QWidget *parent)
 }
 
 //显示八个脑电波数据
-void Curve::updateData(const _eegPkt pkt)
+void Curve::updateData(const _eegPkt& pkt)
 {
     // 原始数据
     int newSize = pkt.raw.size();

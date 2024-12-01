@@ -61,7 +61,7 @@ protected:
     /// 解析一个有效数据包，但是数据不一定有效
     /// \brief parsePkg
     ///
-    int parsePkg(const QByteArray ba, bool &raw, _eegPkt &pkt);
+    int parsePkg(const QByteArray& ba, bool &raw, _eegPkt &pkt);
 
     /// 独立线程函数
     /// \brief run
@@ -91,11 +91,11 @@ private:
     LocalFile *m_lf;
 
     QByteArray m_buff;//数据缓存区
-    int m_noise;//噪声含量
-    int m_total;//总数
-    int m_loss;//丢失数
-    int m_rawCnt;//原始包数
-    int m_eegCnt;//eeg数据包数
+    uint m_noise;//噪声含量
+    uint m_total;//总数
+    uint m_loss;//丢失数
+    uint m_rawCnt;//原始包数
+    uint m_eegCnt;//eeg数据包数
     QVector<double> m_rawData;//原始数据
 
     QMutex m_mutex;
