@@ -1,0 +1,107 @@
+/* 使用文言一心生成 */
+
+/* QWidget 基础样式 */
+QWidget {
+    background-color: #f0f8ff; /* 浅天蓝色背景，适合医疗行业 */
+    font-family: Arial, sans-serif; /* 使用简洁易读的字体 */
+    font-size: 14px; /* 字体大小适中 */
+    color: #000000; /* 黑色文字，确保清晰可见 */
+    border-radius: 5px; /* 圆角边框，增加柔和感 */
+}
+
+/* QFrame 样式 */
+QFrame {
+    background-color: #e0ffff; /* 更浅的蓝色背景，与QWidget区分 */
+    border: 1px solid #00008b; /* 深蓝色边框，增强专业感 */
+    border-radius: 5px; /* 圆角边框 */
+    padding: 10px; /* 内边距，使内容不紧贴边框 */
+}
+
+/* QGroupBox 样式 */
+QGroupBox {
+    border: 2px solid #00008b; /* 深蓝色边框 */
+    border-radius: 5px; /* 圆角边框 */
+    margin-top: 10px; /* 上外边距，与其他控件区分 */
+    padding: 10px; /* 内边距 */
+    font-weight: bold; /* 加粗标题文字 */
+    color: #000000; /* 黑色文字 */
+}
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    padding: 0 3px;
+    background-color: #00008b; /* 深蓝色背景 */
+    color: #ffffff; /* 白色文字，确保清晰可见 */
+    border-top-left-radius: 5px; /* 左上角圆角 */
+    border-top-right-radius: 5px; /* 右上角圆角 */
+}
+
+/* QPushButton 样式 */
+QPushButton {
+    background-color: #006400; /* 绿色背景，表示安全和确认 */
+    color: #ffffff; /* 白色文字，确保清晰可见 */
+    border: none; /* 无边框 */
+    border-radius: 5px; /* 圆角边框 */
+    padding: 10px 20px; /* 内边距，使按钮大小适中 */
+    font-size: 14px; /* 字体大小适中 */
+}
+QPushButton:hover {
+    background-color: #008000; /* 鼠标悬停时背景色变深 */
+}
+QPushButton:pressed {
+    background-color: #004000; /* 按钮按下时背景色变浅 */
+}
+
+/* QLabel 样式 */
+QLabel {
+    color: #000000; /* 黑色文字 */
+    font-size: 11px; /* 字体大小适中 */
+    background-color: transparent; /* 无背景色，保持透明 */
+}
+
+/* 电源 信号 */
+QLabel#labelPower,#labelSignal {
+    color: #00ff00; /* 绿色文字 */
+    font-size: 11px; /* 字体大小适中 */
+    background-color: transparent; /* 无背景色，保持透明 */
+}
+QLabel#labelPowerValue,#labelSignalValue {
+    color: #00ff00; /* 绿色文字 */
+    font-size: 12px; /* 字体大小适中 */
+    background-color: transparent; /* 无背景色，保持透明 */
+}
+
+/* 总包数 丢包率 原始包数 EEG包数 */
+QLabel#labelTotalCnt,#labelTotalLossRate,#labelRawCnt,#labelEEGCnt {
+    color: #0000ff; /* 蓝色文字 */
+    font-size: 11px; /* 字体大小适中 */
+    background-color: transparent; /* 无背景色，保持透明 */
+}
+QLabel#labelTotalCntValue,#labelTotalLossValue,#labelRawCntValue,#labelEEGCntValue {
+    color: #0000ff; /* 蓝色文字 */
+    font-size: 11px; /* 字体大小适中 */
+    background-color: transparent; /* 无背景色，保持透明 */
+}
+
+/* 噪声 */
+QLabel#labelNoise{
+    color: #808080; /* 灰色文字 */
+    font-size: 11px; /* 字体大小适中 */
+    background-color: transparent; /* 无背景色，保持透明 */
+}
+QLabel#labelNoiseValue{
+    color: #808080; /* 灰色文字 */
+    font-size: 12px; /* 字体大小适中 */
+    background-color: transparent; /* 无背景色，保持透明 */
+}
+/* 状态 */
+QLabel#labelStatus{
+    color: #ff0000; /* 红色文字 */
+    font-size: 11px; /* 字体大小适中 */
+    background-color: transparent; /* 无背景色，保持透明 */
+}
+QLabel#labelStatusValue{
+    color: #ff0000; /* 红色文字 */
+    font-size: 12px; /* 字体大小适中 */
+    background-color: transparent; /* 无背景色，保持透明 */
+}
