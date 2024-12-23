@@ -18,7 +18,7 @@ public:
     /// \param filePath
     /// \param parent
     ///
-    explicit LocalFile(const QString& filePath, QObject *parent = nullptr);
+    explicit LocalFile(const QString& strFilePath, QObject *parent = nullptr);
 
     /// 文件内容解析
     /// \brief fileParse
@@ -33,7 +33,7 @@ signals:
     void sigNewPkg(QByteArray ba);
 
 private:
-    QString m_filePath;
+    QString m_strFilePath;
 };
 
 #endif // LOCALFILE_H

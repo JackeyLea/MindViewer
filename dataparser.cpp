@@ -3,53 +3,52 @@
 #include <QDebug>
 
 DataParser::DataParser()
-    :m_comRetriver(nullptr)
-    ,m_sim(nullptr)
-    ,m_lf(nullptr)
-    ,m_noise(0)
-    ,m_total(0)
-    ,m_loss(0)
-    ,m_rawCnt(0)
-    ,m_eegCnt(0)
+    :m_pCOMRetriver(nullptr)
+    ,m_pSIM(nullptr)
+    ,m_pLocalFile(nullptr)
+    ,m_uiNoise(0)
+    ,m_uiTotal(0)
+    ,m_uiLoss(0)
+    ,m_uiRawCnt(0)
+    ,m_uiEEGCnt(0)
     ,m_eType(None)
     ,m_bSave(false)
 {
     //初始化数据
-    m_buff.clear();
-    m_pkgList.clear();
-    m_rawData.clear();
-    m_filePath.clear();
+    m_strBuff.clear();
+    m_vRawData.clear();
+    m_strFilePath.clear();
 }
 
 DataParser::~DataParser()
 {
     if(!m_bSave){
-        if(file.isOpen()){
-            file.remove();
+        if(m_file.isOpen()){
+            m_file.remove();
         }
     }
-    file.close();
+    m_file.close();
 
-    if(m_comRetriver){
-        m_comRetriver->stopCOM();
-        m_comRetriver->deleteLater();
-        m_comRetriver = nullptr;
+    if(m_pCOMRetriver){
+        m_pCOMRetriver->stopCOM();
+        m_pCOMRetriver->deleteLater();
+        m_pCOMRetriver = nullptr;
     }
-    if(m_sim){
-        m_sim->deleteLater();
-        m_sim = nullptr;
+    if(m_pSIM){
+        m_pSIM->deleteLater();
+        m_pSIM = nullptr;
     }
 }
 
 void DataParser::saveLocalFile()
 {
-    file.close();
+    m_file.close();
     m_bSave = true;
 }
 
-void DataParser::setFilePath(const QString path)
+void DataParser::setFilePath(const QString& path)
 {
-    m_filePath = path;
+    m_strFilePath = path;
 }
 
 void DataParser::setSource(DataSourceType type)
@@ -60,54 +59,54 @@ void DataParser::setSource(DataSourceType type)
         break;
     case COM:
     {
-        if(!m_comRetriver){
-            m_comRetriver = new Retriver(NULL);
+        if(!m_pCOMRetriver){
+            m_pCOMRetriver = new Retriver(NULL);
         }
-        m_comRetriver->showWgt();
-        connect(m_comRetriver,&Retriver::sigNewPkg,this,&DataParser::sltRcvData);
+        m_pCOMRetriver->showWgt();
+        connect(m_pCOMRetriver,&Retriver::sigNewPkg,this,&DataParser::sltRcvData);
         //清理之前状态
-        if(m_sim){
-            m_sim->disconnect();
+        if(m_pSIM){
+            m_pSIM->disconnect();
         }
-        if(m_lf){
-            m_lf->disconnect();
+        if(m_pLocalFile){
+            m_pLocalFile->disconnect();
         }
         //本地文件
         QString fileName = QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss")+".txt";
-        file.setFileName(fileName);
-        if(!file.open(QFile::WriteOnly)){
+        m_file.setFileName(fileName);
+        if(!m_file.open(QFile::WriteOnly)){
             qDebug()<<"Cannot open local file.";
         }
         break;
     }
     case Sim:
     {
-        if(!m_sim){
-            m_sim = new Simulator();
+        if(!m_pSIM){
+            m_pSIM = new Simulator();
         }
-        connect(m_sim,&Simulator::sigNewPkg,this,&DataParser::sltRcvData);
+        connect(m_pSIM,&Simulator::sigNewPkg,this,&DataParser::sltRcvData);
         //清理之前状态
-        if(m_lf){
-            m_lf->disconnect();
+        if(m_pLocalFile){
+            m_pLocalFile->disconnect();
         }
-        if(m_comRetriver){
-            m_comRetriver->disconnect();
+        if(m_pCOMRetriver){
+            m_pCOMRetriver->disconnect();
         }
         break;
     }
     case Local:
     {
-        if(!m_lf){
-            m_lf = new LocalFile(m_filePath);
+        if(!m_pLocalFile){
+            m_pLocalFile = new LocalFile(m_strFilePath);
         }
-        connect(m_lf,&LocalFile::sigNewPkg,this,&DataParser::sltRcvData);
-        m_lf->fileParse();
+        connect(m_pLocalFile,&LocalFile::sigNewPkg,this,&DataParser::sltRcvData);
+        m_pLocalFile->fileParse();
         //清理之前状态
-        if(m_sim){
-            m_sim->disconnect();
+        if(m_pSIM){
+            m_pSIM->disconnect();
         }
-        if(m_comRetriver){
-            m_comRetriver->disconnect();
+        if(m_pCOMRetriver){
+            m_pCOMRetriver->disconnect();
         }
         break;
     }
@@ -117,48 +116,47 @@ void DataParser::setSource(DataSourceType type)
 void DataParser::clearBuff()
 {
     m_mutex.lock();
-    m_buff.clear();
+    m_strBuff.clear();
     m_mutex.unlock();
 
-    m_pkgList.clear();
-    m_rawData.clear();
-    m_noise=0;
-    m_total=0;
-    m_loss=0;
-    m_rawCnt=0;
-    m_eegCnt=0;
+    m_vRawData.clear();
+    m_uiNoise=0;
+    m_uiTotal=0;
+    m_uiLoss=0;
+    m_uiRawCnt=0;
+    m_uiEEGCnt=0;
 }
 
 void DataParser::skipInvalidByte()
 {
-    if(m_buff.size()==0) return;
+    if(m_strBuff.size()==0) return;
 
     //一个包最起码包含一个有效数据类型0xaa 0xaa 0x02 0x02 0x01 0xaa
     // 此时包肯定不完整，就结束
-    if(m_buff.size()<=6) {
-        m_buff.clear();
+    if(m_strBuff.size()<=6) {
+        m_strBuff.clear();
         return;
     }
 
     //有可能一次收的数据不完整先判断
-    while(m_buff.size()>=6){
+    while(m_strBuff.size()>=6){
         //可能会出现这种情况 0xaa 0xaa 0xaa
-        if((uchar)m_buff[0]==0xaa && (uchar)m_buff[1]==0xaa && (uchar)m_buff[2]==0xaa){
+        if((uchar)m_strBuff[0]==0xaa && (uchar)m_strBuff[1]==0xaa && (uchar)m_strBuff[2]==0xaa){
             qDebug()<<"3 0xaa found.";
-            m_noise++;
+            m_uiNoise++;
             m_mutex.lock();
-            m_buff.removeFirst();
+            m_strBuff.removeFirst();
             m_mutex.unlock();
             continue;
-        }else if((uchar)m_buff[0]==0xAA && (uchar)m_buff[1]==0xAA){//先找包头
+        }else if((uchar)m_strBuff[0]==0xAA && (uchar)m_strBuff[1]==0xAA){//先找包头
             //包大小
-            int pkgSize = (uchar)m_buff[2];
+            int pkgSize = (uchar)m_strBuff[2];
             //最后的checksum + 本身 + 2个同步
-            if(pkgSize + 2 + 1+ 1 > m_buff.size()){
+            if(pkgSize + 2 + 1+ 1 > m_strBuff.size()){
                 qDebug()<<"pkg is less than given size.";
-                m_noise++;
+                m_uiNoise++;
                 m_mutex.lock();
-                m_buff.removeFirst();
+                m_strBuff.removeFirst();
                 m_mutex.unlock();
                 continue;
             }else{
@@ -166,10 +164,10 @@ void DataParser::skipInvalidByte()
             }
         }else{
             //如果前两个不是0xAA 0xAA就向后移一位
-            m_noise++;
+            m_uiNoise++;
 
             m_mutex.lock();
-            m_buff.removeFirst();
+            m_strBuff.removeFirst();
             m_mutex.unlock();
         }
     }
@@ -178,7 +176,7 @@ void DataParser::skipInvalidByte()
 //使用状态机解析原始数据
 int DataParser::parsePkg(const QByteArray& ba, bool &raw, struct _eegPkt &pkt)
 {
-    m_total++;//输入的数据ba只包含一个有效包
+    m_uiTotal++;//输入的数据ba只包含一个有效包
     raw=false;//此数据包是否包含原始数据
 
     if(ba.isEmpty()) return -1;//如果没有数据就直接退出
@@ -235,7 +233,7 @@ int DataParser::parsePkg(const QByteArray& ba, bool &raw, struct _eegPkt &pkt)
 
             if(payloadSum!=(uchar)buff[payloadLength]){
                 //如果与校验值不同就丢弃此包数据
-                m_loss++;
+                m_uiLoss++;
                 qDebug()<<"Checksum failed.";
                 return -1;
             }
@@ -307,10 +305,10 @@ int DataParser::parsePkg(const QByteArray& ba, bool &raw, struct _eegPkt &pkt)
                     state = PARSER_STATE_SYNC;
                     break;
                 }
-                m_rawCnt++;
+                m_uiRawCnt++;
                 raw=true;
                 short rawValue=((uchar)buff[2]<<8)|(uchar)buff[3];
-                m_rawData.append(rawValue);
+                m_vRawData.append(rawValue);
                 buff.remove(0,5);//4个数据以及最后的校验值
                 break;
             }else if((uchar)buff[0]==0x81 && (uchar)buff[1]==0x20){
@@ -333,7 +331,7 @@ int DataParser::parsePkg(const QByteArray& ba, bool &raw, struct _eegPkt &pkt)
                 state=PARSER_STATE_PAYLOAD;
                 buff.remove(0,26);//24 + 2
                 cnt+=26;
-                m_eegCnt++;//统计
+                m_uiEEGCnt++;//统计
             }else if((uchar)buff[0]==0x86 && (uchar)buff[1]==0x02){
                 //两个大端字节表示R峰的间隔
             }
@@ -352,25 +350,25 @@ int DataParser::parsePkg(const QByteArray& ba, bool &raw, struct _eegPkt &pkt)
 void DataParser::run()
 {
     while(1){
-        if(m_buff.size()>0){
+        if(m_strBuff.size()>0){
             skipInvalidByte();
             //这里用while是考虑缓冲区可能有不止一个包
-            while(m_buff.size()>=6){
+            while(m_strBuff.size()>=6){
                 //跳过无效字节
                 skipInvalidByte();
-                if(m_buff.size()==0) continue;
-                if(((uchar)m_buff[0]!=0xaa) && ((uchar)m_buff[1]!=0xaa)){
+                if(m_strBuff.size()==0) continue;
+                if(((uchar)m_strBuff[0]!=0xaa) && ((uchar)m_strBuff[1]!=0xaa)){
                     continue;
                 }
 
                 //第3个字节是长度
-                int length = (uchar)m_buff[2];
+                int length = (uchar)m_strBuff[2];
                 assert(length>0);
-                QByteArray tmpBA = m_buff.mid(0,length+2+1+1);
+                QByteArray tmpBA = m_strBuff.mid(0,length+2+1+1);
 
                 //从缓冲区删除已经解析的包
                 m_mutex.lock();
-                m_buff.remove(0,length+4);
+                m_strBuff.remove(0,length+4);
                 m_mutex.unlock();
 
                 //解析函数一次只解析一个包
@@ -382,13 +380,13 @@ void DataParser::run()
                     //错误数据已经从缓存区删除，直接进行下一次解析
                 }
                 if(!raw){
-                    pkt.noise = m_noise;
-                    pkt.total = m_total;
-                    pkt.loss = m_loss;
-                    pkt.rawCnt = m_rawCnt;
-                    pkt.eegCnt = m_eegCnt;
-                    pkt.raw = m_rawData;
-                    m_rawData.clear();
+                    pkt.noise = m_uiNoise;
+                    pkt.total = m_uiTotal;
+                    pkt.loss = m_uiLoss;
+                    pkt.rawCnt = m_uiRawCnt;
+                    pkt.eegCnt = m_uiEEGCnt;
+                    pkt.raw = m_vRawData;
+                    m_vRawData.clear();
                     emit sigNewPkt(pkt);
                 }
             }//while
@@ -399,13 +397,13 @@ void DataParser::run()
 }
 
 //收到数据后填充至缓存区等待解析
-void DataParser::sltRcvData(QByteArray ba)
+void DataParser::sltRcvData(QByteArray strData)
 {
-    if(file.isOpen()){
-        file.write(ba);
+    if(m_file.isOpen()){
+        m_file.write(strData);
     }
     // NOTE DEBUG模式下，以下代码可能会崩溃
     m_mutex.lock();
-    m_buff.append(ba);
+    m_strBuff.append(strData);
     m_mutex.unlock();
 }

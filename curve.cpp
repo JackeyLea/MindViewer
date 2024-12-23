@@ -1,13 +1,17 @@
 #include "curve.h"
 
+const int rawCnt = 500;//原始数据可视范围点数量
+const int eegCnt = 250;//EEG可视范围点数量
+const int CurvCnt = 9;//折线数量
+
 Curve::Curve(QWidget *parent)
     :QFrame(parent)
 {
     //绘图范围
-    rawXMap.setScaleInterval(0.0,rawCnt);
-    rawYMap.setScaleInterval(-32768,32767);
-    eegXMap.setScaleInterval(0.0,eegCnt);
-    eegYMap.setScaleInterval(-10737423,10737423);
+    m_rawXMap.setScaleInterval(0.0,rawCnt);
+    m_rawYMap.setScaleInterval(-32768,32767);
+    m_eegXMap.setScaleInterval(0.0,eegCnt);
+    m_eegYMap.setScaleInterval(-10737423,10737423);
 
     setFrameStyle( QFrame::Box | QFrame::Raised );
     setLineWidth( 3 );
@@ -15,10 +19,10 @@ Curve::Curve(QWidget *parent)
 
     //坐标轴
     for(int i=0;i<rawCnt;i++){
-        rawx.append(i);
+        m_vRawX.append(i);
     }
     for(int i=0;i<eegCnt;i++){
-        eegx.append(i);
+        m_vEEGX.append(i);
     }
 
     populate();
@@ -29,99 +33,99 @@ void Curve::updateData(const _eegPkt& pkt)
 {
     // 原始数据
     int newSize = pkt.raw.size();
-    if(dataRaw.size()>=rawCnt){//保持内存中最多rawCnt个点数据
-        dataRaw.remove(0,qMin(newSize,dataRaw.size()));
+    if(m_vDataRaw.size()>=rawCnt){//保持内存中最多rawCnt个点数据
+        m_vDataRaw.remove(0,qMin(newSize,m_vDataRaw.size()));
     }
-    dataRaw.append(pkt.raw);
-    curveRaw.setSamples(rawx,dataRaw);
+    m_vDataRaw.append(pkt.raw);
+    m_curveRaw.setSamples(m_vRawX,m_vDataRaw);
 
     // EEG数据
     //δ线
-    if(dataDelta.size()>=eegCnt){
-        dataDelta.pop_front();
+    if(m_vDataDelta.size()>=eegCnt){
+        m_vDataDelta.pop_front();
     }
-    dataDelta.append(pkt.delta);
-    curve[0].setSamples(eegx,dataDelta);
+    m_vDataDelta.append(pkt.delta);
+    m_curve[0].setSamples(m_vEEGX,m_vDataDelta);
 
     //高α线
-    if(dataHighAlpha.size()>=eegCnt){
-        dataHighAlpha.pop_front();
+    if(m_vDataHighAlpha.size()>=eegCnt){
+        m_vDataHighAlpha.pop_front();
     }
-    dataHighAlpha.append(pkt.highAlpha);
-    curve[1].setSamples(eegx,dataHighAlpha);
+    m_vDataHighAlpha.append(pkt.highAlpha);
+    m_curve[1].setSamples(m_vEEGX,m_vDataHighAlpha);
 
     //高β线
-    if(dataHighBeta.size()>=eegCnt){
-        dataHighBeta.pop_front();
+    if(m_vDataHighBeta.size()>=eegCnt){
+        m_vDataHighBeta.pop_front();
     }
-    dataHighBeta.append(pkt.highBeta);
-    curve[2].setSamples(eegx,dataHighBeta);
+    m_vDataHighBeta.append(pkt.highBeta);
+    m_curve[2].setSamples(m_vEEGX,m_vDataHighBeta);
 
     //低α线
-    if(dataLowAlpha.size()>=eegCnt){
-        dataLowAlpha.pop_front();
+    if(m_vDataLowAlpha.size()>=eegCnt){
+        m_vDataLowAlpha.pop_front();
     }
-    dataLowAlpha.append(pkt.lowAlpha);
-    curve[3].setSamples(eegx,dataLowAlpha);
+    m_vDataLowAlpha.append(pkt.lowAlpha);
+    m_curve[3].setSamples(m_vEEGX,m_vDataLowAlpha);
 
     //低β线
-    if(dataLowBeta.size()>=eegCnt){
-        dataLowBeta.pop_front();
+    if(m_vDataLowBeta.size()>=eegCnt){
+        m_vDataLowBeta.pop_front();
     }
-    dataLowBeta.append(pkt.lowBeta);
-    curve[4].setSamples(eegx,dataLowBeta);
+    m_vDataLowBeta.append(pkt.lowBeta);
+    m_curve[4].setSamples(m_vEEGX,m_vDataLowBeta);
 
     //低γ线
-    if(dataLowGamma.size()>=eegCnt){
-        dataLowGamma.pop_front();
+    if(m_vDataLowGamma.size()>=eegCnt){
+        m_vDataLowGamma.pop_front();
     }
-    dataLowGamma.append(pkt.lowGamma);
-    curve[5].setSamples(eegx,dataLowGamma);
+    m_vDataLowGamma.append(pkt.lowGamma);
+    m_curve[5].setSamples(m_vEEGX,m_vDataLowGamma);
 
     //高γ线
-    if(dataMidGamma.size()>=eegCnt){
-        dataMidGamma.pop_front();
+    if(m_vDataMidGamma.size()>=eegCnt){
+        m_vDataMidGamma.pop_front();
     }
-    dataMidGamma.append(pkt.midGamma);
-    curve[6].setSamples(eegx,dataMidGamma);
+    m_vDataMidGamma.append(pkt.midGamma);
+    m_curve[6].setSamples(m_vEEGX,m_vDataMidGamma);
 
     //θ线
-    if(dataTheta.size()>=eegCnt){
-        dataTheta.pop_front();
+    if(m_vDataTheta.size()>=eegCnt){
+        m_vDataTheta.pop_front();
     }
-    dataTheta.append(pkt.theta);
-    curve[7].setSamples(eegx,dataTheta);
+    m_vDataTheta.append(pkt.theta);
+    m_curve[7].setSamples(m_vEEGX,m_vDataTheta);
 }
 
 //清空数据
 void Curve::clear()
 {
-    dataRaw.clear();
-    curveRaw.setSamples(rawx,dataRaw);
+    m_vDataRaw.clear();
+    m_curveRaw.setSamples(m_vRawX,m_vDataRaw);
 
-    dataDelta.clear();
-    curve[0].setSamples(eegx,dataDelta);
+    m_vDataDelta.clear();
+    m_curve[0].setSamples(m_vEEGX,m_vDataDelta);
 
-    dataHighAlpha.clear();
-    curve[1].setSamples(eegx,dataHighAlpha);
+    m_vDataHighAlpha.clear();
+    m_curve[1].setSamples(m_vEEGX,m_vDataHighAlpha);
 
-    dataHighBeta.clear();
-    curve[2].setSamples(eegx,dataHighBeta);
+    m_vDataHighBeta.clear();
+    m_curve[2].setSamples(m_vEEGX,m_vDataHighBeta);
 
-    dataLowAlpha.clear();
-    curve[3].setSamples(eegx,dataLowAlpha);
+    m_vDataLowAlpha.clear();
+    m_curve[3].setSamples(m_vEEGX,m_vDataLowAlpha);
 
-    dataLowBeta.clear();
-    curve[4].setSamples(eegx,dataLowBeta);
+    m_vDataLowBeta.clear();
+    m_curve[4].setSamples(m_vEEGX,m_vDataLowBeta);
 
-    dataLowGamma.clear();
-    curve[5].setSamples(eegx,dataLowGamma);
+    m_vDataLowGamma.clear();
+    m_curve[5].setSamples(m_vEEGX,m_vDataLowGamma);
 
-    dataMidGamma.clear();
-    curve[6].setSamples(eegx,dataMidGamma);
+    m_vDataMidGamma.clear();
+    m_curve[6].setSamples(m_vEEGX,m_vDataMidGamma);
 
-    dataTheta.clear();
-    curve[7].setSamples(eegx,dataTheta);
+    m_vDataTheta.clear();
+    m_curve[7].setSamples(m_vEEGX,m_vDataTheta);
 }
 
 void Curve::paintEvent(QPaintEvent *event)
@@ -145,21 +149,21 @@ void Curve::drawCurves(QPainter *painter)
     r.setHeight( deltay );
 
     //  raw线
-    rawXMap.setPaintInterval( r.left(), r.right() );
-    rawYMap.setPaintInterval( r.top(), r.bottom() );
+    m_rawXMap.setPaintInterval( r.left(), r.right() );
+    m_rawYMap.setPaintInterval( r.top(), r.bottom() );
 
     painter->setRenderHint( QPainter::Antialiasing,
-                            curveRaw.testRenderHint( QwtPlotItem::RenderAntialiased ) );
-    curveRaw.draw( painter, rawXMap, rawYMap, r );
+                            m_curveRaw.testRenderHint( QwtPlotItem::RenderAntialiased ) );
+    m_curveRaw.draw( painter, m_rawXMap, m_rawYMap, r );
     shiftDown( r, deltay );
 
     // eeg线
     for(int i=0;i<8;i++){
-        eegXMap.setPaintInterval( r.left(), r.right() );
-        eegYMap.setPaintInterval( r.top(), r.bottom() );
+        m_eegXMap.setPaintInterval( r.left(), r.right() );
+        m_eegYMap.setPaintInterval( r.top(), r.bottom() );
         painter->setRenderHint( QPainter::Antialiasing,
-                                curve[i].testRenderHint( QwtPlotItem::RenderAntialiased ) );
-        curve[i].draw( painter, eegXMap, eegYMap, r );
+                                m_curve[i].testRenderHint( QwtPlotItem::RenderAntialiased ) );
+        m_curve[i].draw( painter, m_eegXMap, m_eegYMap, r );
         shiftDown( r, deltay );
     }
 
@@ -211,58 +215,58 @@ void Curve::drawCurves(QPainter *painter)
 void Curve::populate()
 {
     //原始
-    curveRaw.setPen( Qt::red );
-    curveRaw.setStyle( QwtPlotCurve::Lines );
-    curveRaw.setRenderHint( QwtPlotItem::RenderAntialiased );
-    curveRaw.setSamples(rawx,dataRaw);
+    m_curveRaw.setPen( Qt::red );
+    m_curveRaw.setStyle( QwtPlotCurve::Lines );
+    m_curveRaw.setRenderHint( QwtPlotItem::RenderAntialiased );
+    m_curveRaw.setSamples(m_vRawX,m_vDataRaw);
 
     //δ线
-    curve[0].setPen( Qt::black );
-    curve[0].setStyle( QwtPlotCurve::Lines );
-    curve[0].setRenderHint( QwtPlotItem::RenderAntialiased );
-    curve[0].setSamples(eegx,dataDelta);
+    m_curve[0].setPen( Qt::black );
+    m_curve[0].setStyle( QwtPlotCurve::Lines );
+    m_curve[0].setRenderHint( QwtPlotItem::RenderAntialiased );
+    m_curve[0].setSamples(m_vEEGX,m_vDataDelta);
 
     //高α线
-    curve[1].setPen( Qt::magenta );
-    curve[1].setStyle( QwtPlotCurve::Lines );
-    curve[1].setRenderHint( QwtPlotItem::RenderAntialiased );
-    curve[1].setSamples(eegx,dataHighAlpha);
+    m_curve[1].setPen( Qt::magenta );
+    m_curve[1].setStyle( QwtPlotCurve::Lines );
+    m_curve[1].setRenderHint( QwtPlotItem::RenderAntialiased );
+    m_curve[1].setSamples(m_vEEGX,m_vDataHighAlpha);
 
     //低α线
-    curve[2].setPen( Qt::darkBlue );
-    curve[2].setStyle( QwtPlotCurve::Lines );
-    curve[2].setRenderHint( QwtPlotItem::RenderAntialiased );
-    curve[2].setSamples(eegx,dataLowAlpha);
+    m_curve[2].setPen( Qt::darkBlue );
+    m_curve[2].setStyle( QwtPlotCurve::Lines );
+    m_curve[2].setRenderHint( QwtPlotItem::RenderAntialiased );
+    m_curve[2].setSamples(m_vEEGX,m_vDataLowAlpha);
 
     //高β
-    curve[3].setPen( Qt::darkCyan );
-    curve[3].setStyle( QwtPlotCurve::Lines );
-    curve[3].setRenderHint( QwtPlotItem::RenderAntialiased );
-    curve[3].setSamples(eegx,dataHighBeta);
+    m_curve[3].setPen( Qt::darkCyan );
+    m_curve[3].setStyle( QwtPlotCurve::Lines );
+    m_curve[3].setRenderHint( QwtPlotItem::RenderAntialiased );
+    m_curve[3].setSamples(m_vEEGX,m_vDataHighBeta);
 
     //低β
-    curve[4].setPen( Qt::darkMagenta );
-    curve[4].setStyle( QwtPlotCurve::Lines );
-    curve[4].setRenderHint( QwtPlotItem::RenderAntialiased );
-    curve[4].setSamples(eegx,dataLowBeta);
+    m_curve[4].setPen( Qt::darkMagenta );
+    m_curve[4].setStyle( QwtPlotCurve::Lines );
+    m_curve[4].setRenderHint( QwtPlotItem::RenderAntialiased );
+    m_curve[4].setSamples(m_vEEGX,m_vDataLowBeta);
 
     //低γ
-    curve[5].setPen( Qt::darkGreen );
-    curve[5].setStyle( QwtPlotCurve::Lines );
-    curve[5].setRenderHint( QwtPlotItem::RenderAntialiased );
-    curve[5].setSamples(eegx,dataLowGamma);
+    m_curve[5].setPen( Qt::darkGreen );
+    m_curve[5].setStyle( QwtPlotCurve::Lines );
+    m_curve[5].setRenderHint( QwtPlotItem::RenderAntialiased );
+    m_curve[5].setSamples(m_vEEGX,m_vDataLowGamma);
 
     //中γ
-    curve[6].setPen( Qt::darkRed );
-    curve[6].setStyle( QwtPlotCurve::Lines );
-    curve[6].setRenderHint( QwtPlotItem::RenderAntialiased );
-    curve[6].setSamples(eegx,dataMidGamma);
+    m_curve[6].setPen( Qt::darkRed );
+    m_curve[6].setStyle( QwtPlotCurve::Lines );
+    m_curve[6].setRenderHint( QwtPlotItem::RenderAntialiased );
+    m_curve[6].setSamples(m_vEEGX,m_vDataMidGamma);
 
     //θ
-    curve[7].setPen( Qt::darkYellow );
-    curve[7].setStyle( QwtPlotCurve::Lines );
-    curve[7].setRenderHint( QwtPlotItem::RenderAntialiased );
-    curve[7].setSamples(eegx,dataTheta);
+    m_curve[7].setPen( Qt::darkYellow );
+    m_curve[7].setStyle( QwtPlotCurve::Lines );
+    m_curve[7].setRenderHint( QwtPlotItem::RenderAntialiased );
+    m_curve[7].setSamples(m_vEEGX,m_vDataTheta);
 }
 
 void Curve::shiftDown(QRect &rect, int offset) const

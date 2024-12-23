@@ -10,16 +10,11 @@
 #include "qwt_scale_map.h"
 #include "qwt_plot_curve.h"
 #include "qwt_symbol.h"
-#include "qwt_math.h"
 
 #include <QPainter>
 #include <QFrame>
 
 #include "icd.h"
-
-const int rawCnt = 500;//原始数据可视范围点数量
-const int eegCnt = 250;//EEG可视范围点数量
-const int CurvCnt = 9;//折线数量
 
 class Curve : public QFrame
 {
@@ -53,7 +48,7 @@ private:
     /// \brief drawCurves
     /// \param painter
     ///
-    void drawCurves(QPainter*painter);
+    void drawCurves(QPainter* painter);
 
     /// 折线（颜色、线宽）属性设置
     /// \brief populate
@@ -68,29 +63,29 @@ private:
     void shiftDown(QRect& rect, int offset) const;
 
     //范围
-    QwtScaleMap rawXMap;
-    QwtScaleMap rawYMap;
-    QwtScaleMap eegXMap;
-    QwtScaleMap eegYMap;
+    QwtScaleMap m_rawXMap;
+    QwtScaleMap m_rawYMap;
+    QwtScaleMap m_eegXMap;
+    QwtScaleMap m_eegYMap;
 
-    QVector<double> rawx;//坐标轴
-    QVector<double> eegx;//坐标轴
+    QVector<double> m_vRawX;//坐标轴
+    QVector<double> m_vEEGX;//坐标轴
 
-    QVector<double> dataRaw;//原始数据折线数据
+    QVector<double> m_vDataRaw;//原始数据折线数据
     // EEG数据折线数据
-    QVector<double> dataDelta;
-    QVector<double> dataTheta;
-    QVector<double> dataLowAlpha;
-    QVector<double> dataHighAlpha;
-    QVector<double> dataLowBeta;
-    QVector<double> dataHighBeta;
-    QVector<double> dataLowGamma;
-    QVector<double> dataMidGamma;
+    QVector<double> m_vDataDelta;
+    QVector<double> m_vDataTheta;
+    QVector<double> m_vDataLowAlpha;
+    QVector<double> m_vDataHighAlpha;
+    QVector<double> m_vDataLowBeta;
+    QVector<double> m_vDataHighBeta;
+    QVector<double> m_vDataLowGamma;
+    QVector<double> m_vDataMidGamma;
 
     // 折线
-    QwtPlotCurve curveRaw;
+    QwtPlotCurve m_curveRaw;
     //分别为 delta theta lowalpha highalpha lowbeta highbeta lowgamma midgamma
-    QwtPlotCurve curve[8];
+    QwtPlotCurve m_curve[8];
 };
 
 #endif // CURVE_H

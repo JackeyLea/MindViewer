@@ -35,21 +35,21 @@ public:
     /// \param max 数值上限，下限默认为0
     /// \return
     ///
-    QByteArray getOne(uchar mn, int max);
+    QByteArray getOne(uchar ucModelIndex, int iMax);
 
     /// 模拟原始数据包
     /// \brief getRaw
-    /// \param noise
+    /// \param bNoise
     /// \return
     ///
-    QByteArray getRaw(bool noise=false);
+    QByteArray getRaw(bool bNoise=false);
 
     /// 模拟EEG数据包
     /// \brief getEEG
     /// \param noise
     /// \return
     ///
-    QByteArray getEEG(bool noise=false);
+    QByteArray getEEG(bool bNoise=false);
 
 signals:
     /// 通知界面已经成功解析一包
@@ -59,9 +59,9 @@ signals:
     void sigNewPkg(QByteArray ba);
 
 private:
-    QTimer *m_timer;
+    QTimer *m_pTimer;
 
-    uint time_index=0;
+    uint m_unIterCnt;
 };
 
 #endif // SIMULATOR_H

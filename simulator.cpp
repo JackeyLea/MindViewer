@@ -3,163 +3,165 @@
 #include "icd.h"
 
 Simulator::Simulator()
-    :m_timer(new QTimer)
+    :m_pTimer(new QTimer)
+    ,m_unIterCnt(0)
 {
-    m_timer->setInterval(2);
-    connect(m_timer,&QTimer::timeout,[=](){
-        QByteArray buff;
-        buff.clear();
-        if(time_index%512==0){//每512个包就有一个大包
-            buff = getEEG();
+    m_pTimer->setInterval(2);
+    connect(m_pTimer,&QTimer::timeout,[=](){
+        QByteArray strBuff;
+        strBuff.clear();
+        if(m_unIterCnt%512==0){//每512个包就有一个大包
+            strBuff = getEEG();
         }else{//其他状态为小包
-            buff = getRaw();
+            strBuff = getRaw();
         }
 
-        emit sigNewPkg(buff);
+        emit sigNewPkg(strBuff);
 
-        if(time_index > 3000000){
-            time_index=0;
+        if(m_unIterCnt > 3000000){
+            m_unIterCnt=0;
         }
-        ++time_index;
+        ++m_unIterCnt;
     });
-    m_timer->start();
+    m_pTimer->start();
 }
 
 Simulator::~Simulator()
 {
-    if(m_timer){
-        m_timer->stop();
-        delete m_timer;
-        m_timer = nullptr;
+    if(m_pTimer){
+        m_pTimer->stop();
+        delete m_pTimer;
+        m_pTimer = nullptr;
     }
 }
 
-QByteArray Simulator::getOne(uchar mn, int max)
+QByteArray Simulator::getOne(uchar ucModelIndex, int iMax)
 {
-    QByteArray data;
-    data.append((uchar)mn);
-    data.append(getNum(max));
-    return data;
+    QByteArray strModuleData;
+    strModuleData.append((uchar)ucModelIndex);
+    strModuleData.append(getNum(iMax));
+    return strModuleData;
 }
+
 //16位raw value -32768~32767
 //打包时分为两个uchar存储
-QByteArray Simulator::getRaw(bool noise)
+QByteArray Simulator::getRaw(bool bNoise)
 {
-    QByteArray data;
-    data.clear();
+    QByteArray strPkt;
+    strPkt.clear();
 
-    data.append(0xAA);
-    data.append(0xAA);
-    data.append(0x04);//包大小
-    data.append(0x80);//原始数据
-    data.append(0x02);//原始数据大小
-    data.append(getNum());//low
-    data.append(getNum());//high
+    strPkt.append(0xAA);
+    strPkt.append(0xAA);
+    strPkt.append(0x04);//包大小
+    strPkt.append(0x80);//原始数据
+    strPkt.append(0x02);//原始数据大小
+    strPkt.append(getNum());//low
+    strPkt.append(getNum());//high
 
     //计算校验值
-    int checksum = data[3];
-    for (int k = 4; k < data.size(); k++)
+    int iChecksum = strPkt[3];
+    for (int k = 4; k < strPkt.size(); k++)
     {
-        checksum += data[k];
+        iChecksum += strPkt[k];
     }
-    checksum &= 0xff;
-    checksum = ~checksum & 0xff;
-    data.append(checksum);
+    iChecksum &= 0xff;
+    iChecksum = ~iChecksum & 0xff;
+    strPkt.append(iChecksum);
 
     //添加随机干扰数据
-    if(noise){
+    if(bNoise){
         int cnt = getNum();
         for(int n=0;n<cnt;n++){
-            data.append(getNum());
+            strPkt.append(getNum());
         }
-        data.append(0xaa);
+        strPkt.append(0xaa);
     }
 
-    return data;
+    return strPkt;
 }
 
 //大包不包含原始数据
 //eeg数据有三个无符号整数组成
-QByteArray Simulator::getEEG(bool noise)
+QByteArray Simulator::getEEG(bool bNoise)
 {
-    QByteArray pkg;
+    QByteArray strPkt;
 
-    pkg.clear();
-    pkg.append(0xAA);//0
-    pkg.append(0xAA);//1
-    pkg.append((char)0x00);// payload，先为空，等模块确定后才能确定
+    strPkt.clear();
+    strPkt.append(0xAA);//0
+    strPkt.append(0xAA);//1
+    strPkt.append((char)0x00);// payload，先为空，等模块确定后才能确定
 
     //电源值
-    pkg.append(getOne(0x01,128));
+    strPkt.append(getOne(0x01,128));
 
     //信号强度
-    pkg.append(getOne(0x02,256));
+    strPkt.append(getOne(0x02,256));
 
     //心跳
-    pkg.append(getOne(0x03,256));
+    strPkt.append(getOne(0x03,256));
 
     //EEG
     //0x83后接18和24个EEG数据
-    pkg.append(0x83); //eeg
-    pkg.append(0x18); //eeg count value
+    strPkt.append(0x83); //eeg
+    strPkt.append(0x18); //eeg count value
     //delta
-    pkg.append(getNum());
-    pkg.append(getNum());
-    pkg.append(getNum());
+    strPkt.append(getNum());
+    strPkt.append(getNum());
+    strPkt.append(getNum());
     //theta
-    pkg.append(getNum());
-    pkg.append(getNum());
-    pkg.append(getNum());
+    strPkt.append(getNum());
+    strPkt.append(getNum());
+    strPkt.append(getNum());
     //lowalpha
-    pkg.append(getNum());
-    pkg.append(getNum());
-    pkg.append(getNum());
+    strPkt.append(getNum());
+    strPkt.append(getNum());
+    strPkt.append(getNum());
     //highalpha
-    pkg.append(getNum());
-    pkg.append(getNum());
-    pkg.append(getNum());
+    strPkt.append(getNum());
+    strPkt.append(getNum());
+    strPkt.append(getNum());
     //lowbeta
-    pkg.append(getNum());
-    pkg.append(getNum());
-    pkg.append(getNum());
+    strPkt.append(getNum());
+    strPkt.append(getNum());
+    strPkt.append(getNum());
     //highbeta
-    pkg.append(getNum());
-    pkg.append(getNum());
-    pkg.append(getNum());
+    strPkt.append(getNum());
+    strPkt.append(getNum());
+    strPkt.append(getNum());
     //lowgamma
-    pkg.append(getNum());
-    pkg.append(getNum());
-    pkg.append(getNum());
+    strPkt.append(getNum());
+    strPkt.append(getNum());
+    strPkt.append(getNum());
     //middlegamma
-    pkg.append(getNum());
-    pkg.append(getNum());
-    pkg.append(getNum());
+    strPkt.append(getNum());
+    strPkt.append(getNum());
+    strPkt.append(getNum());
 
     //注意力
-    pkg.append(getOne(0x04,100));
+    strPkt.append(getOne(0x04,100));
     //冥想值
-    pkg.append(getOne(0x05,100));
+    strPkt.append(getOne(0x05,100));
 
     //更新包长
-    pkg[2]=pkg.size()-3;//末尾一个 两个0xaa
+    strPkt[2]=strPkt.size()-3;//末尾一个 两个0xaa
 
     //计算校验值
-    int checksum = pkg[3];
-    for (int j = 4; j < pkg.size(); j++)
+    int iChecksum = strPkt[3];
+    for (int iDataIndex = 4; iDataIndex < strPkt.size(); iDataIndex++)
     {
-        checksum += pkg[j];
+        iChecksum += strPkt[iDataIndex];
     }
-    checksum &= 0xff;
-    checksum = ~checksum & 0xff;
-    pkg.append(checksum);
+    iChecksum &= 0xff;
+    iChecksum = ~iChecksum & 0xff;
+    strPkt.append(iChecksum);
 
     //添加随机干扰数据
-    if(noise){
-        int cnt = getNum();
-        for(int n=0;n<cnt;n++){
-            pkg.append(getNum());
+    if(bNoise){
+        int iNoiseCnt = getNum();
+        for(int iNoiseIndex=0;iNoiseIndex<iNoiseCnt;iNoiseIndex++){
+            strPkt.append(getNum());
         }
     }
 
-    return pkg;
+    return strPkt;
 }

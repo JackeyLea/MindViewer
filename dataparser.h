@@ -38,7 +38,7 @@ public:
     /// \brief setFilePath
     /// \param path
     ///
-    void setFilePath(const QString path);
+    void setFilePath(const QString& path);
 
     /// 设置数据源类型
     /// \brief setSource
@@ -80,30 +80,28 @@ private slots:
     /// \brief sltRcvData
     /// \param ba
     ///
-    void sltRcvData(QByteArray ba);
+    void sltRcvData(QByteArray strData);
 
 private:
-    QList<_eegPkt> m_pkgList;//解析后的结构体列表
-
     /// 数据源
-    Retriver *m_comRetriver;
-    Simulator *m_sim;
-    LocalFile *m_lf;
+    Retriver *m_pCOMRetriver;
+    Simulator *m_pSIM;
+    LocalFile *m_pLocalFile;
 
-    QByteArray m_buff;//数据缓存区
-    uint m_noise;//噪声含量
-    uint m_total;//总数
-    uint m_loss;//丢失数
-    uint m_rawCnt;//原始包数
-    uint m_eegCnt;//eeg数据包数
-    QVector<double> m_rawData;//原始数据
+    QByteArray m_strBuff;//数据缓存区
+    uint m_uiNoise;//噪声含量
+    uint m_uiTotal;//总数
+    uint m_uiLoss;//丢失数
+    uint m_uiRawCnt;//原始包数
+    uint m_uiEEGCnt;//eeg数据包数
+    QVector<double> m_vRawData;//原始数据
 
     QMutex m_mutex;
 
-    QString m_filePath;
+    QString m_strFilePath;
 
     DataSourceType m_eType;//当前数据源类型
-    QFile file;
+    QFile m_file;
     bool m_bSave;
 };
 

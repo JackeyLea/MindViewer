@@ -78,9 +78,9 @@ private:
     Ui::Retriver *ui;
 
     //串口操作
-    QSerialPort *com;
+    QSerialPort *m_pCOM;
 
-    bool isCOMOpen=false;
+    bool m_bOpen;
 };
 
 #endif // RETRIVER_H
