@@ -6,9 +6,14 @@
 MainWidget::MainWidget(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::MainWidget)
-    , m_parser(new DataParser)
+    , m_pParser(new DataParser)
     , m_bStatus(false)
     , m_eType(None)
+    , m_unSec(0)
+    , m_unMinute(0)
+    , m_unHour(0)
+    , m_unDay(0)
+    , m_unYear(0)
 {
 #ifdef Q_OS_LINUX
     qRegisterMetaType<_eegPkt>("_eegPkt");
@@ -20,18 +25,18 @@ MainWidget::MainWidget(QWidget *parent)
     initConn();
 
     //启动解析线程
-    m_parser->start();
+    m_pParser->start();
 }
 
 MainWidget::~MainWidget()
 {
     delete ui;
-    if(m_parser){
-        if(m_parser->isRunning()){
-            m_parser->requestInterruption();
-            m_parser->quit();
-            m_parser->wait(50);
-            m_parser->deleteLater();
+    if(m_pParser){
+        if(m_pParser->isRunning()){
+            m_pParser->requestInterruption();
+            m_pParser->quit();
+            m_pParser->wait(50);
+            m_pParser->deleteLater();
         }
     }
 }
@@ -46,14 +51,14 @@ void MainWidget::initConn()
     connect(ui->btnClear,&QPushButton::clicked,this,&MainWidget::sltBtnClear);
     connect(ui->btnSave,&QPushButton::clicked,this,&MainWidget::sltBtnSave);
 
-    connect(m_parser,&DataParser::sigNewPkt,this,&MainWidget::sltUpdateWidget);
+    connect(m_pParser,&DataParser::sigNewPkt,this,&MainWidget::sltUpdateWidget);
 }
 
 void MainWidget::sltBtnCOM()
 {
     m_bStatus = true;
     ui->labelStatusValue->setText("运行");
-    m_parser->setSource(COM);
+    m_pParser->setSource(COM);
     m_eType = COM;
 }
 
@@ -61,7 +66,7 @@ void MainWidget::sltBtnSIM()
 {
     m_bStatus = true;
     ui->labelStatusValue->setText("运行");
-    m_parser->setSource(Sim);
+    m_pParser->setSource(Sim);
     m_eType = Sim;
 }
 
@@ -77,8 +82,8 @@ void MainWidget::sltBtnLocal()
     //传递参数
     m_bStatus = true;
     ui->labelStatusValue->setText("运行");
-    m_parser->setFilePath(filePath);
-    m_parser->setSource(Local);
+    m_pParser->setFilePath(filePath);
+    m_pParser->setSource(Local);
     m_eType = Local;
 }
 
@@ -127,7 +132,7 @@ void MainWidget::sltBtnClear()
     ui->labelEEGCntValue->setText("0");
     ui->frameCurve->clear();
     //清空缓存区
-    m_parser->clearBuff();
+    m_pParser->clearBuff();
 }
 
 void MainWidget::sltBtnSave()
@@ -138,6 +143,7 @@ void MainWidget::sltBtnSave()
     }
     switch(m_eType){
     case COM:
+        // TODO
         break;
     case Sim:
         QMessageBox::warning(this,tr("警告"),tr("模拟数据没必要保存"));
@@ -158,6 +164,26 @@ void MainWidget::sltUpdateWidget(_eegPkt pkt)
         //暂停状态
         return;
     }
+    //计时
+    m_unSec++;
+    if(m_unSec > 59){
+        m_unMinute++;
+        m_unSec = 0;
+    }
+    if(m_unMinute > 59){
+        m_unHour ++;
+        m_unMinute = 0;
+    }
+    if(m_unHour > 23){
+        m_unDay++;
+        m_unHour=0;
+    }
+    ui->labelTimeValue->setText(QString("%1 d %2 h %3 m %4 s")
+                                    .arg(m_unDay)
+                                    .arg(m_unHour)
+                                    .arg(m_unMinute)
+                                    .arg(m_unSec));
+    //刷新界面值
     ui->labelPowerValue->setText(QString("%1").arg(pkt.power));
     ui->labelSignalValue->setText(QString("%1").arg(pkt.signal));
     ui->labelTotalCntValue->setText(QString("%1").arg(pkt.total));
@@ -169,6 +195,7 @@ void MainWidget::sltUpdateWidget(_eegPkt pkt)
     ui->widgetMeditation->setValue(pkt.meditation);
     ui->frameCurve->updateData(pkt);
 
+    //刷新界面
     update();
 }
 

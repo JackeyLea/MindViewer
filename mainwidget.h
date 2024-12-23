@@ -83,10 +83,13 @@ private:
     Ui::MainWidget *ui;
 
     // 解析器
-    DataParser *m_parser;
+    DataParser *m_pParser;
 
     bool m_bStatus;//状态控制
 
     DataSourceType m_eType;//当前模式
+
+    //计时
+    uint m_unSec,m_unMinute,m_unHour,m_unDay,m_unYear;
 };
 #endif // MAINWIDGET_H

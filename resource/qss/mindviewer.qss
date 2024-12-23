@@ -105,3 +105,15 @@ QLabel#labelStatusValue{
     font-size: 12px; /* 字体大小适中 */
     background-color: transparent; /* 无背景色，保持透明 */
 }
+
+/* 运行时间 */
+QLabel#labelTime{
+    color: #000000; /* 黑色文字 */
+    font-size: 11px; /* 字体大小适中 */
+    background-color: transparent; /* 无背景色，保持透明 */
+}
+QLabel#labelTimeValue{
+    color: #000000; /* 黑色文字 */
+    font-size: 14px; /* 字体大小适中 */
+    background-color: transparent; /* 无背景色，保持透明 */
+}
