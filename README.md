@@ -4,6 +4,8 @@
 
 ***写代码5年了，以软件架构和系统设计角度对软件进行重构***
 
+***程序员不懂设计，所以不要期盼什么美感***
+
 官方说明手册翻译：<a href="https://blog.jackeylea.com/tgam/translation-of-tgam-development-doc" target="_blank">TGAM开发手册翻译</a>
 
 TGAM连接及测试：<a href="https://blog.jackeylea.com/tgam/setup-and-installation-of-tgam-module" target="_blank">神念科技TGAM模块组装测试</a>

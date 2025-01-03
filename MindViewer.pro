@@ -2,7 +2,7 @@
 ### \author Jackey Lea
 ### \date 2020-12-26
 ### \brief 主程序
-### \note Qt 6.8.0
+### \note Qt 6.8.1
 ### \note VS2022
 #######################
 
