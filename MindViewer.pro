@@ -18,28 +18,28 @@ CONFIG += c++17
 include(qwt.pri)
 
 SOURCES += \
-    curve.cpp \
-    dataparser.cpp \
-    indicator.cpp \
-    localfile.cpp \
-    main.cpp \
-    mainwidget.cpp \
-    retriver.cpp \
-    simulator.cpp
+    src/curve.cpp \
+    src/dataparser.cpp \
+    src/indicator.cpp \
+    src/localfile.cpp \
+    src/main.cpp \
+    src/mainwidget.cpp \
+    src/retriver.cpp \
+    src/simulator.cpp
 
 HEADERS += \
-    curve.h \
-    dataparser.h \
-    icd.h \
-    indicator.h \
-    localfile.h \
-    mainwidget.h \
-    retriver.h \
-    simulator.h
+    include/curve.h \
+    include/dataparser.h \
+    include/icd.h \
+    include/indicator.h \
+    include/localfile.h \
+    include/mainwidget.h \
+    include/retriver.h \
+    include/simulator.h
 
 FORMS += \
-    mainwidget.ui \
-    retriver.ui
+    ui/mainwidget.ui \
+    ui/retriver.ui
 
 RESOURCES += \
     resource.qrc
