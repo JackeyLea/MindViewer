@@ -10,7 +10,6 @@ QT     += core gui widgets
 QT     += serialport
 
 CONFIG += c++17
-VERSION = 1.0.0
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -47,7 +46,28 @@ FORMS += \
 RESOURCES += \
     resource.qrc
 
+####################
+# 程序信息
+####################
+# 可执行文件名称
+TARGET = MindViewer
+# 版本信息
+VERSION = 1.0.0
+# 图标
 RC_ICONS = resource/icon/mind.ico
+# 公司名称
+QMAKE_TARGET_COMPANY = "食铁兽"
+# 产品名称
+QMAKE_TARGET_PRODUCT = "MindViewer"
+# 文件说明
+QMAKE_TARGET_DESCRIPTION="Qt 6.8.1 (64bit) with MSVC 2022"
+# 版权信息
+QMAKE_TARGET_COPYRIGHT="Copyright 2020-2024 blog.jackeylea.com.All rights reserved."
+# 语言 中文（简体）
+RC_LANG = 0x0004
+####################
+# 程序信息结束
+####################
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
