@@ -14,12 +14,12 @@ TGAM连接及测试：<a href="https://blog.jackeylea.com/tgam/setup-and-install
 
 ### 配置
 
-Qt 6.8.0 + VS 2022 64bit + QWT6.3.0
+Qt 6.8.1 + VS 2022 64bit + QWT6.3.0(build with vcpkg)
 
 ## 编译
 
 1. 下载vcpkg，使用vcpkg安装qwt库
-2. 安装Qt 6.8.0
+2. 安装Qt 6.8.1
 3. 安装VS2022
 4. 使用QtCreator打开工程并编译
 
