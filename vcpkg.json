@@ -1,8 +1,0 @@
-{
-  "name": "mindviewer",
-  "version": "1.0.0",
-  "description": "TGAM脑波模块图像化显示工具",
-  "dependencies": [
-    "qwt"
-  ]
-}
