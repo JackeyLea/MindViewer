@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Installer>
+    <Name>MindViewer</Name>
+    <Version>1.0.0</Version>
+    <Title>MindViewer 安装程序</Title>
+    <Publisher>食铁兽 (blog.jackeylea.com)</Publisher>
+    <ProductUrl>https://blog.jackeylea.com</ProductUrl>
+    <InstallerWindowIcon>mind.ico</InstallerWindowIcon>
+    <InstallerApplicationIcon>mind</InstallerApplicationIcon>
+    <Logo>mind.ico</Logo>
+    <StartMenuDir>MindViewer</StartMenuDir>
+    <TargetDir>@HomeDir@/MindViewer</TargetDir>
+    <InstallActionColumnVisible>true</InstallActionColumnVisible>
+    <AllowNonAsciiCharacters>true</AllowNonAsciiCharacters>
+    <AllowSpaceInPath>true</AllowSpaceInPath>
+    <RunProgram>@TargetDir@/MindViewer.exe</RunProgram>
+    <RunProgramDescription>启动 MindViewer</RunProgramDescription>
+    <ControlScript>controlscript.qs</ControlScript>
+</Installer>

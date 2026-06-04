@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<Package>
+    <DisplayName>MindViewer</DisplayName>
+    <Description>TGAM脑波模块图像化显示工具</Description>
+    <Version>1.0.0</Version>
+    <ReleaseDate>2024-01-01</ReleaseDate>
+    <Default>true</Default>
+    <Script>installscript.qs</Script>
+    <ForcedInstallation>true</ForcedInstallation>
+    <RequiresAdminRights>false</RequiresAdminRights>
+</Package>
