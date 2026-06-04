@@ -1,0 +1,119 @@
+name: Build Windows Installer
+
+on:
+  push:
+    branches: [main, master]
+    tags: ['v*']
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-2022
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v4
+      with:
+        version: '6.8.1'
+        host: 'windows'
+        target: 'desktop'
+        arch: 'win64_msvc2022_64'
+        cache: true
+
+    - name: Setup vcpkg
+      uses: lukka/run-vcpkg@v11
+      with:
+        vcpkgGitCommitId: 'c4af3593e1f1aa9e14a560a09e45ea2cb0fbe1e6'
+
+    - name: Configure CMake
+      shell: bash
+      run: |
+        cmake -B build -S . \
+          -DCMAKE_TOOLCHAIN_FILE="${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DCMAKE_PREFIX_PATH="${Qt6_DIR}/../../"
+
+    - name: Build
+      run: cmake --build build --config Release
+
+    - name: Prepare package data
+      shell: bash
+      run: |
+        # 清理并创建数据目录
+        rm -rf installer/packages/com.jackeylea.mindviewer/data/*
+        mkdir -p installer/packages/com.jackeylea.mindviewer/data
+        
+        # 复制可执行文件
+        cp build/bin/Release/MindViewer.exe installer/packages/com.jackeylea.mindviewer/data/
+        
+        # 使用 windeployqt 部署 Qt 依赖
+        windeployqt installer/packages/com.jackeylea.mindviewer/data/MindViewer.exe \
+          --release \
+          --no-translations \
+          --no-compiler-runtime
+        
+        # 复制 QWT 及其他 vcpkg 运行时库
+        cp "${VCPKG_ROOT}/installed/x64-windows/bin/qwt.dll" installer/packages/com.jackeylea.mindviewer/data/
+        
+        # 复制可能需要的 MSVC 运行时 (可选,如需静态打包可取消注释)
+        # cp "${VCPKG_ROOT}/installed/x64-windows/bin/"*.dll installer/packages/com.jackeylea.mindviewer/data/ 2>/dev/null || true
+
+    - name: Copy icon for installer
+      shell: bash
+      run: |
+        cp resource/icon/mind.ico installer/config/mind.ico
+
+    - name: Install Qt IFW
+      run: |
+        pip install aqtinstall
+        aqt install-tool windows desktop tools_ifw --outputdir ${{ github.workspace }}/qt-ifw
+
+    - name: Find binarycreator
+      id: find-binc
+      shell: pwsh
+      run: |
+        $binc = Get-ChildItem -Path "${{ github.workspace }}/qt-ifw" -Recurse -Filter "binarycreator.exe" | Select-Object -First 1
+        if (-not $binc) {
+          Write-Error "binarycreator.exe not found"
+          exit 1
+        }
+        Write-Output "path=$($binc.FullName)" >> $env:GITHUB_OUTPUT
+        Write-Output "Found binarycreator at: $($binc.FullName)"
+
+    - name: Build Installer
+      shell: bash
+      run: |
+        VERSION="${GITHUB_REF_NAME//v/}"
+        [ -z "$VERSION" ] && VERSION="1.0.0"
+        
+        OUTPUT_NAME="MindViewer-${VERSION}-setup.exe"
+        
+        "${{ steps.find-binc.outputs.path }}" \
+          -c installer/config/config.xml \
+          -p installer/packages \
+          "$OUTPUT_NAME"
+        
+        echo "OUTPUT_NAME=$OUTPUT_NAME" >> $GITHUB_ENV
+
+    - name: Upload Artifact
+      if: github.event_name != 'pull_request'
+      uses: actions/upload-artifact@v4
+      with:
+        name: MindViewer-Windows-Installer
+        path: MindViewer-*-setup.exe
+
+    - name: Create Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: MindViewer-*-setup.exe
+        draft: false
+        prerelease: false
+        generate_release_notes: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
