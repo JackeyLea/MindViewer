@@ -23,18 +23,21 @@ jobs:
         host: 'windows'
         target: 'desktop'
         arch: 'win64_msvc2022_64'
-        cache: true
 
     - name: Setup vcpkg
-      uses: lukka/run-vcpkg@v11
-      with:
-        vcpkgGitCommitId: 'c4af3593e1f1aa9e14a560a09e45ea2cb0fbe1e6'
+      run: |
+        git clone --depth 1 https://github.com/microsoft/vcpkg.git
+        .\vcpkg\bootstrap-vcpkg.bat
+
+    - name: Install QWT
+      run: |
+        .\vcpkg\vcpkg.exe install qwt:x64-windows
 
     - name: Configure CMake
       shell: bash
       run: |
         cmake -B build -S . \
-          -DCMAKE_TOOLCHAIN_FILE="${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" \
+          -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake" \
           -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_PREFIX_PATH="${Qt6_DIR}/../../"
 
@@ -57,11 +60,8 @@ jobs:
           --no-translations \
           --no-compiler-runtime
         
-        # 复制 QWT 及其他 vcpkg 运行时库
-        cp "${VCPKG_ROOT}/installed/x64-windows/bin/qwt.dll" installer/packages/com.jackeylea.mindviewer/data/
-        
-        # 复制可能需要的 MSVC 运行时 (可选,如需静态打包可取消注释)
-        # cp "${VCPKG_ROOT}/installed/x64-windows/bin/"*.dll installer/packages/com.jackeylea.mindviewer/data/ 2>/dev/null || true
+        # 复制 QWT 运行时库
+        cp "${{ github.workspace }}/vcpkg/installed/x64-windows/bin/qwt.dll" installer/packages/com.jackeylea.mindviewer/data/
 
     - name: Copy icon for installer
       shell: bash
