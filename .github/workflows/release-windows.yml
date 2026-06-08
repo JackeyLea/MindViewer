@@ -39,6 +39,7 @@ jobs:
         cmake -B build -S . \
           -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake" \
           -DCMAKE_BUILD_TYPE=Release \
+          -DQt6_DIR="${Qt6_DIR}" \
           -DCMAKE_PREFIX_PATH="${Qt6_DIR}/../../"
 
     - name: Build
