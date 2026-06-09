@@ -37,17 +37,11 @@ jobs:
     - name: Configure CMake
       shell: bash
       run: |
-        # 定位 vcpkg 中 Qwt 的 CMake 配置目录
-        QWT_SHARE_DIR="${{ github.workspace }}/vcpkg/installed/x64-windows/share"
-        QWT_CMAKE_DIR=$(find "$QWT_SHARE_DIR" -maxdepth 1 -type d -name 'qwt*' -o -name 'Qwt*' | head -n 1)
-        echo "Found Qwt cmake dir: $QWT_CMAKE_DIR"
-        ls -la "$QWT_CMAKE_DIR" || true
-        
+        # Qt 6.8.1 必须放在 CMAKE_PREFIX_PATH 最前面，避免 Qt 工具包被 vcpkg 的 Qt 6.11.1 截获
         cmake -B build -S . \
           -DCMAKE_BUILD_TYPE=Release \
-          -DCMAKE_PREFIX_PATH="${{ github.workspace }}/vcpkg/installed/x64-windows" \
-          -DQt6_DIR="${QT_ROOT_DIR}/lib/cmake/Qt6" \
-          -DQwt_DIR="$QWT_CMAKE_DIR"
+          -DCMAKE_PREFIX_PATH="${QT_ROOT_DIR};${{ github.workspace }}/vcpkg/installed/x64-windows" \
+          -DQt6_DIR="${QT_ROOT_DIR}/lib/cmake/Qt6"
 
     - name: Build
       run: cmake --build build --config Release
