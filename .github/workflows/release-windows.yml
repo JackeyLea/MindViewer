@@ -46,7 +46,7 @@ jobs:
         cmake -B build -S . \
           -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_PREFIX_PATH="${{ github.workspace }}/vcpkg/installed/x64-windows" \
-          -DQt6_DIR="${Qt6_DIR}" \
+          -DQt6_DIR="${QT_ROOT_DIR}/lib/cmake/Qt6" \
           -DQwt_DIR="$QWT_CMAKE_DIR"
 
     - name: Build
