@@ -23,6 +23,7 @@ jobs:
         host: 'windows'
         target: 'desktop'
         arch: 'win64_msvc2022_64'
+        modules: 'qtserialport'
 
     - name: Setup vcpkg
       run: |
@@ -44,7 +45,8 @@ jobs:
         
         cmake -B build -S . \
           -DCMAKE_BUILD_TYPE=Release \
-          -DCMAKE_PREFIX_PATH="${Qt6_DIR}/../../;${{ github.workspace }}/vcpkg/installed/x64-windows" \
+          -DCMAKE_PREFIX_PATH="${{ github.workspace }}/vcpkg/installed/x64-windows" \
+          -DQt6_DIR="${Qt6_DIR}" \
           -DQwt_DIR="$QWT_CMAKE_DIR"
 
     - name: Build
